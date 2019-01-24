@@ -1,0 +1,13 @@
+{
+  "name": "jukebox",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "online music player / backup",
+  "scripts": {
+    "files": "http-server temp --cors=If-Modified-Since, Range",
+    "player": "cd player && yarn start"
+  },
+  "dependencies": {
+    "http-server": "^0.11.1"
+  }
+}
