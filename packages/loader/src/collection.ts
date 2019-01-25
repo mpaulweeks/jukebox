@@ -1,29 +1,43 @@
-import { MetaData } from 'jukebox-utils/src';
-
-interface Item extends MetaData {
-  updated: Date,
-};
-
-export interface Collection {
-  [source: string]: Item,
-}
+import { CollectionData, compileSongData, MetaLoader, SongData } from 'jukebox-utils/src';
+import { UrlList } from 'jukebox-utils/src/types';
 
 export class CollectionLoader {
-  data: Collection;
+  data: CollectionData;
 
-  constructor(existingCollection: Collection) {
+  constructor(existingCollection: CollectionData) {
     this.data = existingCollection;
   }
-  merge(metaData: MetaData) {
-    this.data = {
-      ...this.data,
-      [metaData.source]: {
-        ...metaData,
-        updated: new Date(),
+
+  contains(songUrl) {
+    return !!this.data.songs[songUrl];
+  }
+  merge(songData: SongData) {
+    this.data.songs = {
+      ...this.data.songs,
+      [songData.source]: {
+        ...songData,
       },
     };
   }
-  mergeMany(metaDatas: Array<MetaData>) {
-    metaDatas.forEach(md => this.merge(md));
+  mergeMany(songDatas: Array<SongData>) {
+    songDatas.forEach(sd => this.merge(sd));
+  }
+
+  static async fromUrlList(urlList: UrlList, existing: CollectionData): Promise<CollectionLoader> {
+    const loader = new CollectionLoader(existing);
+
+    const urlsToUpdate: Array<string> = [];
+    urlList.urls.forEach(url => {
+      if (!loader.contains(url)) {
+        urlsToUpdate.push(url);
+      }
+    });
+
+    const songPromises = urlsToUpdate.map(url => {
+      return MetaLoader.fromUrl(url).then(metaData => compileSongData(url, metaData))
+    });
+    const songs = await Promise.all(songPromises);
+    loader.mergeMany(songs);
+    return loader;
   }
 }

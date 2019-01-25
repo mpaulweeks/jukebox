@@ -1,6 +1,5 @@
 import React from 'react';
-import { MetaDataLoader, MetaData } from 'jukebox-utils';
-import { FILE_ROOT } from './constants';
+import { Constants, MetaLoader, MetaData } from 'jukebox-utils';
 
 interface State {
   audioSource?: string,
@@ -11,7 +10,7 @@ export default class App extends React.Component<any, State> {
   state: State = {};
 
   async loadSong(source: string) {
-    const metaData = await MetaDataLoader.fromUrl(source);
+    const metaData = await MetaLoader.fromUrl(source);
     console.log(metaData);
     this.setState({
       audioSource: source,
@@ -21,7 +20,7 @@ export default class App extends React.Component<any, State> {
 
   componentDidMount() {
     // const source = `${FILE_ROOT}/claire_de_lune.mp3`;
-    const source = `${FILE_ROOT}/slimegirls_warpstar.mp3`;
+    const source = `${Constants.DevRootPath}/slimegirls_warpstar.mp3`;
     // const source = `${FILE_ROOT}/robgasser_move.mp3`;
     // const source = 'https://s3.amazonaws.com/jsmediatags-offset-issue/audio.mp3';
 
