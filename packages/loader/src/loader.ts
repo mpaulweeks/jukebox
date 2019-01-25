@@ -15,7 +15,7 @@ export default class Loader {
     const allTracks = {};
     library.getPlaylists().forEach(playlist => {
       if (whitelist.includes(playlist.name)) {
-        collection.data.playlists[playlist.id] = {
+        collection.data.playlists[playlist.name] = {
           name: playlist.name,
           trackIds: playlist.trackIds,
         };
@@ -33,7 +33,10 @@ export default class Loader {
     }, {});
 
     const toUpdateMeta = Object.keys(collection.data.tracks).filter(id => !this.songDataBase[id]);
-    const songPromises = Object.keys(toUpdateMeta).map(id => SongLoader.fromId(id));
+    const songPromises = toUpdateMeta.map(id => {
+      const location = library.getTrack(id).location;
+      return SongLoader.fromFile(id, location);
+    });
     const songDatas = await Promise.all(songPromises);
     const songDatasById = songDatas.reduce((obj, song) => {
       obj[song.id] = song;
@@ -48,6 +51,6 @@ export default class Loader {
   async export() {
     // todo upload to s3
     console.log(this.collection);
-    console.log(this.songDataBase);
+    // console.log(this.songDataBase);
   }
 }

@@ -19,7 +19,7 @@ export class Collection {
   static default(): Collection {
     return new Collection({
       tracks: {},
-      playlists: [],
+      playlists: {},
     });
   }
 }

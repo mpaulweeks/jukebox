@@ -7,10 +7,16 @@ export class MetaLoader {
 
   constructor(buffer: Buffer) {
     const tags = NodeID3.read(buffer);
+
     // console.log(tags);
 
-    const imageBuffer = tags.image.imageBuffer;
-    const imageSrc = 'data:image/jpeg;base64,' + imageBuffer.toString('base64');
+    let imageSrc = '';
+    if (tags.image) {
+      const imageBuffer = tags.image.imageBuffer;
+      imageSrc = 'data:image/jpeg;base64,' + imageBuffer.toString('base64');
+    } else {
+      console.log('meta failure:', tags);
+    }
 
     this.data = {
       album: tags.album,
@@ -29,9 +35,17 @@ export class MetaLoader {
   }
 
   static async fromFile(source: string): Promise<MetaData> {
+    source = source.replace('file:///', '/');
+    source = decodeURI(source);
+    console.log('reading meta for:', source);
     return new Promise((resolve, reject) => {
       fs.readFile(source, (err, buffer) => {
-        resolve(new MetaLoader(buffer).data);
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          resolve(new MetaLoader(buffer).data);
+        }
       });
     })
   }

@@ -3,15 +3,15 @@ import itunes from "itunes-data";
 
 interface LibraryData {
   tracks: {
-    [id: number]: string,
+    [id: string]: any,
   },
-  albums: {
-
+  playlists: {
+    [id: string]: any,
   }
-}
+};
 
 export class Library {
-  data: any;
+  data: LibraryData;
 
   constructor() {
     this.data = {
@@ -25,6 +25,7 @@ export class Library {
       id: String(track['Track ID']),
       name: track.Name,
       location: track.Location,
+      summary: `${track.Album} - ${track.Artist} - ${track.Name}`,
     };
     const { tracks } = this.data;
     tracks[newTrack.id] = newTrack;
@@ -32,6 +33,9 @@ export class Library {
   getTracks() {
     const { tracks } = this.data;
     return Object.keys(tracks).map(key => tracks[key]);
+  }
+  getTrack(id) {
+    return this.data.tracks[id];
   }
 
   addPlaylist(playlist: any) {

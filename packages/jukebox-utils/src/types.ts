@@ -13,7 +13,7 @@ export interface MetaData {
 };
 
 export interface SongData extends MetaData {
-  source: string,
+  id: string,
   updated: Date,
 };
 
@@ -33,7 +33,13 @@ export interface PlaylistData {
   trackIds: Array<string>,
 };
 
+export interface PlaylistList {
+  // key: string name of playlsit
+  // value: playlistData
+  [id: string]: PlaylistData,
+};
+
 export interface CollectionData {
-  playlists: Array<PlaylistData>,
+  playlists: PlaylistList,
   tracks: TrackList,
 };
