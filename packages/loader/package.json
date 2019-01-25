@@ -4,15 +4,18 @@
   "license": "ISC",
   "private": true,
   "description": "scripts to upload music and scrape metadata",
+  "scripts": {
+    "build": "tsc",
+    "main": "ts-node src/bin/main.ts",
+    "test": "jest"
+  },
   "dependencies": {
-    "jukebox-utils": "0.1.0",
     "@types/jest": "^23.3.13",
     "@types/node": "^10.12.18",
     "jest": "^23.6.0",
+    "jukebox-utils": "0.1.0",
     "ts-jest": "^23.10.5",
-    "typescript": "^3.2.4"
-  },
-  "scripts": {
-    "test": "jest"
+    "typescript": "^3.2.4",
+    "xml2js": "^0.4.19"
   }
 }
