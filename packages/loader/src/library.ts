@@ -25,7 +25,7 @@ export class Library {
       id: String(track['Track ID']),
       name: track.Name,
       location: track.Location,
-      summary: `${track.Album} - ${track.Artist} - ${track.Name}`,
+      summary: (track.Album ? `${track.Album} - ` : '') + `${track.Artist} - ${track.Name}`,
     };
     const { tracks } = this.data;
     tracks[newTrack.id] = newTrack;

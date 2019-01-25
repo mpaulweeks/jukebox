@@ -8,14 +8,12 @@ export class MetaLoader {
   constructor(buffer: Buffer) {
     const tags = NodeID3.read(buffer);
 
-    // console.log(tags);
-
     let imageSrc = '';
     if (tags.image) {
       const imageBuffer = tags.image.imageBuffer;
       imageSrc = 'data:image/jpeg;base64,' + imageBuffer.toString('base64');
     } else {
-      console.log('meta failure:', tags);
+      console.log('unrecognized meta:', tags);
     }
 
     this.data = {
@@ -41,7 +39,7 @@ export class MetaLoader {
     return new Promise((resolve, reject) => {
       fs.readFile(source, (err, buffer) => {
         if (err) {
-          console.log(err);
+          console.log('error reading meta:', err);
           reject(err);
         } else {
           resolve(new MetaLoader(buffer).data);
