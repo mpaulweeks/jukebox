@@ -1,13 +1,15 @@
 {
   "name": "jukebox",
   "version": "0.1.0",
-  "license": "MIT",
+  "license": "ISC",
   "description": "online music player / backup",
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "files": "http-server temp --cors=If-Modified-Since, Range",
-    "player": "cd player && yarn start"
+    "player": "cd packages/player && yarn start"
   },
   "dependencies": {
-    "http-server": "^0.11.1"
+    "http-server": "^0.11.1",
+    "lerna": "^3.10.7"
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
+import { MetaDataLoader, MetaData } from 'jukebox-utils';
 import { FILE_ROOT } from './constants';
-import { MetaDataLoader, MetaData } from './metadata';
 
 interface State {
   audioSource?: string,
@@ -10,7 +10,7 @@ interface State {
 export default class App extends React.Component<any, State> {
   state: State = {};
 
-  async loadSong(source) {
+  async loadSong(source: string) {
     const metaData = await MetaDataLoader.fromUrl(source);
     console.log(metaData);
     this.setState({
@@ -31,23 +31,26 @@ export default class App extends React.Component<any, State> {
   render() {
     // todo store in audio obj, only display inteface
     const { audioSource, metaData } = this.state;
-    return (
-      <div>
-        {metaData && audioSource && (
+
+    if (audioSource && metaData) {
+      return (
+        <div>
           <div>
-            <div>
-              {metaData.title}
-            </div>
-            <div>
-              {metaData.artist}
-            </div>
-            {metaData.imageSrc && (
-              <img src={metaData.imageSrc} />
-            )}
-            <audio controls src={audioSource}></audio>
+            {metaData.title}
           </div>
-        )}
-      </div>
-    );
+          <div>
+            {metaData.artist}
+          </div>
+          {metaData.imageSrc && (
+            <img src={metaData.imageSrc} />
+          )}
+          <audio controls src={audioSource}></audio>
+        </div>
+      );
+    } else {
+      return (
+        <h3> loading, please wait... </h3>
+      );
+    }
   }
 }
