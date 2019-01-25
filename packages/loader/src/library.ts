@@ -49,10 +49,11 @@ export class Library {
     const { playlists } = this.data;
     playlists[newPlaylist.id] = newPlaylist;
   }
-  getPlaylists() {
+  getPlaylists(filter?: Array<string>) {
     const { tracks, playlists } = this.data;
     return Object.keys(playlists)
       .map(key => playlists[key])
+      .filter(playlist => filter ? filter.includes(playlist.name) : true)
       .map(playlist => ({
         ...playlist,
         tracks: playlist.trackIds.map(id => tracks[id]),

@@ -5,7 +5,7 @@
   "private": true,
   "description": "online music player / backup",
   "scripts": {
-    "bs": "lerna bootstrap",
+    "bs": "cd packages/jukebox-utils && yarn build && cd ../.. && lerna bootstrap",
     "test": "cd packages/jukebox-utils && yarn test",
     "files": "http-server temp --cors=If-Modified-Since, Range",
     "player": "cd packages/player && yarn start"

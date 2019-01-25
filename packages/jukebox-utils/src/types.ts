@@ -12,21 +12,28 @@ export interface MetaData {
   imageSrc: string,
 };
 
-export interface PlaylistData {
-  name: string,
-  trackIds: Array<string>,
-};
-
 export interface SongData extends MetaData {
   source: string,
   updated: Date,
 };
 
-export interface SongLookup {
-  [source: string]: SongData,
+export interface SongDataBase {
+  [id: string]: SongData,
+};
+
+
+export interface TrackList {
+  // key: string track id in itunes
+  // value: summary of song, for human readability
+  [id: string]: string,
+};
+
+export interface PlaylistData {
+  name: string,
+  trackIds: Array<string>,
 };
 
 export interface CollectionData {
   playlists: Array<PlaylistData>,
-  songs: SongLookup,
+  tracks: TrackList,
 };
