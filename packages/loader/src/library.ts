@@ -22,7 +22,7 @@ export class Library {
 
   addTrack(track: any) {
     const newTrack = {
-      id: track['Track ID'],
+      id: String(track['Track ID']),
       name: track.Name,
       location: track.Location,
     };
@@ -41,9 +41,9 @@ export class Library {
     }
 
     const newPlaylist = {
-      id: playlist['Playlist ID'],
+      id: String(playlist['Playlist ID']),
       name: playlist['Name'],
-      trackIds: items.map(pi => pi['Track ID']),
+      trackIds: items.map(pi => String(pi['Track ID'])),
     }
 
     const { playlists } = this.data;

@@ -6,7 +6,7 @@
   "description": "online music player / backup",
   "scripts": {
     "bs": "cd packages/jukebox-utils && yarn build && cd ../.. && lerna bootstrap",
-    "test": "cd packages/jukebox-utils && yarn test",
+    "test": "cd packages/jukebox-utils && yarn test && cd ../loader && yarn test",
     "files": "http-server temp --cors=If-Modified-Since, Range",
     "player": "cd packages/player && yarn start"
   },
