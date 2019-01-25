@@ -1,8 +1,10 @@
-import { Library } from '.';
+import { LibraryLoader } from ".";
 
 const librarySource = '../../temp/Library.xml';
 
 test('test fromFile', async () => {
-  const library = await Library.fromFile(librarySource);
-  expect(library.data).toBe('hello');
+  const library = await LibraryLoader.fromFile(librarySource);
+  const playlists = library.getPlaylists();
+  const test = playlists.filter(pl => pl.name === 'BroadwayTest')
+  expect(JSON.stringify(test)).toBe('hello');
 });

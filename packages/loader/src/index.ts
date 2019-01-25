@@ -1,4 +1,4 @@
-import Library from './library';
+import { Library, LibraryLoader } from './library';
 
-export { Library };
+export { Library, LibraryLoader };
 
