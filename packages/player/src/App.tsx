@@ -20,7 +20,7 @@ export default class App extends React.Component<any, State> {
 
   componentDidMount() {
     // const source = `${FILE_ROOT}/claire_de_lune.mp3`;
-    const source = `${Constants.DevRootPath}/slimegirls_warpstar.mp3`;
+    const source = `${Constants.ServerRootPath}/slimegirls_warpstar.mp3`;
     // const source = `${FILE_ROOT}/robgasser_move.mp3`;
     // const source = 'https://s3.amazonaws.com/jsmediatags-offset-issue/audio.mp3';
 

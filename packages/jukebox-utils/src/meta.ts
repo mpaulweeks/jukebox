@@ -32,12 +32,9 @@ export class MetaLoader {
     return new MetaLoader(buffer).data;
   }
 
-  static async fromFile(source: string): Promise<MetaData> {
-    source = source.replace('file:///', '/');
-    source = decodeURI(source);
-    console.log('reading meta for:', source);
+  static async fromFile(path: string): Promise<MetaData> {
     return new Promise((resolve, reject) => {
-      fs.readFile(source, (err, buffer) => {
+      fs.readFile(path, (err, buffer) => {
         if (err) {
           console.log('error reading meta:', err);
           reject(err);

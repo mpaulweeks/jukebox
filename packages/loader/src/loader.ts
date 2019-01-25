@@ -38,8 +38,8 @@ export default class Loader {
 
     const toUpdateMeta = Object.keys(collection.data.tracks).filter(id => !this.songDataBase[id]);
     const songPromises = toUpdateMeta.map(id => {
-      const location = library.getTrack(id).location;
-      return SongLoader.fromFile(id, location);
+      const { path } = library.getTrack(id);
+      return SongLoader.fromFile(id, path);
     });
     const songDatas = await Promise.all(songPromises);
     const songDatasById = songDatas.reduce((obj, song) => {

@@ -29,6 +29,7 @@ export default class Store {
           console.log('Failed to put an object: ' + error);
           reject(error);
         } else {
+          console.log('uploaded: ', key);
           resolve(key);
         }
       });
@@ -48,6 +49,7 @@ export default class Store {
             console.log('Failed to put an object: ' + error);
             reject(error);
           } else {
+            console.log('uploaded: ', key);
             resolve(key);
           }
         });
