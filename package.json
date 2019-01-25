@@ -2,9 +2,10 @@
   "name": "jukebox",
   "version": "0.1.0",
   "license": "ISC",
+  "private": true,
   "description": "online music player / backup",
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bs": "lerna bootstrap",
     "test": "cd packages/jukebox-utils && yarn test",
     "files": "http-server temp --cors=If-Modified-Since, Range",
     "player": "cd packages/player && yarn start"

@@ -1,21 +1,18 @@
 {
-  "name": "jukebox-utils",
+  "name": "loader",
   "version": "0.1.0",
   "license": "ISC",
   "private": true,
-  "description": "common tools / components",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "test": "jest"
-  },
+  "description": "scripts to upload music and scrape metadata",
   "dependencies": {
+    "jukebox-utils": "0.1.0",
     "@types/jest": "^23.3.13",
     "@types/node": "^10.12.18",
     "jest": "^23.6.0",
-    "node-id3": "^0.1.7",
     "ts-jest": "^23.10.5",
     "typescript": "^3.2.4"
+  },
+  "scripts": {
+    "test": "jest"
   }
 }

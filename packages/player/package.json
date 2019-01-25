@@ -1,8 +1,9 @@
 {
   "name": "player",
   "version": "0.1.0",
-  "license": "MIT",
+  "license": "ISC",
   "private": true,
+  "description": "react app for playing songs",
   "dependencies": {
     "jukebox-utils": "0.1.0",
     "@types/jest": "^23.3.13",
