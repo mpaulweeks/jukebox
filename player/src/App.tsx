@@ -1,13 +1,23 @@
 import React from 'react';
-import jsmediatags from 'jsmediatags';
 import { FILE_ROOT } from './constants';
+import { MetaDataLoader, MetaData } from './metadata';
 
+interface State {
+  audioSource?: string,
+  metaData?: MetaData,
+};
 
-export default class App extends React.Component {
-  state = {
-    info: undefined,
-    loaded: undefined,
-  };
+export default class App extends React.Component<any, State> {
+  state: State = {};
+
+  async loadSong(source) {
+    const metaData = await MetaDataLoader.fromUrl(source);
+    console.log(metaData);
+    this.setState({
+      audioSource: source,
+      metaData,
+    });
+  }
 
   componentDidMount() {
     // const source = `${FILE_ROOT}/claire_de_lune.mp3`;
@@ -15,39 +25,27 @@ export default class App extends React.Component {
     // const source = `${FILE_ROOT}/robgasser_move.mp3`;
     // const source = 'https://s3.amazonaws.com/jsmediatags-offset-issue/audio.mp3';
 
-    // todo store in audio obj, only display inteface
-    this.setState({
-      loaded: source,
-    });
-
-    new jsmediatags
-      .Reader(source)
-      .setTagsToRead(["title", "year", "album", "year", "genre", "picture"])
-      .read({
-        onSuccess: data => {
-          console.log(data);
-          this.setState({
-            info: JSON.stringify(data),
-          });
-        },
-        onError: error => {
-          console.log(error);
-          this.setState({
-            info: JSON.stringify(error),
-          });
-        },
-      });
+    this.loadSong(source);
   }
 
   render() {
-    const { info, loaded } = this.state;
+    // todo store in audio obj, only display inteface
+    const { audioSource, metaData } = this.state;
     return (
       <div>
-        {info && (
-          <h3>{info}</h3>
-        )}
-        {loaded && (
-          <audio controls src={loaded}></audio>
+        {metaData && audioSource && (
+          <div>
+            <div>
+              {metaData.title}
+            </div>
+            <div>
+              {metaData.artist}
+            </div>
+            {metaData.imageSrc && (
+              <img src={metaData.imageSrc} />
+            )}
+            <audio controls src={audioSource}></audio>
+          </div>
         )}
       </div>
     );
