@@ -21,11 +21,13 @@ export class Library {
   }
 
   addTrack(track: any) {
-    const { tracks } = this.data;
-    tracks[track['Track ID']] = {
+    const newTrack = {
+      id: track['Track ID'],
       name: track.Name,
       location: track.Location,
     };
+    const { tracks } = this.data;
+    tracks[newTrack.id] = newTrack;
   }
   getTracks() {
     const { tracks } = this.data;
@@ -38,11 +40,14 @@ export class Library {
       return;
     }
 
-    const { playlists } = this.data;
-    playlists[playlist['Playlist ID']] = {
+    const newPlaylist = {
+      id: playlist['Playlist ID'],
       name: playlist['Name'],
       trackIds: items.map(pi => pi['Track ID']),
-    };
+    }
+
+    const { playlists } = this.data;
+    playlists[newPlaylist.id] = newPlaylist;
   }
   getPlaylists() {
     const { tracks, playlists } = this.data;
@@ -87,7 +92,6 @@ export class LibraryLoader {
 
   static async fromFile(source: string): Promise<Library> {
     const stream = fs.createReadStream(source);
-    const loader = new LibraryLoader(stream);
     return new LibraryLoader(stream).dataPromise;
   }
 }
