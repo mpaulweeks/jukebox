@@ -1,13 +1,16 @@
 import { Collection, SongDataBase, SongLoader } from 'jukebox-utils';
 import { Library } from './library';
+import Store from './store';
 
 export default class Loader {
   collection: Collection;
   songDataBase: SongDataBase;
+  toUpload: Array<any>;
 
   constructor(existingCollection: Collection, existingDataBase: SongDataBase) {
     this.collection = existingCollection;
     this.songDataBase = existingDataBase;
+    this.toUpload = [];
   }
 
   async addPlaylists(library: Library, whitelist: Array<string>) {
@@ -25,8 +28,9 @@ export default class Loader {
       }
     });
 
-    const toUpload = Object.keys(allTracks).filter(id => !collection.data.tracks[id]);
-    // todo upload to s3
+    this.toUpload = Object.keys(allTracks)
+      .filter(id => !collection.data.tracks[id])
+      .map(id => library.getTrack(id));
     collection.data.tracks = Object.keys(allTracks).reduce((obj, id) => {
       obj[id] = allTracks[id].summary;
       return obj;
@@ -49,8 +53,18 @@ export default class Loader {
   }
 
   async export() {
-    // todo upload to s3
     console.log(this.collection);
     // console.log(this.songDataBase);
+
+    const store = new Store();
+
+    await store.uploadData('collection.json', this.collection);
+    await store.uploadData('metaData.json', this.songDataBase);
+
+    const trackPromises = this.toUpload.map(track => store.uploadAudio(track.id, track.path));
+    this.toUpload = [];
+    await Promise.all(trackPromises);
+
+    console.log('success!')
   }
 }

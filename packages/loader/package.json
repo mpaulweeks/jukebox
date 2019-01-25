@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/jest": "^23.3.13",
     "@types/node": "^10.12.18",
+    "aws-sdk": "^2.395.0",
     "itunes-data": "^0.1.4",
     "jest": "^23.6.0",
     "jukebox-utils": "0.1.0",
