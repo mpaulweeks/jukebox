@@ -1,3 +1,4 @@
+import fs from 'fs';
 import NodeID3 from 'node-id3';
 
 export interface MetaData {
@@ -11,9 +12,8 @@ export interface MetaData {
 export class MetaDataLoader {
   data: MetaData;
 
-  constructor(arrayBuffer: ArrayBuffer) {
-    const data = Buffer.from(arrayBuffer);
-    const tags = NodeID3.read(data);
+  constructor(buffer: Buffer) {
+    const tags = NodeID3.read(buffer);
     // console.log(tags);
 
     const imageBuffer = tags.image.imageBuffer;
@@ -31,6 +31,15 @@ export class MetaDataLoader {
   static async fromUrl(source: string): Promise<MetaData> {
     const resp = await fetch(source);
     const arrayBuffer = await resp.arrayBuffer();
-    return new MetaDataLoader(arrayBuffer).data;
+    const buffer = Buffer.from(arrayBuffer);
+    return new MetaDataLoader(buffer).data;
+  }
+
+  static async fromFile(path: string): Promise<MetaData> {
+    return new Promise((resolve, reject) => {
+      fs.readFile('../../temp/fusq_perfume.mp3', (err, buffer) => {
+        resolve(new MetaDataLoader(buffer).data);
+      });
+    })
   }
 }
