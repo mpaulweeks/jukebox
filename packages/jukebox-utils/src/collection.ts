@@ -16,4 +16,10 @@ export class Collection {
     const json = await resp.json();
     return new Collection(json);
   }
+  static default(): Collection {
+    return new Collection({
+      tracks: {},
+      playlists: [],
+    });
+  }
 }

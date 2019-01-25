@@ -43,7 +43,11 @@ export default class Loader {
       ...this.songDataBase,
       ...songDatasById,
     };
+  }
 
-    // todo save two collection files
+  async export() {
+    // todo upload to s3
+    console.log(this.collection);
+    console.log(this.songDataBase);
   }
 }
