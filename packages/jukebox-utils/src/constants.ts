@@ -1,17 +1,24 @@
-const isReactDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV === 'development';
+console.log('isDev:', isDev);
 
 const LocalFileServerRoot = 'http://localhost:8081';
 const AwsRoot = 'https://s3.amazonaws.com/mpaulweeks-jukebox';
-const StorageRootPath = isReactDev ? LocalFileServerRoot : AwsRoot;
+const StorageRootPath = isDev ? LocalFileServerRoot : AwsRoot;
 
 const DataRootPath = `${StorageRootPath}/data`;
 const AudioRootPath = `${StorageRootPath}/audio`;
 
-const CollectionPath = `${DataRootPath}/collection.json`;
-const InfoLookupPath = `${DataRootPath}/metaData.json`;
+const CollectionFileName = `collection.json`;
+const InfoLookupFileName = `metaData.json`;
+
+const CollectionPath = `${DataRootPath}/${CollectionFileName}`;
+const InfoLookupPath = `${DataRootPath}/${InfoLookupFileName}`;
 
 export default {
+  isDev,
   AudioRootPath,
+  CollectionFileName,
+  InfoLookupFileName,
   CollectionPath,
   InfoLookupPath,
 };

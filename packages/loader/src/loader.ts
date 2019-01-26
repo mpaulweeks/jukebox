@@ -2,7 +2,7 @@ import { Collection, Constants, InfoLookup, SongLoader } from 'jukebox-utils';
 import { Library } from './library';
 import Store from './store';
 
-export default class Loader {
+export class Loader {
   collection: Collection;
   infoLookup: InfoLookup;
   toUpload: Array<any>;
