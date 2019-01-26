@@ -23,7 +23,7 @@ const TrackRow = styled.div`
 `;
 
 const TrackTitle = styled(TrackRow)`
-  font-size: 1.2em;
+  font-weight: bold;
   text-decoration: underline;
 `;
 
