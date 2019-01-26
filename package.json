@@ -9,9 +9,9 @@
     "bs": "yarn build && lerna bootstrap",
     "test": "cd packages/jukebox-utils && yarn test && cd ../loader && yarn test",
     "loader": "yarn bs && cd packages/loader && yarn main",
-    "dev:files": "http-server temp --cors=If-Modified-Since, Range",
+    "dev:files": "http-server local --cors=If-Modified-Since, Range",
     "dev:loader": "NODE_ENV=development yarn loader",
-    "dev:player": "cd packages/player && yarn start"
+    "dev:player": "yarn bs && cd packages/player && yarn start"
   },
   "dependencies": {
     "http-server": "^0.11.1",

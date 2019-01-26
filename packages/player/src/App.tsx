@@ -23,11 +23,8 @@ export default class App extends React.Component<any, State> {
 
   componentDidMount() {
     console.log(process.env);
-    // const source = `${FILE_ROOT}/claire_de_lune.mp3`;
-    // const source = `${Constants.ServerRootPath}/slimegirls_warpstar.mp3`;
-    // const source = `${FILE_ROOT}/robgasser_move.mp3`;
-    // const source = 'https://s3.amazonaws.com/jsmediatags-offset-issue/audio.mp3';
-    // this.loadSong(source);
+
+    (window as any).state = this.state;
 
     fetchCollection().then(collection => this.setState({
       collection: collection,
@@ -38,6 +35,8 @@ export default class App extends React.Component<any, State> {
   }
 
   render() {
+    console.log('state:', this.state);
+
     const { collection, infoLookup } = this.state;
     if (!collection || !infoLookup) {
       return (

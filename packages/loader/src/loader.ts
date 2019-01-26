@@ -58,8 +58,8 @@ export class Loader {
 
     const store = new Store();
 
-    await store.uploadData(Constants.CollectionFileName, this.collection);
-    await store.uploadData(Constants.InfoLookupFileName, this.infoLookup);
+    await store.uploadData(Constants.CollectionFileName, this.collection.data);
+    await store.uploadData(Constants.InfoLookupFileName, this.infoLookup.data);
 
     const trackPromises = this.toUpload.map(track => store.uploadAudio(track.id, track.path));
     this.toUpload = [];
