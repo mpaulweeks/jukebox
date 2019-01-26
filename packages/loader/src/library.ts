@@ -20,12 +20,21 @@ export class Library {
     };
   }
 
+  decodeLocation(location) {
+    return location && decodeURI(
+      location
+        .split('file:///').join('/')
+        .split('%3B').join(';')
+        .split('%23').join('#')
+    )
+  }
+
   addTrack(track: any) {
     const newTrack = {
       id: String(track['Track ID']),
       name: track.Name,
       location: track.Location,
-      path: track.Location && decodeURI(track.Location.replace('file:///', '/')),
+      path: this.decodeLocation(track.Location),
       summary: (track.Album ? `${track.Album} - ` : '') + `${track.Artist} - ${track.Name}`,
     };
     const { tracks } = this.data;

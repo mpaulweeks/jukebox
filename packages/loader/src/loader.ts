@@ -53,7 +53,7 @@ export class Loader {
   }
 
   async export() {
-    console.log(this.collection);
+    // console.log(this.collection);
     // console.log(this.InfoLookup);
 
     const store = new Store();
