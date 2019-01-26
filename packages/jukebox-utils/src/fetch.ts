@@ -1,7 +1,11 @@
-import { Collection, Constants } from ".";
+import { Collection } from "./collection";
+import Constants from "./constants";
+import { InfoLookup } from "./infoLookup";
 
 export const fetchCollection = (): Promise<Collection> => {
-  return fetch(`${Constants.DataRootPath}/collection.json`)
-    .then(resp => resp.json())
-    .then(data => new Collection(data));
+  return Collection.fromUrl(`${Constants.DataRootPath}/${Constants.CollectionFileName}`);
+}
+
+export const fetchInfoLookup = (): Promise<InfoLookup> => {
+  return InfoLookup.fromUrl(`${Constants.DataRootPath}/${Constants.InfoLookupFileName}`);
 }

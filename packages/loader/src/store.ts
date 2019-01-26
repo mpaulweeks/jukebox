@@ -17,7 +17,7 @@ export default class Store {
     }
   }
   uploadData(filename: string, data: any) {
-    // https://s3.amazonaws.com/mpaulweeks-jukebox/audio/12345
+    // eg: https://s3.amazonaws.com/mpaulweeks-jukebox/data/collection.json
     const key = 'data/' + filename;
     return new Promise((resolve, reject) => {
       this.s3.putObject({
@@ -36,7 +36,7 @@ export default class Store {
     });
   }
   uploadAudio(id: string, location: string) {
-    // https://s3.amazonaws.com/mpaulweeks-jukebox/audio/12345
+    // eg: https://s3.amazonaws.com/mpaulweeks-jukebox/audio/12345
     const key = 'audio/' + id;
     return new Promise((resolve, reject) => {
       fs.readFile(location, (err, buffer) => {

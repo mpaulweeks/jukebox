@@ -1,9 +1,4 @@
 
-export interface UrlList {
-  updated: Date,
-  urls: Array<string>,
-};
-
 export interface MetaData {
   album: string,
   artist: string,
@@ -17,7 +12,7 @@ export interface SongData extends MetaData {
   updated: Date,
 };
 
-export interface SongDataBase {
+export interface InfoLookupData {
   [id: string]: SongData,
 };
 

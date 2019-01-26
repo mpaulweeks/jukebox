@@ -1,20 +1,20 @@
-import { Collection, SongDataBase, SongLoader } from 'jukebox-utils';
+import { Collection, Constants, InfoLookup, SongLoader } from 'jukebox-utils';
 import { Library } from './library';
 import Store from './store';
 
 export default class Loader {
   collection: Collection;
-  songDataBase: SongDataBase;
+  infoLookup: InfoLookup;
   toUpload: Array<any>;
 
-  constructor(existingCollection: Collection, existingDataBase: SongDataBase) {
+  constructor(existingCollection: Collection, existingDataBase: InfoLookup) {
     this.collection = existingCollection;
-    this.songDataBase = existingDataBase;
+    this.infoLookup = existingDataBase;
     this.toUpload = [];
   }
 
   async addPlaylists(library: Library, whitelist: Array<string>) {
-    const { collection } = this;
+    const { collection, infoLookup } = this;
     const allTracks = {};
     library.getPlaylists().forEach(playlist => {
       if (whitelist.includes(playlist.name)) {
@@ -29,14 +29,14 @@ export default class Loader {
     });
 
     this.toUpload = Object.keys(allTracks)
-      .filter(id => !collection.data.tracks[id])
+      .filter(id => !collection.containsTrack(id))
       .map(id => library.getTrack(id));
     collection.data.tracks = Object.keys(allTracks).reduce((obj, id) => {
       obj[id] = allTracks[id].summary;
       return obj;
     }, {});
 
-    const toUpdateMeta = Object.keys(collection.data.tracks).filter(id => !this.songDataBase[id]);
+    const toUpdateMeta = Object.keys(collection.data.tracks).filter(id => !infoLookup.containsTrack(id));
     const songPromises = toUpdateMeta.map(id => {
       const { path } = library.getTrack(id);
       return SongLoader.fromFile(id, path);
@@ -46,20 +46,20 @@ export default class Loader {
       obj[song.id] = song;
       return obj;
     }, {});
-    this.songDataBase = {
-      ...this.songDataBase,
+    infoLookup.data = {
+      ...infoLookup.data,
       ...songDatasById,
     };
   }
 
   async export() {
     console.log(this.collection);
-    // console.log(this.songDataBase);
+    // console.log(this.InfoLookup);
 
     const store = new Store();
 
-    await store.uploadData('collection.json', this.collection);
-    await store.uploadData('metaData.json', this.songDataBase);
+    await store.uploadData(Constants.CollectionFileName, this.collection);
+    await store.uploadData(Constants.InfoLookupFileName, this.infoLookup);
 
     const trackPromises = this.toUpload.map(track => store.uploadAudio(track.id, track.path));
     this.toUpload = [];
