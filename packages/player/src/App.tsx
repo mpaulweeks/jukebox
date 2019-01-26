@@ -1,7 +1,10 @@
 import React from 'react';
-import { Constants, MetaLoader, MetaData } from 'jukebox-utils';
+import { MetaLoader, MetaData, fetchCollection, Collection, InfoLookup, fetchInfoLookup } from 'jukebox-utils';
+import Playlist from './Playlist';
 
 interface State {
+  collection?: Collection,
+  infoLookup?: InfoLookup,
   audioSource?: string,
   metaData?: MetaData,
 };
@@ -19,37 +22,40 @@ export default class App extends React.Component<any, State> {
   }
 
   componentDidMount() {
+    console.log(process.env);
     // const source = `${FILE_ROOT}/claire_de_lune.mp3`;
-    const source = `${Constants.ServerRootPath}/slimegirls_warpstar.mp3`;
+    // const source = `${Constants.ServerRootPath}/slimegirls_warpstar.mp3`;
     // const source = `${FILE_ROOT}/robgasser_move.mp3`;
     // const source = 'https://s3.amazonaws.com/jsmediatags-offset-issue/audio.mp3';
+    // this.loadSong(source);
 
-    this.loadSong(source);
+    fetchCollection().then(collection => this.setState({
+      collection: collection,
+    }));
+    fetchInfoLookup().then(infoLookup => this.setState({
+      infoLookup: infoLookup,
+    }));
   }
 
   render() {
-    // todo store in audio obj, only display inteface
-    const { audioSource, metaData } = this.state;
-
-    if (audioSource && metaData) {
-      return (
-        <div>
-          <div>
-            {metaData.title}
-          </div>
-          <div>
-            {metaData.artist}
-          </div>
-          {metaData.imageSrc && (
-            <img src={metaData.imageSrc} />
-          )}
-          <audio controls src={audioSource}></audio>
-        </div>
-      );
-    } else {
+    const { collection, infoLookup } = this.state;
+    if (!collection || !infoLookup) {
       return (
         <h3> loading, please wait... </h3>
       );
     }
+
+    return (
+      <div>
+        {collection.getPlaylists().map((pl, index) => (
+          <Playlist
+            key={`playlist-${index}`}
+            playlist={pl}
+            infoLookup={infoLookup}
+          />
+        ))}
+      </div>
+    )
+
   }
 }

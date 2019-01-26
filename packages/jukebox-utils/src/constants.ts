@@ -1,18 +1,17 @@
-const DevRootPath = 'http://localhost:8081';
-const ProdRootPath = 'aws something todo';
-const ServerRootPath = DevRootPath; // todo diff on prod
+const isReactDev = process.env.NODE_ENV === 'development';
 
-const StorageRootPath = 'https://s3.amazonaws.com/mpaulweeks-jukebox';
+const LocalFileServerRoot = 'http://localhost:8081';
+const AwsRoot = 'https://s3.amazonaws.com/mpaulweeks-jukebox';
+const StorageRootPath = isReactDev ? LocalFileServerRoot : AwsRoot;
+
 const DataRootPath = `${StorageRootPath}/data`;
 const AudioRootPath = `${StorageRootPath}/audio`;
 
-const CollectionFileName = 'collection.json';
-const InfoLookupFileName = 'metaData.json';
+const CollectionPath = `${DataRootPath}/collection.json`;
+const InfoLookupPath = `${DataRootPath}/metaData.json`;
 
 export default {
-  ServerRootPath,
-  DataRootPath,
   AudioRootPath,
-  CollectionFileName,
-  InfoLookupFileName,
+  CollectionPath,
+  InfoLookupPath,
 };
