@@ -1,26 +1,51 @@
 import React from 'react';
-import { PlaylistData, InfoLookup } from 'jukebox-utils';
+import styled from 'styled-components';
+import { PlaylistData, InfoLookup, SongData } from 'jukebox-utils';
 import Track from './Track';
 
+const PlaylistContainer = styled.div`
+  border: 5px solid grey;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: no-wrap;
+`;
+
+const TracksContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
 interface Props {
+  loadTrack: (track: SongData) => void,
   infoLookup: InfoLookup,
   playlist: PlaylistData,
 };
 
 export default class Playlist extends React.Component<Props> {
   render() {
-    const { playlist, infoLookup } = this.props;
+    const { loadTrack, infoLookup, playlist } = this.props;
     return (
-      <div>
+      <PlaylistContainer>
         <h3>{playlist.name}</h3>
-        {playlist.trackIds.map((id, index) => (
-          <Track
-            key={`track-${index}`}
-            trackId={id}
-            infoLookup={infoLookup}
-          />
-        ))}
-      </div>
+        <TracksContainer>
+          {playlist.trackIds.map((id, index) => (
+            <Track
+              key={`track-${index}`}
+              loadTrack={loadTrack}
+              track={infoLookup.get(id)}
+            />
+          ))}
+        </TracksContainer>
+      </PlaylistContainer>
     )
   }
 }
