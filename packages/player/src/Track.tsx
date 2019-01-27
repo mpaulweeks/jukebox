@@ -56,7 +56,7 @@ export default class Track extends React.Component<Props> {
     loadTrack(track);
   }
   truncate(info: string) {
-    return info.substring(0, 20);
+    return (info || '').substring(0, 20);
   }
   render() {
     // todo store in audio obj, only display inteface
@@ -68,10 +68,13 @@ export default class Track extends React.Component<Props> {
           <AlbumCover src={track.imageSrc || PlaceholderImage} />
         </div>
         <TrackTitle>
-          {track.title || 'Unknown Title'}
+          {track.title}
         </TrackTitle>
         <TrackRow>
-          {this.truncate(track.artist || 'Unknown Artist')}
+          {this.truncate(track.artist)}
+        </TrackRow>
+        <TrackRow>
+          {track.album}
         </TrackRow>
         <TrackRow>
           {track.id}

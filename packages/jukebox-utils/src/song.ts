@@ -15,9 +15,9 @@ export class SongLoader {
     const metaData = await MetaLoader.fromFile(location);
     return this.compileSongData(id, metaData);
   }
-  static async fromId(songId: string): Promise<SongData> {
-    const url = `${Constants.AudioRootPath}/${songId}`;
+  static async fromId(id: string): Promise<SongData> {
+    const url = `${Constants.AudioRootPath}/${id}`;
     const metaData = await MetaLoader.fromUrl(url);
-    return this.compileSongData(url, metaData);
+    return this.compileSongData(id, metaData);
   }
 }

@@ -7,6 +7,7 @@ import styled from 'styled-components';
 interface State {
   collection?: Collection,
   infoLookup?: InfoLookup,
+  tracks?: Array<SongData>,
 };
 
 export default class TestBed extends React.Component<any, State> {
@@ -15,14 +16,18 @@ export default class TestBed extends React.Component<any, State> {
 
   async test() {
     const { collection, infoLookup } = this.state;
-    const tracks = [
+    const ids = [
       '18921', // hello
       '269', // disco fever
+      '251', // we'll go from there
+      '19267', // genesis of next
+      '19290', // yooka
     ];
-    const info = await Promise.all(
-      tracks.map(id => SongLoader.fromId(id))
+    ids.forEach(id => SongLoader.fromId(id)
+      .then(track => this.setState({
+        tracks: (this.state.tracks || []).concat(track),
+      }))
     );
-    console.log(info);
   }
 
   componentDidMount() {
@@ -37,14 +42,14 @@ export default class TestBed extends React.Component<any, State> {
   }
 
   componentDidUpdate() {
-    const { collection, infoLookup } = this.state;
-    if (collection && infoLookup) {
+    const { collection, infoLookup, tracks } = this.state;
+    if (collection && infoLookup && !tracks) {
       this.test();
     }
   }
 
   render() {
-    const { collection, infoLookup } = this.state;
+    const { collection, infoLookup, tracks } = this.state;
     if (!collection || !infoLookup) {
       return (
         <h3> loading, please wait... </h3>
@@ -53,6 +58,13 @@ export default class TestBed extends React.Component<any, State> {
     return (
       <div>
         loaded
+        {tracks && tracks.map((track, index) => (
+          <Track
+            key={`track-${index}`}
+            track={track}
+            loadTrack={() => { }}
+          />
+        ))}
       </div>
     )
 

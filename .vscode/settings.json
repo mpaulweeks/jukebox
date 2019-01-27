@@ -1,0 +1,12 @@
+{
+  "saveAndRun": {
+    "commands": [
+      {
+        "match": "packages/jukebox-utils/src/.+\.ts",
+        "cmd": "yarn bs",
+        "useShortcut": false,
+        "silent": false
+      }
+    ]
+  }
+}

@@ -4,7 +4,7 @@ export interface MetaData {
   artist: string,
   title: string,
   year: string,
-  imageSrc: string,
+  imageSrc?: string,
 };
 
 export interface SongData extends MetaData {
