@@ -5,8 +5,8 @@ import { MetaData } from './types';
 
 export class MetaLoader {
 
-  static imageFromArray(format, dataString) {
-    return `data:image/${format};base64,${dataString}`;
+  static imageFromArray(format, buffer) {
+    return `data:image/${format};base64,${buffer.toString('base64')}`;
   }
   static tryParseNodeId3(buffer: Buffer): Promise<MetaData> {
     return new Promise((resolve, reject) => {
@@ -15,13 +15,13 @@ export class MetaLoader {
 
       if (tags.image) {
         const imageFormat = tags.image.mime;
-        const imageData = tags.image.imageBuffer.toString('base64');
+        const imageBuffer = tags.image.imageBuffer;
         resolve({
           album: tags.album,
           artist: tags.artist,
           title: tags.title,
           year: tags.year,
-          imageSrc: this.imageFromArray(imageFormat, imageData),
+          imageSrc: this.imageFromArray(imageFormat, imageBuffer),
         });
       } else {
         // console.log('node-id3 error:', tags);
@@ -38,8 +38,9 @@ export class MetaLoader {
           let imageSrc: (string | undefined);
           if (data.tags.picture) {
             const imageFormat = data.tags.picture.format;
-            const imageData = btoa(data.tags.picture.data.map(char => String.fromCharCode(char)).join(''));
-            imageSrc = this.imageFromArray(imageFormat, imageData);
+            const imageStr = data.tags.picture.data.map(char => String.fromCharCode(char)).join('');
+            const imageBuffer = Buffer.from(imageStr, 'binary');
+            imageSrc = this.imageFromArray(imageFormat, imageBuffer);
           }
           resolve({
             album: data.tags.album,
