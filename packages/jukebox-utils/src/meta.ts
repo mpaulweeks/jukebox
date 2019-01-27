@@ -11,7 +11,7 @@ export class MetaLoader {
   static tryParseNodeId3(buffer: Buffer): Promise<MetaData> {
     return new Promise((resolve, reject) => {
       const tags = NodeID3.read(buffer);
-      // console.log(tags);
+      // console.log('node-id3:', tags);
 
       if (tags.image) {
         const imageFormat = tags.image.mime;
