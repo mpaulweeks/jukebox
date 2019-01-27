@@ -1,5 +1,5 @@
 import React from 'react';
-import { MetaLoader, MetaData, fetchCollection, Collection, InfoLookup, fetchInfoLookup, getAudioUrl, TrackData } from 'jukebox-utils';
+import { fetchCollection, Collection, InfoLookup, fetchInfoLookup, getAudioUrl, TrackData } from 'jukebox-utils';
 import Playlist from './Playlist';
 import Track from './Track';
 import styled from 'styled-components';
@@ -67,7 +67,7 @@ export default class App extends React.Component<any, State> {
           />
         )}
         <PlaylistWrapper>
-          {collection.getPlaylists().map((pl, index) => (
+          {collection.getSortedPlaylistData().map((pl, index) => (
             <Playlist
               key={`playlist-${index}`}
               loadTrack={loadTrack}

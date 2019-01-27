@@ -23,7 +23,7 @@ export class Collection {
   containsImage(imageHash) {
     return !!this.data.images[imageHash];
   }
-  getPlaylists() {
+  getSortedPlaylistData() {
     const { playlists } = this.data;
     const arr = Object.keys(playlists).map(key => playlists[key]);
     arr.sort(this.comparePlaylists);
