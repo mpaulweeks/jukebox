@@ -1,3 +1,4 @@
+import Constants from "./constants";
 import { MetaLoader } from "./meta";
 import { MetaData, SongData } from "./types";
 
@@ -15,7 +16,7 @@ export class SongLoader {
     return this.compileSongData(id, metaData);
   }
   static async fromId(songId: string): Promise<SongData> {
-    const url = 'todo s3/' + songId;
+    const url = `${Constants.AudioRootPath}/${songId}`;
     const metaData = await MetaLoader.fromUrl(url);
     return this.compileSongData(url, metaData);
   }
