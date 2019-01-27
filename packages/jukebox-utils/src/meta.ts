@@ -6,12 +6,12 @@ import { MetaData } from './types';
 export class MetaLoader {
 
   static imageFromArray(format, dataString) {
-    return `data:${format};base64,${dataString}`;
+    return `data:image/${format};base64,${dataString}`;
   }
   static tryParseNodeId3(buffer: Buffer): Promise<MetaData> {
     return new Promise((resolve, reject) => {
       const tags = NodeID3.read(buffer);
-      console.log(tags);
+      // console.log(tags);
 
       if (tags.image) {
         const imageFormat = tags.image.mime;
@@ -24,7 +24,7 @@ export class MetaLoader {
           imageSrc: this.imageFromArray(imageFormat, imageData),
         });
       } else {
-        console.log('node-id3 error:', tags);
+        // console.log('node-id3 error:', tags);
         reject();
       }
     });
@@ -34,24 +34,23 @@ export class MetaLoader {
     return new Promise<MetaData>((resolve, reject) => {
       jsmediatags.read(buffer, {
         onSuccess: data => {
+          // console.log(data);
+          let imageSrc: (string | undefined);
           if (data.tags.picture) {
-            console.log('jsmediatags:', data);
-            // const imageFormat = data.tags.picture.format;
-            const imageFormat = 'image/jpeg';
-            const imageData = btoa(data.tags.picture.data.map(char => String.fromCharCode(char)));
-            resolve({
-              album: data.tags.album,
-              artist: data.tags.artist,
-              title: data.tags.title,
-              year: data.tags.year,
-              imageSrc: this.imageFromArray(imageFormat, imageData),
-            });
-          } else {
-            reject('no picture data');
+            const imageFormat = data.tags.picture.format;
+            const imageData = btoa(data.tags.picture.data.map(char => String.fromCharCode(char)).join(''));
+            imageSrc = this.imageFromArray(imageFormat, imageData);
           }
+          resolve({
+            album: data.tags.album,
+            artist: data.tags.artist,
+            title: data.tags.title,
+            year: data.tags.year,
+            imageSrc: imageSrc,
+          });
         },
         onError: error => {
-          console.log('jsmediatags error:', error);
+          // console.log('jsmediatags error:', error);
           reject(error);
         },
       });
