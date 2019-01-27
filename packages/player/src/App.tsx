@@ -2,6 +2,15 @@ import React from 'react';
 import { MetaLoader, MetaData, fetchCollection, Collection, InfoLookup, fetchInfoLookup, getAudioUrl, SongData } from 'jukebox-utils';
 import Playlist from './Playlist';
 import Track from './Track';
+import styled from 'styled-components';
+
+const PlaylistWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+`;
 
 interface State {
   collection?: Collection,
@@ -57,14 +66,16 @@ export default class App extends React.Component<any, State> {
             isCurrent={true}
           />
         )}
-        {collection.getPlaylists().map((pl, index) => (
-          <Playlist
-            key={`playlist-${index}`}
-            loadTrack={loadTrack}
-            infoLookup={infoLookup}
-            playlist={pl}
-          />
-        ))}
+        <PlaylistWrapper>
+          {collection.getPlaylists().map((pl, index) => (
+            <Playlist
+              key={`playlist-${index}`}
+              loadTrack={loadTrack}
+              infoLookup={infoLookup}
+              playlist={pl}
+            />
+          ))}
+        </PlaylistWrapper>
       </div>
     )
 

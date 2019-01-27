@@ -18,10 +18,10 @@ const PlaylistContainer = styled.div`
 
 const TracksContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: no-wrap;
 `;
 
 interface Props {

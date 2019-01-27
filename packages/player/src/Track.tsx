@@ -9,6 +9,12 @@ const TrackContainer = styled.div`
   border: 1px solid black;
   padding: 5px;
   margin: 5px;
+
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const CurrentContainer = styled(TrackContainer)`
@@ -20,6 +26,8 @@ const TrackRow = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  margin: 0px 20px;
 `;
 
 const TrackTitle = styled(TrackRow)`
@@ -28,7 +36,7 @@ const TrackTitle = styled(TrackRow)`
 `;
 
 const AlbumCover = styled.img`
-  width: 100px;
+  width: 50px;
   height: auto;
 
   ${CurrentContainer} & {
@@ -56,6 +64,9 @@ export default class Track extends React.Component<Props> {
     const ContainerComp = isCurrent ? CurrentContainer : TrackContainer
     return (
       <ContainerComp onClick={this.onClick}>
+        <div>
+          <AlbumCover src={track.imageSrc || PlaceholderImage} />
+        </div>
         <TrackTitle>
           {track.title || 'Unknown Title'}
         </TrackTitle>
@@ -63,7 +74,7 @@ export default class Track extends React.Component<Props> {
           {this.truncate(track.artist || 'Unknown Artist')}
         </TrackRow>
         <TrackRow>
-          <AlbumCover src={track.imageSrc || PlaceholderImage} />
+          {track.id}
         </TrackRow>
       </ContainerComp>
     )
