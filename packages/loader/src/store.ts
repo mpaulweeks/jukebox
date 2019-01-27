@@ -63,4 +63,13 @@ export default class Store {
       });
     });
   }
+
+  uploadImage(hash: string, buffer: Buffer) {
+    // eg: https://s3.amazonaws.com/mpaulweeks-jukebox/image/12345
+    return this.upload({
+      Bucket: this.bucket,
+      Key: 'image/' + hash,
+      Body: buffer,
+    });
+  }
 }

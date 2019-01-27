@@ -7,7 +7,8 @@ function testPerfume(metaData: MetaData) {
   expect(metaData.artist).toBe('fusq');
   expect(metaData.title).toBe('Perfume! (Lost Station EP)');
   expect(metaData.year).toBe('2015');
-  expect(metaData.imageSrc).toMatch(/data:image\/jpeg;base64,.+/);
+  expect(metaData.imageFormat).toMatch('jpg');
+  expect(metaData.imageBuffer).toBeTruthy();
 }
 
 test('test fromFile', async () => {

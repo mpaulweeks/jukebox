@@ -1,19 +1,21 @@
 import Constants from "./constants";
 import { MetaLoader } from "./meta";
 import { MetaData, SongData } from "./types";
+import md5 = require("md5");
 
 export class SongLoader {
   static compileSongData(id: string, metaData: MetaData): SongData {
     return {
-      ...metaData,
+      album: metaData.album,
+      artist: metaData.artist,
+      title: metaData.title,
+      year: metaData.year,
+      imageFormat: metaData.imageFormat,
+
       id: id,
       updated: new Date(),
+      imageHash: metaData.imageBuffer && md5(metaData.imageBuffer),
     };
-  }
-  static async fromFile(id: string, location: string): Promise<SongData> {
-    console.log(id, location);
-    const metaData = await MetaLoader.fromFile(location);
-    return this.compileSongData(id, metaData);
   }
   static async fromId(id: string): Promise<SongData> {
     const url = `${Constants.AudioRootPath}/${id}`;

@@ -5,23 +5,27 @@ import { MetaData } from './types';
 
 export class MetaLoader {
 
-  static imageFromArray(format, buffer) {
-    return `data:image/${format};base64,${buffer.toString('base64')}`;
+  static dataUrl(metaData: MetaData) {
+    const { imageFormat, imageBuffer } = metaData;
+    if (!imageFormat || !imageBuffer) {
+      return null;
+    }
+    return `data:image/${imageFormat};base64,${imageBuffer.toString('base64')}`;
   }
+
   static tryParseNodeId3(buffer: Buffer): Promise<MetaData> {
     return new Promise((resolve, reject) => {
       const tags = NodeID3.read(buffer);
       // console.log('node-id3:', tags);
 
       if (tags.image) {
-        const imageFormat = tags.image.mime;
-        const imageBuffer = tags.image.imageBuffer;
         resolve({
           album: tags.album,
           artist: tags.artist,
           title: tags.title,
           year: tags.year,
-          imageSrc: this.imageFromArray(imageFormat, imageBuffer),
+          imageFormat: tags.image.mime,
+          imageBuffer: tags.image.imageBuffer,
         });
       } else {
         // console.log('node-id3 error:', tags);
@@ -35,19 +39,18 @@ export class MetaLoader {
       jsmediatags.read(buffer, {
         onSuccess: data => {
           // console.log(data);
-          let imageSrc: (string | undefined);
+          let imageBuffer: (Buffer | undefined);
           if (data.tags.picture) {
-            const imageFormat = data.tags.picture.format;
             const imageStr = data.tags.picture.data.map(char => String.fromCharCode(char)).join('');
-            const imageBuffer = Buffer.from(imageStr, 'binary');
-            imageSrc = this.imageFromArray(imageFormat, imageBuffer);
+            imageBuffer = Buffer.from(imageStr, 'binary');
           }
           resolve({
             album: data.tags.album,
             artist: data.tags.artist,
             title: data.tags.title,
             year: data.tags.year,
-            imageSrc: imageSrc,
+            imageFormat: data.tags.picture && data.tags.picture.format,
+            imageBuffer: imageBuffer,
           });
         },
         onError: error => {

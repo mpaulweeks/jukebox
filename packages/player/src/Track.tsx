@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SongData } from 'jukebox-utils';
+import { SongData, Constants } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
 
 
@@ -61,11 +61,13 @@ export default class Track extends React.Component<Props> {
   render() {
     // todo store in audio obj, only display inteface
     const { track, isCurrent } = this.props;
-    const ContainerComp = isCurrent ? CurrentContainer : TrackContainer
+    const ContainerComp = isCurrent ? CurrentContainer : TrackContainer;
+    // todo wrap in song object in library
+    const imageSrc = track.imageHash && `${Constants.ImageRootPath}/${track.imageHash}`;
     return (
       <ContainerComp onClick={this.onClick}>
         <div>
-          <AlbumCover src={track.imageSrc || PlaceholderImage} />
+          <AlbumCover src={imageSrc || PlaceholderImage} />
         </div>
         <TrackTitle>
           {track.title}

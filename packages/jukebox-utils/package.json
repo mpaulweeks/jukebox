@@ -12,9 +12,11 @@
   },
   "dependencies": {
     "@types/jest": "^23.3.13",
+    "@types/md5": "^2.1.33",
     "@types/node": "^10.12.18",
     "jest": "^23.6.0",
     "jsmediatags": "^3.8.1",
+    "md5": "^2.2.1",
     "node-id3": "^0.1.7",
     "ts-jest": "^23.10.5",
     "typescript": "^3.2.4"

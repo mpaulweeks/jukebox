@@ -1,16 +1,23 @@
-import { Collection, Constants, InfoLookup, SongLoader } from 'jukebox-utils';
+import { Collection, Constants, InfoLookup, MetaLoader, SongLoader } from 'jukebox-utils';
 import { Library } from './library';
 import Store from './store';
+
+interface ImageFile {
+  hash: string,
+  buffer: Buffer,
+}
 
 export class Loader {
   collection: Collection;
   infoLookup: InfoLookup;
-  toUpload: Array<any>;
+  toUploadImage: Array<ImageFile>;
+  toUploadAudio: Array<any>;
 
   constructor(existingCollection: Collection, existingDataBase: InfoLookup) {
     this.collection = existingCollection;
     this.infoLookup = existingDataBase;
-    this.toUpload = [];
+    this.toUploadImage = [];
+    this.toUploadAudio = [];
   }
 
   async addPlaylists(library: Library, whitelist: Array<string>) {
@@ -28,7 +35,7 @@ export class Loader {
       }
     });
 
-    this.toUpload = Object.keys(allTracks)
+    this.toUploadAudio = Object.keys(allTracks)
       .filter(id => !collection.containsTrack(id))
       .map(id => library.getTrack(id));
     collection.data.tracks = Object.keys(allTracks).reduce((obj, id) => {
@@ -37,9 +44,18 @@ export class Loader {
     }, {});
 
     const toUpdateMeta = Object.keys(collection.data.tracks).filter(id => !infoLookup.containsTrack(id));
-    const songPromises = toUpdateMeta.map(id => {
+    const imageBuffers = {};
+    const songPromises = toUpdateMeta.map(async id => {
       const { path } = library.getTrack(id);
-      return SongLoader.fromFile(id, path);
+      const metaData = await MetaLoader.fromFile(path);
+      const song = SongLoader.compileSongData(id, metaData);
+      if (song.imageHash) {
+        imageBuffers[song.imageHash] = {
+          hash: song.imageHash,
+          buffer: metaData.imageBuffer,
+        };
+      }
+      return song;
     });
     const songDatas = await Promise.all(songPromises);
     const songDatasById = songDatas.reduce((obj, song) => {
@@ -50,6 +66,8 @@ export class Loader {
       ...infoLookup.data,
       ...songDatasById,
     };
+
+    this.toUploadImage = Object.keys(imageBuffers).map(key => imageBuffers[key]);
   }
 
   async export() {
@@ -61,9 +79,13 @@ export class Loader {
     await store.uploadData(Constants.CollectionFileName, this.collection.data);
     await store.uploadData(Constants.InfoLookupFileName, this.infoLookup.data);
 
-    const trackPromises = this.toUpload.map(track => store.uploadAudio(track.id, track.path));
-    this.toUpload = [];
+    const trackPromises = this.toUploadAudio.map(track => store.uploadAudio(track.id, track.path));
+    this.toUploadAudio = [];
     await Promise.all(trackPromises);
+
+    const imagePromises = this.toUploadImage.map(image => store.uploadImage(image.hash, image.buffer));
+    this.toUploadImage = [];
+    await Promise.all(imagePromises);
 
     console.log('success!')
   }

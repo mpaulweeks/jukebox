@@ -1,15 +1,20 @@
 
-export interface MetaData {
+interface BasicData {
   album: string,
   artist: string,
   title: string,
   year: string,
-  imageSrc?: string,
+  imageFormat?: string,
+}
+
+export interface MetaData extends BasicData {
+  imageBuffer?: Buffer,
 };
 
-export interface SongData extends MetaData {
+export interface SongData extends BasicData {
   id: string,
   updated: Date,
+  imageHash?: string,
 };
 
 export interface InfoLookupData {
