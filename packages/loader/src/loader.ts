@@ -5,6 +5,7 @@ import Store from './store';
 interface ImageFile {
   hash: string,
   buffer: Buffer,
+  summary: string,
 }
 
 export class Loader {
@@ -35,6 +36,7 @@ export class Loader {
       }
     });
 
+    // determine what tracks are missing in collection
     this.toUploadAudio = Object.keys(allTracks)
       .filter(id => !collection.containsTrack(id))
       .map(id => library.getTrack(id));
@@ -48,27 +50,34 @@ export class Loader {
     const songPromises = toUpdateMeta.map(async id => {
       const { path } = library.getTrack(id);
       const metaData = await MetaLoader.fromFile(path);
-      const song = SongLoader.compileSongData(id, metaData);
+      const song = SongLoader.compileTrackData(id, metaData);
       if (song.imageHash) {
         imageBuffers[song.imageHash] = {
           hash: song.imageHash,
           buffer: metaData.imageBuffer,
+          summary: song.album,
         };
       }
       return song;
     });
-    const songDatas = await Promise.all(songPromises);
-    const songDatasById = songDatas.reduce((obj, song) => {
+    const trackDatas = await Promise.all(songPromises);
+    const trackDatasById = trackDatas.reduce((obj, song) => {
       obj[song.id] = song;
       return obj;
     }, {});
     infoLookup.data = {
       ...infoLookup.data,
-      ...songDatasById,
+      ...trackDatasById,
     };
 
-    // todo compare to images in collection
-    this.toUploadImage = Object.keys(imageBuffers).map(key => imageBuffers[key]);
+    // determine what images are missing in collection
+    this.toUploadImage = Object.keys(imageBuffers)
+      .filter(id => !collection.containsImage(id))
+      .map(id => imageBuffers[id]);
+    collection.data.images = Object.keys(imageBuffers).reduce((obj, id) => {
+      obj[id] = imageBuffers[id].summary;
+      return obj;
+    }, {});
   }
 
   async export() {

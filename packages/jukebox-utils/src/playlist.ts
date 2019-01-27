@@ -1,8 +1,8 @@
-import { InfoLookupData, PlaylistData, SongData } from "./types";
+import { InfoLookupData, PlaylistData, TrackData } from "./types";
 
 export class Playlist {
   data: PlaylistData;
-  tracks: Array<SongData>;
+  tracks: Array<TrackData>;
 
   constructor(playlistData: PlaylistData, InfoLookupData: InfoLookupData, ) {
     this.data = playlistData;

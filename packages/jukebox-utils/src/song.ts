@@ -1,10 +1,10 @@
 import Constants from "./constants";
 import { MetaLoader } from "./meta";
-import { MetaData, SongData } from "./types";
+import { MetaData, TrackData } from "./types";
 import md5 = require("md5");
 
 export class SongLoader {
-  static compileSongData(id: string, metaData: MetaData): SongData {
+  static compileTrackData(id: string, metaData: MetaData): TrackData {
     return {
       album: metaData.album,
       artist: metaData.artist,
@@ -17,9 +17,9 @@ export class SongLoader {
       imageHash: metaData.imageBuffer && md5(metaData.imageBuffer),
     };
   }
-  static async fromId(id: string): Promise<SongData> {
+  static async fromId(id: string): Promise<TrackData> {
     const url = `${Constants.AudioRootPath}/${id}`;
     const metaData = await MetaLoader.fromUrl(url);
-    return this.compileSongData(id, metaData);
+    return this.compileTrackData(id, metaData);
   }
 }

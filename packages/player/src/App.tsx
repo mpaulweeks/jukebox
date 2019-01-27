@@ -1,5 +1,5 @@
 import React from 'react';
-import { MetaLoader, MetaData, fetchCollection, Collection, InfoLookup, fetchInfoLookup, getAudioUrl, SongData } from 'jukebox-utils';
+import { MetaLoader, MetaData, fetchCollection, Collection, InfoLookup, fetchInfoLookup, getAudioUrl, TrackData } from 'jukebox-utils';
 import Playlist from './Playlist';
 import Track from './Track';
 import styled from 'styled-components';
@@ -15,7 +15,7 @@ const PlaylistWrapper = styled.div`
 interface State {
   collection?: Collection,
   infoLookup?: InfoLookup,
-  currentTrack?: SongData,
+  currentTrack?: TrackData,
 };
 
 export default class App extends React.Component<any, State> {
@@ -33,7 +33,7 @@ export default class App extends React.Component<any, State> {
     }));
   }
 
-  loadTrack = (track: SongData) => {
+  loadTrack = (track: TrackData) => {
     // todo make this redux
     const newSource = getAudioUrl(track.id);
     if (newSource !== this.audioElm.src) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PlaylistData, InfoLookup, SongData } from 'jukebox-utils';
+import { PlaylistData, InfoLookup, TrackData } from 'jukebox-utils';
 import Track from './Track';
 
 const PlaylistContainer = styled.div`
@@ -25,7 +25,7 @@ const TracksContainer = styled.div`
 `;
 
 interface Props {
-  loadTrack: (track: SongData) => void,
+  loadTrack: (track: TrackData) => void,
   infoLookup: InfoLookup,
   playlist: PlaylistData,
 };

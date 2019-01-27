@@ -1,5 +1,5 @@
 import React from 'react';
-import { MetaLoader, MetaData, fetchCollection, Collection, InfoLookup, fetchInfoLookup, getAudioUrl, SongData, SongLoader } from 'jukebox-utils';
+import { MetaLoader, MetaData, fetchCollection, Collection, InfoLookup, fetchInfoLookup, getAudioUrl, TrackData, SongLoader } from 'jukebox-utils';
 import Playlist from './Playlist';
 import Track from './Track';
 import styled from 'styled-components';
@@ -7,7 +7,7 @@ import styled from 'styled-components';
 interface State {
   collection?: Collection,
   infoLookup?: InfoLookup,
-  tracks?: Array<SongData>,
+  tracks?: Array<TrackData>,
 };
 
 export default class TestBed extends React.Component<any, State> {

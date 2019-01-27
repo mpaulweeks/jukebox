@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SongData, Constants } from 'jukebox-utils';
+import { TrackData, Constants } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
 
 
@@ -45,8 +45,8 @@ const AlbumCover = styled.img`
 `;
 
 interface Props {
-  loadTrack: (track: SongData) => void,
-  track: SongData,
+  loadTrack: (track: TrackData) => void,
+  track: TrackData,
   isCurrent?: boolean,
 };
 

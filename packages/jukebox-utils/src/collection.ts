@@ -20,6 +20,9 @@ export class Collection {
   containsTrack(trackId) {
     return !!this.data.tracks[trackId];
   }
+  containsImage(imageHash) {
+    return !!this.data.images[imageHash];
+  }
   getPlaylists() {
     const { playlists } = this.data;
     const arr = Object.keys(playlists).map(key => playlists[key]);
@@ -34,8 +37,9 @@ export class Collection {
   }
   static default(): Collection {
     return new Collection({
-      tracks: {},
       playlists: {},
+      tracks: {},
+      images: {},
     });
   }
 }
