@@ -1,2 +1,3 @@
-export * from './library';
+export * from './iTunesLibrary';
 export * from './loader';
+

@@ -1,5 +1,5 @@
 import { Collection, Constants, fetchCollection, fetchInfoLookup, InfoLookup } from 'jukebox-utils';
-import { LibraryLoader, Loader } from "..";
+import { iTunesLibraryLoader, Loader } from "..";
 
 async function main() {
   const librarySource = '../../temp/Library.xml.20190126';
@@ -8,7 +8,7 @@ async function main() {
     'Sample',
     'Yooka',
   ]
-  const library = await LibraryLoader.fromFile(librarySource);
+  const library = await iTunesLibraryLoader.fromFile(librarySource);
 
   const { isDev } = Constants;
   const collection = isDev ? Collection.default() : await fetchCollection();

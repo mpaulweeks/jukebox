@@ -1,5 +1,5 @@
 import { Collection, Constants, InfoLookup, MetaLoader, SongLoader } from 'jukebox-utils';
-import { Library } from './library';
+import { iTunesLibrary } from './iTunesLibrary';
 import Store from './store';
 
 interface ImageFile {
@@ -20,7 +20,7 @@ export class Loader {
     this.toUploadAudio = [];
   }
 
-  async addPlaylists(library: Library, whitelist: Array<string>) {
+  async addPlaylists(library: iTunesLibrary, whitelist: Array<string>) {
     const { collection, infoLookup } = this;
     const allTracks = {};
     library.getPlaylists().forEach(playlist => {
@@ -67,6 +67,7 @@ export class Loader {
       ...songDatasById,
     };
 
+    // todo compare to images in collection
     this.toUploadImage = Object.keys(imageBuffers).map(key => imageBuffers[key]);
   }
 

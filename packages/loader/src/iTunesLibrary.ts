@@ -1,7 +1,7 @@
 import fs from 'fs';
 import itunes from "itunes-data";
 
-interface LibraryData {
+interface iTunesLibraryData {
   tracks: {
     [id: string]: any,
   },
@@ -10,8 +10,8 @@ interface LibraryData {
   }
 };
 
-export class Library {
-  data: LibraryData;
+export class iTunesLibrary {
+  data: iTunesLibraryData;
 
   constructor() {
     this.data = {
@@ -76,11 +76,11 @@ export class Library {
 
 }
 
-export class LibraryLoader {
-  dataPromise: Promise<Library>;
+export class iTunesLibraryLoader {
+  dataPromise: Promise<iTunesLibrary>;
 
   constructor(stream: fs.ReadStream) {
-    const data = new Library();
+    const data = new iTunesLibrary();
     const parser = this.setupListeners(data);
     this.dataPromise = new Promise((resolve, reject) => {
       stream.on('end', () => {
@@ -89,7 +89,7 @@ export class LibraryLoader {
       stream.pipe(parser);
     });
   }
-  setupListeners(library: Library) {
+  setupListeners(library: iTunesLibrary) {
     const parser = itunes.parser();
 
     parser.on("track", function (track) {
@@ -105,8 +105,8 @@ export class LibraryLoader {
     return parser;
   }
 
-  static async fromFile(source: string): Promise<Library> {
+  static async fromFile(source: string): Promise<iTunesLibrary> {
     const stream = fs.createReadStream(source);
-    return new LibraryLoader(stream).dataPromise;
+    return new iTunesLibraryLoader(stream).dataPromise;
   }
 }
