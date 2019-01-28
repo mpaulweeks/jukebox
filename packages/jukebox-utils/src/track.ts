@@ -18,6 +18,7 @@ export class Track implements PlayableTrack {
   trackNumerator?: number;
   trackDenominator?: number;
   trackNumberDisplay?: string;
+  sortKey: string;
 
   constructor(trackData: TrackData) {
     const {
@@ -46,9 +47,20 @@ export class Track implements PlayableTrack {
         this.trackNumberDisplay = `${this.trackNumerator}`;
       }
     }
+    this.sortKey = `${this.album} ${String(this.trackNumerator || 0).padStart(4, '0')}`;
 
     this.audioSrc = getAudioUrl(id);
     this.imageSrc = imageHash && `${Constants.ImageRootPath}/${imageHash}`;
+  }
+
+  static compare(a: PlayableTrack, b: PlayableTrack) {
+    if (a.sortKey < b.sortKey) {
+      return -1;
+    }
+    if (a.sortKey > b.sortKey) {
+      return 1;
+    }
+    return 1;
   }
 
   static fromLookup(id: string, infoLookup: InfoLookup) {

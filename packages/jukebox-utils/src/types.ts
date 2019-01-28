@@ -27,6 +27,7 @@ export interface PlayableTrack extends BasicData {
   trackNumerator?: number,
   trackDenominator?: number,
   trackNumberDisplay?: string,
+  sortKey: string,
   audioSrc: string,
   imageSrc?: string,
 }
@@ -34,6 +35,7 @@ export interface PlayableTrack extends BasicData {
 export interface PlayableTrackList {
   name: string,
   tracks: Array<PlayableTrack>,
+  ordered: boolean;
   nextTrack(PlayableTrack): PlayableTrack,
   prevTrack(PlayableTrack): PlayableTrack,
 }

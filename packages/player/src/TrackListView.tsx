@@ -67,11 +67,14 @@ export default class TrackListView extends React.Component<Props> {
     }
     return (
       <TrackListContainer>
-        <h1>{playlist.name}</h1>
+        <h1>
+          {playlist.name}
+          {!playlist.ordered && <em> (sortable) </em>}
+        </h1>
         <TracksTable>
           <thead>
             <tr>
-              {['art', 'title', 'artist', 'album', 'track#', 'id'].map((text, index) => (
+              {['', 'title', 'artist', 'album', '', ''].map((text, index) => (
                 <th key={`header-${index}`}>
                   <TrackInfo>
                     {text}

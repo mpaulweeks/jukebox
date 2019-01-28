@@ -5,10 +5,26 @@ import { PlayableTrack, PlayableTrackList, PlaylistData } from "./types";
 export class Playlist implements PlayableTrackList {
   name: string;
   tracks: Array<PlayableTrack>;
+  ordered: boolean;
 
-  constructor(data: PlaylistData, tracks: Array<PlayableTrack>) {
+  constructor(data: PlaylistData, tracks: Array<PlayableTrack>, ordered: boolean) {
     this.name = data.name;
     this.tracks = tracks;
+    this.ordered = ordered;
+
+    if (!ordered) {
+      this.tracks.sort(Track.compare);
+    }
+  }
+
+  static compare(a: PlayableTrackList, b: PlayableTrackList) {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 1;
   }
 
   nextTrack(track: PlayableTrack): PlayableTrack {
@@ -22,8 +38,8 @@ export class Playlist implements PlayableTrackList {
     return this.tracks[newIndex];
   }
 
-  static fromLookup(data: PlaylistData, infoLookup: InfoLookup) {
+  static fromLookup(infoLookup: InfoLookup, data: PlaylistData, ordered = true) {
     const tracks = data.trackIds.map(id => Track.fromLookup(id, infoLookup));
-    return new Playlist(data, tracks);
+    return new Playlist(data, tracks, ordered);
   }
 }

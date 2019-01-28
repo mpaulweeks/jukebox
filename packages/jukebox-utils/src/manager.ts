@@ -13,22 +13,17 @@ export class Manager {
     this.collection = collection;
     this.infoLookup = infoLookup;
 
+    const allSongs = Playlist.fromLookup(infoLookup, {
+      name: 'All Songs',
+      trackIds: Object.keys(collection.data.tracks),
+    }, false);
+
     const unsortedPlaylists = Object.keys(collection.data.playlists).map(key => {
       const data = collection.data.playlists[key];
-      return Playlist.fromLookup(data, infoLookup);
+      return Playlist.fromLookup(infoLookup, data);
     });
-    unsortedPlaylists.sort(this.comparePlaylists);
-    this.playlists = unsortedPlaylists;
-  }
-
-  private comparePlaylists(a: Playlist, b: Playlist) {
-    if (a.name < b.name) {
-      return -1;
-    }
-    if (a.name > b.name) {
-      return 1;
-    }
-    return 1;
+    unsortedPlaylists.sort(Playlist.compare);
+    this.playlists = [allSongs].concat(unsortedPlaylists);
   }
 
   static async fetch(): Promise<Manager> {
