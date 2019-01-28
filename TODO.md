@@ -1,6 +1,9 @@
 # todo
 
-- move library location into env.json
+- move library.xml location into env.json
+- implement shuffle
+  - on playlist creation, make shuffle array pointing to same track objs
+  - on next/prev, check shuffle arg to determine which arr to use for lookup
 - playlist for By Album, By Artist that lead to secondary view
   - enum on App for browsing album/artist
   - album view uses meta from first track
