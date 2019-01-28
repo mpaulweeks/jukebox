@@ -1,6 +1,6 @@
 import { Collection, Constants, InfoLookup, Logger, MetaLoader, SongLoader } from 'jukebox-utils';
 import { iTunesLibrary } from './iTunesLibrary';
-import Store from './store';
+import { Store } from './store';
 
 interface ImageFile {
   hash: string,
@@ -9,12 +9,14 @@ interface ImageFile {
 }
 
 export class Loader {
+  store: Store;
   collection: Collection;
   infoLookup: InfoLookup;
   toUploadImage: Array<ImageFile>;
   toUploadAudio: Array<any>;
 
-  constructor(existingCollection: Collection, existingDataBase: InfoLookup) {
+  constructor(store: Store, existingCollection: Collection, existingDataBase: InfoLookup) {
+    this.store = store;
     this.collection = existingCollection;
     this.infoLookup = existingDataBase;
     this.toUploadImage = [];
@@ -81,16 +83,16 @@ export class Loader {
   }
 
   async export() {
-    const store = new Store();
+    const { store, collection, infoLookup, toUploadAudio, toUploadImage } = this;
 
-    await store.uploadData(Constants.CollectionFileName, this.collection.data);
-    await store.uploadData(Constants.InfoLookupFileName, this.infoLookup.data);
+    await store.uploadData(Constants.CollectionFileName, collection.data);
+    await store.uploadData(Constants.InfoLookupFileName, infoLookup.data);
 
-    const trackPromises = this.toUploadAudio.map(track => store.uploadAudio(track.id, track.path));
+    const trackPromises = toUploadAudio.map(track => store.uploadAudio(track.id, track.path));
     this.toUploadAudio = [];
     await Promise.all(trackPromises);
 
-    const imagePromises = this.toUploadImage.map(image => store.uploadImage(image.hash, image.buffer));
+    const imagePromises = toUploadImage.map(image => store.uploadImage(image.hash, image.buffer));
     this.toUploadImage = [];
     await Promise.all(imagePromises);
 

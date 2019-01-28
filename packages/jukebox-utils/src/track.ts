@@ -1,5 +1,4 @@
 import { Constants } from './constants';
-import { getAudioUrl } from './fetch';
 import { InfoLookup } from './infoLookup';
 import { PlayableTrack, TrackData } from './types';
 
@@ -49,7 +48,7 @@ export class Track implements PlayableTrack {
     }
     this.sortKey = `${this.album} ${String(this.trackNumerator || 0).padStart(4, '0')}`;
 
-    this.audioSrc = getAudioUrl(id);
+    this.audioSrc = `${Constants.AudioRootPath}/${id}`;
     this.imageSrc = imageHash && `${Constants.ImageRootPath}/${imageHash}`;
   }
 

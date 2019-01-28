@@ -19,7 +19,6 @@ export class InfoLookup {
     const json = await resp.json();
     return new InfoLookup(json);
   }
-
   static default(): InfoLookup {
     return new InfoLookup({});
   }

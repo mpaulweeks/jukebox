@@ -1,20 +1,20 @@
-import { Collection, Constants, fetchCollection, fetchInfoLookup, InfoLookup } from 'jukebox-utils';
-import { iTunesLibraryLoader, Loader } from "..";
+import { iTunesLibraryLoader, Loader, Store } from "..";
 
 async function main() {
-  const librarySource = '../../temp/Library.xml.20190126';
+  const librarySource = '/Users/mpaulweeks/Music/iTunes/iTunes Music Library.xml';
   const whitelist = [
+    'Anime',
     'Broadway',
     'Sample',
     'Yooka',
   ]
+
+  const store = new Store();
+  const collection = await store.downloadCollection();
+  const infoLookup = await store.downloadInfoLookup();
+  const loader = new Loader(store, collection, infoLookup);
+
   const library = await iTunesLibraryLoader.fromFile(librarySource);
-
-  const { isDev } = Constants;
-  const collection = isDev ? Collection.default() : await fetchCollection();
-  const infoLookup = isDev ? InfoLookup.default() : await fetchInfoLookup();
-  const loader = new Loader(collection, infoLookup);
-
   await loader.addPlaylists(library, whitelist);
   await loader.export();
 }

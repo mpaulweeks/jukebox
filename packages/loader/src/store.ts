@@ -1,8 +1,8 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
-import { Constants, Logger } from 'jukebox-utils';
+import { Collection, Constants, fetchCollection, fetchInfoLookup, InfoLookup, Logger } from 'jukebox-utils';
 
-export default class Store {
+export class Store {
   s3: AWS.S3;
   bucket = 'mpaulweeks-jukebox';
 
@@ -15,10 +15,42 @@ export default class Store {
     this.s3 = new AWS.S3();
   }
 
+  downloadCollection(): Promise<Collection> {
+    if (Constants.isDev) {
+      return new Promise((resolve, reject) => {
+        try {
+          const path = `${Constants.LocalDataRoot}/${Constants.DataLocalPath}/${Constants.CollectionFileName}`;
+          const jsonStr = fs.readFileSync(path, 'utf8');
+          resolve(new Collection(JSON.parse(jsonStr)));
+        } catch (err) {
+          resolve(Collection.default());
+        }
+      });
+    } else {
+      return fetchCollection();
+    }
+  }
+
+  downloadInfoLookup(): Promise<InfoLookup> {
+    if (Constants.isDev) {
+      return new Promise((resolve, reject) => {
+        try {
+          const path = `${Constants.LocalDataRoot}/${Constants.DataLocalPath}/${Constants.InfoLookupFileName}`;
+          const jsonStr = fs.readFileSync(path, 'utf8');
+          resolve(new InfoLookup(JSON.parse(jsonStr)));
+        } catch (err) {
+          resolve(InfoLookup.default());
+        }
+      });
+    } else {
+      return fetchInfoLookup();
+    }
+  }
+
   upload(config: AWS.S3.PutObjectRequest): Promise<string> {
     return new Promise((resolve, reject) => {
       if (Constants.isDev) {
-        fs.writeFile(`../../local/${config.Key}`, config.Body, error => {
+        fs.writeFile(`${Constants.LocalDataRoot}/${config.Key}`, config.Body, error => {
           if (error) {
             Logger.log('Failed to save locally: ' + error);
             reject(error);
@@ -45,7 +77,7 @@ export default class Store {
     // eg: https://s3.amazonaws.com/mpaulweeks-jukebox/data/collection.json
     return this.upload({
       Bucket: this.bucket,
-      Key: 'data/' + filename,
+      Key: `${Constants.DataLocalPath}/${filename}`,
       Body: JSON.stringify(data, null, 2),
     });
   }
@@ -56,7 +88,7 @@ export default class Store {
       fs.readFile(location, (err, buffer) => {
         const promise = this.upload({
           Bucket: this.bucket,
-          Key: 'audio/' + id,
+          Key: `${Constants.AudioLocalPath}/${id}`,
           Body: buffer,
         });
         resolve(promise);
@@ -68,7 +100,7 @@ export default class Store {
     // eg: https://s3.amazonaws.com/mpaulweeks-jukebox/image/12345
     return this.upload({
       Bucket: this.bucket,
-      Key: 'image/' + hash,
+      Key: `${Constants.ImageLocalPath}/${hash}`,
       Body: buffer,
     });
   }
