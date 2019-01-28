@@ -71,53 +71,41 @@ export default class TrackListView extends React.Component<Props> {
         <TracksTable>
           <thead>
             <tr>
-              <th><TrackInfo>
-                art
-              </TrackInfo></th>
-              <th><TrackInfo>
-                title
-              </TrackInfo></th>
-              <th><TrackInfo>
-                artist
-              </TrackInfo></th>
-              <th><TrackInfo>
-                track#
-              </TrackInfo></th>
-              <th><TrackInfo>
-                album
-              </TrackInfo></th>
-              <th><TrackInfo>
-                id
-              </TrackInfo></th>
+              {['art', 'title', 'artist', 'album', 'track#', 'id'].map((text, index) => (
+                <th key={`header-${index}`}>
+                  <TrackInfo>
+                    {text}
+                  </TrackInfo>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {playlist.tracks.map((track, index) => (
-              <TrackRow
-                key={`track-${index}`}
-                onClick={() => loadTrack(track)}
-                isCurrent={track === currentTrack}
-              >
-                <td><TrackInfo>
-                  <TrackImage src={track.imageSrc || PlaceholderImage} />
-                </TrackInfo></td>
-                <td><TrackInfo>
-                  {track.title}
-                </TrackInfo></td>
-                <td><TrackInfo>
-                  {this.truncate(track.artist)}
-                </TrackInfo></td>
-                <td><TrackInfo>
-                  {track.trackNumerator && `${track.trackNumerator}/${track.trackDenominator}`}
-                </TrackInfo></td>
-                <td><TrackInfo>
-                  {track.album}
-                </TrackInfo></td>
-                <td><TrackInfo>
-                  {track.id}
-                </TrackInfo></td>
-              </TrackRow>
-            ))}
+            {playlist.tracks.map((track, row) => {
+              const columns = [
+                <TrackImage src={track.imageSrc || PlaceholderImage} />,
+                track.title,
+                this.truncate(track.artist),
+                track.album,
+                track.trackNumberDisplay,
+                track.id,
+              ];
+              return (
+                <TrackRow
+                  key={`track-${row}`}
+                  onClick={() => loadTrack(track)}
+                  isCurrent={track === currentTrack}
+                >
+                  {columns.map((comp, column) => (
+                    <td key={`body-${row}-${column}`}>
+                      <TrackInfo>
+                        {comp}
+                      </TrackInfo>
+                    </td>
+                  ))}
+                </TrackRow>
+              );
+            })}
           </tbody>
         </TracksTable>
       </TrackListContainer>

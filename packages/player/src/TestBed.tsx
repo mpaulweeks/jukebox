@@ -30,6 +30,8 @@ export default class TestBed extends React.Component<any, State> {
 
   test = async () => {
     const ids = [
+      '141', // hai
+      '137', // groove bias
       '18921', // hello
       '269', // disco fever
       '251', // we'll go from there

@@ -17,6 +17,7 @@ export class Track implements PlayableTrack {
   imageSrc?: string;
   trackNumerator?: number;
   trackDenominator?: number;
+  trackNumberDisplay?: string;
 
   constructor(trackData: TrackData) {
     const {
@@ -35,9 +36,15 @@ export class Track implements PlayableTrack {
     this.year = year;
     this.trackNumber = trackNumber;
 
-    if (trackNumber && trackNumber.split('/').length === 2) {
-      this.trackNumerator = parseFloat(trackNumber.split('/')[0]);
-      this.trackDenominator = parseFloat(trackNumber.split('/')[1]);
+    if (trackNumber) {
+      if (trackNumber.split('/').length === 2) {
+        this.trackNumerator = parseFloat(trackNumber.split('/')[0]);
+        this.trackDenominator = parseFloat(trackNumber.split('/')[1]);
+        this.trackNumberDisplay = `${this.trackNumerator}/${this.trackDenominator}`;
+      } else if (!trackNumber.includes('/')) {
+        this.trackNumerator = parseFloat(trackNumber);
+        this.trackNumberDisplay = `${this.trackNumerator}`;
+      }
     }
 
     this.audioSrc = getAudioUrl(id);

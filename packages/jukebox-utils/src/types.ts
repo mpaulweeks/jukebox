@@ -26,6 +26,7 @@ export interface PlayableTrack extends BasicData {
   id: string,
   trackNumerator?: number,
   trackDenominator?: number,
+  trackNumberDisplay?: string,
   audioSrc: string,
   imageSrc?: string,
 }
