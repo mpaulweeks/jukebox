@@ -1,10 +1,12 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
 import { Collection, Constants, fetchCollection, fetchInfoLookup, InfoLookup, Logger } from 'jukebox-utils';
+import { iTunesLibrary, iTunesLibraryLoader } from './iTunesLibrary';
 
 export class Store {
   s3: AWS.S3;
   bucket = 'mpaulweeks-jukebox';
+  iTunesLibraryPath: string;
 
   constructor() {
     const json = fs.readFileSync('../../local/env.json', 'utf8');
@@ -12,7 +14,12 @@ export class Store {
     process.env.AWS_ACCESS_KEY_ID = envData.AWS_ACCESS_KEY_ID;
     process.env.AWS_SECRET_ACCESS_KEY = envData.AWS_SECRET_ACCESS_KEY;
 
+    this.iTunesLibraryPath = envData.ITUNES_MUSIC_LIBRARY;
     this.s3 = new AWS.S3();
+  }
+
+  iTunesLibrary(): Promise<iTunesLibrary> {
+    return iTunesLibraryLoader.fromFile(this.iTunesLibraryPath);
   }
 
   downloadCollection(): Promise<Collection> {

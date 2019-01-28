@@ -1,8 +1,8 @@
 # todo
 
-- move library.xml location into env.json
 - how to export as vanilla js?
 - use `now` to deploy player to s3
+- add redux for currentTrack/Playlist and player settings
 - implement shuffle
   - on playlist creation, make shuffle array pointing to same track objs
   - on next/prev, check shuffle arg to determine which arr to use for lookup
