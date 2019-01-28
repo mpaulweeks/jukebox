@@ -57,6 +57,7 @@ export class iTunesLibrary {
     const newPlaylist = {
       id: String(playlist['Playlist ID']),
       name: playlist['Name'],
+      // todo 'Persistent ID' lookup
       trackIds: items.map(pi => String(pi['Track ID'])),
     }
 
