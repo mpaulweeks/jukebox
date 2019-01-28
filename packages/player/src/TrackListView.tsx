@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Playlist, Track } from 'jukebox-utils';
+import { PlayableTrackList, PlayableTrack } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
 import { DisplayConstants } from './DisplayConstants';
 
-const PlaylistContainer = styled.div`
+const TrackListContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -51,12 +51,12 @@ const TrackInfo = styled.div`
 
 
 interface Props {
-  loadTrack: (track: Track) => void,
-  currentTrack?: Track,
-  playlist?: Playlist,
+  loadTrack: (track: PlayableTrack) => void,
+  currentTrack?: PlayableTrack,
+  playlist?: PlayableTrackList,
 };
 
-export default class PlaylistView extends React.Component<Props> {
+export default class TrackListView extends React.Component<Props> {
   truncate(info: string) {
     return (info || '').substring(0, 20);
   }
@@ -66,7 +66,7 @@ export default class PlaylistView extends React.Component<Props> {
       return 'loading';
     }
     return (
-      <PlaylistContainer>
+      <TrackListContainer>
         <h1>{playlist.name}</h1>
         <TracksTable>
           <thead>
@@ -90,7 +90,7 @@ export default class PlaylistView extends React.Component<Props> {
             ))}
           </tbody>
         </TracksTable>
-      </PlaylistContainer>
+      </TrackListContainer>
     )
   }
 }

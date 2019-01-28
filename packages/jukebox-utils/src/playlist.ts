@@ -1,12 +1,12 @@
 import { InfoLookup } from "./infoLookup";
 import { Track } from "./track";
-import { PlaylistData } from "./types";
+import { PlayableTrack, PlayableTrackList, PlaylistData } from "./types";
 
-export class Playlist {
+export class Playlist implements PlayableTrackList {
   name: string;
-  tracks: Array<Track>;
+  tracks: Array<PlayableTrack>;
 
-  constructor(data: PlaylistData, tracks: Array<Track>) {
+  constructor(data: PlaylistData, tracks: Array<PlayableTrack>) {
     this.name = data.name;
     this.tracks = tracks;
   }

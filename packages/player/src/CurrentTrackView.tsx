@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Track } from 'jukebox-utils';
+import { PlayableTrack } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
 
 const TrackContainer = styled.div`
@@ -44,7 +44,7 @@ const TrackTitle = styled(DetailsRow)`
 `;
 
 interface Props {
-  track?: Track,
+  track?: PlayableTrack,
 };
 
 export default class TrackView extends React.Component<Props> {

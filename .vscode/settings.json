@@ -2,11 +2,23 @@
   "saveAndRun": {
     "commands": [
       {
-        "match": "packages/jukebox-utils/src/.+\.ts",
+        "match": "packages/loader/src/.+.ts",
+        "cmd": "yarn tsc-loader",
+        "useShortcut": false,
+        "silent": false
+      },
+      {
+        "match": "packages/player/src/.+.ts",
+        "cmd": "yarn tsc-player",
+        "useShortcut": false,
+        "silent": false
+      },
+      {
+        "match": "packages/jukebox-utils/src/.+.ts",
         "cmd": "yarn bs",
         "useShortcut": false,
         "silent": false
-      }
+      },
     ]
   }
 }

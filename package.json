@@ -5,8 +5,10 @@
   "private": true,
   "description": "online music player / backup",
   "scripts": {
-    "build": "cd packages/jukebox-utils && yarn build",
-    "bs": "yarn build && lerna bootstrap",
+    "tsc-utils": "cd packages/jukebox-utils && yarn tsc",
+    "tsc-player": "cd packages/player && yarn tsc",
+    "tsc-loader": "cd packages/loader && yarn tsc",
+    "bs": "yarn tsc-utils && lerna bootstrap",
     "test": "cd packages/jukebox-utils && yarn test && cd ../loader && yarn test",
     "loader": "yarn bs && cd packages/loader && yarn main",
     "dev:files": "http-server local --cors=If-Modified-Since, Range",

@@ -1,9 +1,9 @@
 import { Constants } from './constants';
 import { getAudioUrl } from './fetch';
 import { InfoLookup } from './infoLookup';
-import { TrackData } from './types';
+import { PlayableTrack, TrackData } from './types';
 
-export class Track {
+export class Track implements PlayableTrack {
   id: string;
   album: string;
   artist: string;

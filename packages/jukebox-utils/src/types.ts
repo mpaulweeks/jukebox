@@ -21,33 +21,46 @@ export interface InfoLookupData {
   [id: string]: TrackData,
 };
 
-// data.json stuff
+export interface PlayableTrack extends BasicData {
+  id: string,
+  audioSrc: string,
+  imageSrc?: string,
+}
+
+export interface PlayableTrackList {
+  name: string;
+  tracks: Array<PlayableTrack>;
+}
+
+/////////////////////
+// data.json stuff //
+/////////////////////
 
 export interface PlaylistData {
   name: string,
   trackIds: Array<string>,
 };
 
-export interface PlaylistList {
+export interface CollectionPlaylists {
   // key: string name of playlsit
   // value: playlistData
   [id: string]: PlaylistData,
 };
 
-export interface TrackList {
+export interface CollectionTrackLists {
   // key: string track id in itunes
   // value: summary of song, for human readability
   [id: string]: string,
 };
 
-export interface ImageList {
+export interface CollectionImageLists {
   // key: string hash of image buffer
   // value: album name
   [id: string]: string,
 };
 
 export interface CollectionData {
-  playlists: PlaylistList,
-  tracks: TrackList,
-  images: ImageList,
+  playlists: CollectionPlaylists,
+  tracks: CollectionTrackLists,
+  images: CollectionImageLists,
 };

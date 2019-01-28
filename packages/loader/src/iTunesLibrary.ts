@@ -1,5 +1,5 @@
 import fs from 'fs';
-import itunes from "itunes-data";
+import itunes from 'itunes-data';
 
 interface iTunesLibraryData {
   tracks: {

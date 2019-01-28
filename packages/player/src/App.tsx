@@ -1,6 +1,6 @@
 import React from 'react';
-import { Manager, Track, Playlist } from 'jukebox-utils';
-import PlaylistView from './PlaylistView';
+import { Manager, PlayableTrack, PlayableTrackList } from 'jukebox-utils';
+import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
 import styled from 'styled-components';
@@ -44,8 +44,8 @@ const PlaylistBox = styled(Box)`
 
 interface State {
   manager?: Manager,
-  currentTrack?: Track,
-  currentPlaylist?: Playlist,
+  currentTrack?: PlayableTrack,
+  currentPlaylist?: PlayableTrackList,
 };
 
 export default class App extends React.Component<any, State> {
@@ -60,7 +60,7 @@ export default class App extends React.Component<any, State> {
     }));
   }
 
-  loadTrack = (track: Track) => {
+  loadTrack = (track: PlayableTrack) => {
     // todo make this redux
     const newSource = track.audioSrc;
     if (newSource !== this.audioElm.src) {
@@ -72,7 +72,7 @@ export default class App extends React.Component<any, State> {
       });
     }
   }
-  loadPlaylist = (playlist: Playlist) => {
+  loadPlaylist = (playlist: PlayableTrackList) => {
     // todo make this redux
     const { currentPlaylist } = this.state;
     if (!currentPlaylist || currentPlaylist.name !== playlist.name) {
@@ -111,7 +111,7 @@ export default class App extends React.Component<any, State> {
             />
           </SidebarBox>
           <PlaylistBox>
-            <PlaylistView
+            <TrackListView
               loadTrack={loadTrack}
               playlist={currentPlaylist}
               currentTrack={currentTrack}
