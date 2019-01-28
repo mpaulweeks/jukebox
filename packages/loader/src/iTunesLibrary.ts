@@ -1,5 +1,6 @@
 import fs from 'fs';
 import itunes from 'itunes-data';
+import { Logger } from 'jukebox-utils';
 
 interface iTunesLibraryData {
   tracks: {
@@ -81,10 +82,12 @@ export class iTunesLibraryLoader {
   dataPromise: Promise<iTunesLibrary>;
 
   constructor(stream: fs.ReadStream) {
+    Logger.log('building iTunes library...');
     const data = new iTunesLibrary();
     const parser = this.setupListeners(data);
     this.dataPromise = new Promise((resolve, reject) => {
       stream.on('end', () => {
+        Logger.log('done building iTunes library');
         resolve(data);
       });
       stream.pipe(parser);
@@ -105,6 +108,7 @@ export class iTunesLibraryLoader {
   }
 
   static async fromFile(source: string): Promise<iTunesLibrary> {
+    Logger.log('loading iTunes library...');
     const stream = fs.createReadStream(source);
     return new iTunesLibraryLoader(stream).dataPromise;
   }

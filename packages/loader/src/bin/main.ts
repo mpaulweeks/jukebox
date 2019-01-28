@@ -7,6 +7,7 @@ async function main() {
     'Broadway',
     'Sample',
     'Yooka',
+    'iPod',
   ]
 
   const store = new Store();

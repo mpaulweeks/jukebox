@@ -1,5 +1,6 @@
 # todo
 
+- move library location into env.json
 - playlist for By Album, By Artist that lead to secondary view
   - enum on App for browsing album/artist
   - album view uses meta from first track
