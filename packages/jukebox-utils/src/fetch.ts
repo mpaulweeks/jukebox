@@ -1,5 +1,5 @@
 import { Collection } from "./collection";
-import Constants from "./constants";
+import { Constants } from "./constants";
 import { InfoLookup } from "./infoLookup";
 
 const bustCache = (url: string): string => `${url}?v=${new Date().getTime()}`;

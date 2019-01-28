@@ -15,7 +15,7 @@ const InfoLookupFileName = `metaData.json`;
 const CollectionPath = `${DataRootPath}/${CollectionFileName}`;
 const InfoLookupPath = `${DataRootPath}/${InfoLookupFileName}`;
 
-export default {
+export const Constants = {
   isDev,
   AudioRootPath,
   ImageRootPath,

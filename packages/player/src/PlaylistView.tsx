@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PlaylistData, InfoLookup, TrackData } from 'jukebox-utils';
-import Track from './Track';
+import { Playlist, Track } from 'jukebox-utils';
+import TrackView from './TrackView';
 
 const PlaylistContainer = styled.div`
   border: 5px solid grey;
@@ -25,23 +25,22 @@ const TracksContainer = styled.div`
 `;
 
 interface Props {
-  loadTrack: (track: TrackData) => void,
-  infoLookup: InfoLookup,
-  playlist: PlaylistData,
+  loadTrack: (track: Track) => void,
+  playlist: Playlist,
 };
 
-export default class Playlist extends React.Component<Props> {
+export default class PlaylistView extends React.Component<Props> {
   render() {
-    const { loadTrack, infoLookup, playlist } = this.props;
+    const { loadTrack, playlist } = this.props;
     return (
       <PlaylistContainer>
         <h3>{playlist.name}</h3>
         <TracksContainer>
-          {playlist.trackIds.map((id, index) => (
-            <Track
+          {playlist.tracks.map((track, index) => (
+            <TrackView
               key={`track-${index}`}
               loadTrack={loadTrack}
-              track={infoLookup.get(id)}
+              track={track}
             />
           ))}
         </TracksContainer>

@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TrackData, Constants } from 'jukebox-utils';
+import { Track } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
-
 
 const TrackContainer = styled.div`
   cursor: pointer;
@@ -45,14 +44,14 @@ const AlbumCover = styled.img`
 `;
 
 interface Props {
-  loadTrack: (track: TrackData) => void,
-  track: TrackData,
+  loadTrack: (track: Track) => void,
+  track: Track,
   isCurrent?: boolean,
 };
 
-export default class Track extends React.Component<Props> {
+export default class TrackView extends React.Component<Props> {
   onClick = () => {
-    const { track, loadTrack, isCurrent } = this.props;
+    const { track, loadTrack } = this.props;
     loadTrack(track);
   }
   truncate(info: string) {
@@ -62,12 +61,10 @@ export default class Track extends React.Component<Props> {
     // todo store in audio obj, only display inteface
     const { track, isCurrent } = this.props;
     const ContainerComp = isCurrent ? CurrentContainer : TrackContainer;
-    // todo wrap in song object in library
-    const imageSrc = track.imageHash && `${Constants.ImageRootPath}/${track.imageHash}`;
     return (
       <ContainerComp onClick={this.onClick}>
         <div>
-          <AlbumCover src={imageSrc || PlaceholderImage} />
+          <AlbumCover src={track.imageSrc || PlaceholderImage} />
         </div>
         <TrackTitle>
           {track.title}

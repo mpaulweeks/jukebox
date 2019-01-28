@@ -1,7 +1,7 @@
-import Constants from "./constants";
+import md5 from 'md5';
+import { Constants } from "./constants";
 import { MetaLoader } from "./meta";
 import { MetaData, TrackData } from "./types";
-import md5 = require("md5");
 
 export class SongLoader {
   static compileTrackData(id: string, metaData: MetaData): TrackData {

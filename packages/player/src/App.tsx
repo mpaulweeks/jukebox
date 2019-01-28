@@ -1,7 +1,7 @@
 import React from 'react';
-import { fetchCollection, Collection, InfoLookup, fetchInfoLookup, getAudioUrl, TrackData } from 'jukebox-utils';
-import Playlist from './Playlist';
-import Track from './Track';
+import { Manager, Track } from 'jukebox-utils';
+import PlaylistView from './PlaylistView';
+import TrackView from './TrackView';
 import styled from 'styled-components';
 
 const PlaylistWrapper = styled.div`
@@ -13,9 +13,8 @@ const PlaylistWrapper = styled.div`
 `;
 
 interface State {
-  collection?: Collection,
-  infoLookup?: InfoLookup,
-  currentTrack?: TrackData,
+  manager?: Manager,
+  currentTrack?: Track,
 };
 
 export default class App extends React.Component<any, State> {
@@ -23,21 +22,16 @@ export default class App extends React.Component<any, State> {
   state: State = {};
 
   componentDidMount() {
-    console.log(process.env);
-
-    fetchCollection().then(collection => this.setState({
-      collection: collection,
-    }));
-    fetchInfoLookup().then(infoLookup => this.setState({
-      infoLookup: infoLookup,
+    Manager.fetch().then(manager => this.setState({
+      manager: manager,
     }));
   }
 
-  loadTrack = (track: TrackData) => {
+  loadTrack = (track: Track) => {
     // todo make this redux
-    const newSource = getAudioUrl(track.id);
+    const newSource = track.audioSrc;
     if (newSource !== this.audioElm.src) {
-      this.audioElm.src = getAudioUrl(track.id);
+      this.audioElm.src = newSource;
       this.audioElm.play();
 
       this.setState({
@@ -49,8 +43,8 @@ export default class App extends React.Component<any, State> {
   render() {
     console.log('state:', this.state);
 
-    const { collection, infoLookup, currentTrack } = this.state;
-    if (!collection || !infoLookup) {
+    const { manager, currentTrack } = this.state;
+    if (!manager) {
       return (
         <h3> loading, please wait... </h3>
       );
@@ -60,18 +54,17 @@ export default class App extends React.Component<any, State> {
     return (
       <div>
         {currentTrack && (
-          <Track
+          <TrackView
             loadTrack={loadTrack}
             track={currentTrack}
             isCurrent={true}
           />
         )}
         <PlaylistWrapper>
-          {collection.getSortedPlaylistData().map((pl, index) => (
-            <Playlist
+          {manager.playlists.map((pl, index) => (
+            <PlaylistView
               key={`playlist-${index}`}
               loadTrack={loadTrack}
-              infoLookup={infoLookup}
               playlist={pl}
             />
           ))}

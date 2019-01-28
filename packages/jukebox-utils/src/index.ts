@@ -1,9 +1,11 @@
-import { Collection } from './collection';
-import Constants from './constants';
-import { InfoLookup } from './infoLookup';
-import { MetaLoader } from './meta';
-import { SongLoader } from './song';
+export * from './collection';
+export * from './constants';
 export * from './fetch';
+export * from './infoLookup';
+export * from './manager';
+export * from './meta';
+export * from './playlist';
+export * from './song';
+export * from './track';
 export * from './types';
-export { Collection, InfoLookup, MetaLoader, Constants, SongLoader };
 

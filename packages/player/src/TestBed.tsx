@@ -1,21 +1,19 @@
 import React from 'react';
-import { MetaLoader, MetaData, fetchCollection, Collection, InfoLookup, fetchInfoLookup, getAudioUrl, TrackData, SongLoader } from 'jukebox-utils';
-import Playlist from './Playlist';
-import Track from './Track';
-import styled from 'styled-components';
+import { Manager, Track, TrackData, SongLoader } from 'jukebox-utils';
+import TrackView from './TrackView';
 
 interface State {
-  collection?: Collection,
-  infoLookup?: InfoLookup,
-  tracks?: Array<TrackData>,
+  manager?: Manager;
+  tracks: Array<Track>;
 };
 
 export default class TestBed extends React.Component<any, State> {
   audioElm = new Audio();
-  state: State = {};
+  state: State = {
+    tracks: [],
+  };
 
-  async test() {
-    const { collection, infoLookup } = this.state;
+  test = async () => {
     const ids = [
       '18921', // hello
       '269', // disco fever
@@ -23,43 +21,30 @@ export default class TestBed extends React.Component<any, State> {
       '19267', // genesis of next
       '19290', // yooka
     ];
-    ids.forEach(id => SongLoader.fromId(id)
-      .then(track => this.setState({
-        tracks: (this.state.tracks || []).concat(track),
-      }))
-    );
+    ids.forEach(async id => {
+      const trackData = await SongLoader.fromId(id);
+      const track = new Track(trackData);
+      const tracks = (this.state.tracks || []).concat(track);
+      this.setState({
+        tracks,
+      });
+    });
   }
 
   componentDidMount() {
     console.log(process.env);
-
-    fetchCollection().then(collection => this.setState({
-      collection: collection,
-    }));
-    fetchInfoLookup().then(infoLookup => this.setState({
-      infoLookup: infoLookup,
-    }));
-  }
-
-  componentDidUpdate() {
-    const { collection, infoLookup, tracks } = this.state;
-    if (collection && infoLookup && !tracks) {
-      this.test();
-    }
+    Manager.fetch().then(manager => this.setState({
+      manager: manager,
+    }, this.test));
   }
 
   render() {
-    const { collection, infoLookup, tracks } = this.state;
-    if (!collection || !infoLookup) {
-      return (
-        <h3> loading, please wait... </h3>
-      );
-    }
+    const { tracks } = this.state;
     return (
       <div>
         loaded
-        {tracks && tracks.map((track, index) => (
-          <Track
+        {tracks.map((track, index) => (
+          <TrackView
             key={`track-${index}`}
             track={track}
             loadTrack={() => { }}
