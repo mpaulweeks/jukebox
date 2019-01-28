@@ -1,4 +1,6 @@
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.JUKEBOX_ENV === 'development';
+const isStaging = process.env.JUKEBOX_ENV === 'staging';
+const isProduction = process.env.JUKEBOX_ENV === 'production';
 
 const isBrowser = (typeof window !== 'undefined');
 const isTest = isBrowser && window.location.search === '?test';
@@ -9,7 +11,7 @@ const LocalDataRoot = '../../local';
 const LocalFileServerRoot = 'http://localhost:8081';
 const AwsRoot = 'https://s3.amazonaws.com/mpaulweeks-jukebox';
 const StorageRootPath = isDev ? LocalFileServerRoot : AwsRoot;
-const BucketPath = 'staging';
+const BucketPath = isProduction ? 'production' : 'staging';
 
 const DataLocalPath = `${BucketPath}/data`;
 const AudioLocalPath = `${BucketPath}/audio`;

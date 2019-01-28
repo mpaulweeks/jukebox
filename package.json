@@ -11,9 +11,12 @@
     "bs": "yarn tsc-utils && lerna bootstrap",
     "test": "cd packages/jukebox-utils && yarn test && cd ../loader && yarn test",
     "loader": "yarn bs && cd packages/loader && yarn main",
+    "player": "yarn bs && cd packages/player && yarn start",
     "dev:files": "http-server local --cors=If-Modified-Since, Range",
-    "dev:loader": "NODE_ENV=development yarn loader",
-    "dev:player": "yarn bs && cd packages/player && yarn start"
+    "dev:loader": "JUKEBOX_ENV=development yarn loader",
+    "dev:player": "JUKEBOX_ENV=development yarn player",
+    "stage:loader": "JUKEBOX_ENV=staging yarn loader",
+    "stage:player": "JUKEBOX_ENV=staging yarn player"
   },
   "dependencies": {
     "http-server": "^0.11.1",
