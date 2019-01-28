@@ -11,7 +11,7 @@ const TrackContainer = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  background-color: lightblue;
+  flex-wrap: no-wrap;
 `;
 
 const AlbumContainer = styled.div`

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Manager, Track, TrackData, SongLoader } from 'jukebox-utils';
-import TrackView from './TrackView';
+import CurrentTrackView from './CurrentTrackView';
 
 interface State {
   manager?: Manager;
@@ -44,10 +44,9 @@ export default class TestBed extends React.Component<any, State> {
       <div>
         loaded
         {tracks.map((track, index) => (
-          <TrackView
+          <CurrentTrackView
             key={`track-${index}`}
             track={track}
-            loadTrack={() => { }}
           />
         ))}
       </div>

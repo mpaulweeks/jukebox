@@ -78,8 +78,6 @@ export default class App extends React.Component<any, State> {
     if (!currentPlaylist || currentPlaylist.name !== playlist.name) {
       this.setState({
         currentPlaylist: playlist,
-      }, () => {
-        this.loadTrack(playlist.tracks[0]);
       });
     }
   }
@@ -109,12 +107,14 @@ export default class App extends React.Component<any, State> {
             <PlaylistMenu
               loadPlaylist={loadPlaylist}
               manager={manager}
+              currentPlaylist={currentPlaylist}
             />
           </SidebarBox>
           <PlaylistBox>
             <PlaylistView
               loadTrack={loadTrack}
               playlist={currentPlaylist}
+              currentTrack={currentTrack}
             />
           </PlaylistBox>
         </Body>
