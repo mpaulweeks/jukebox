@@ -67,7 +67,7 @@ export default class App extends React.Component<any, State> {
     Manager.fetch().then(manager => this.setState({
       manager: manager,
     }, () => {
-      this.loadPlaylist(manager.playlists[1]);
+      this.loadPlaylist(manager.playlists[0]);
     }));
   }
 
