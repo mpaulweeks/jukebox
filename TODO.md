@@ -3,6 +3,13 @@
 - how to export as vanilla js?
 - use `now` to deploy player to s3
 - add redux for currentTrack/Playlist and player settings
+- capture meta on track length
+  - simplify update by just deleting meta file?
+  - split out step that reads mp3s for meta, probably the slow part
+- nextTrack on song end
+- implement repeat
+  - notion of "force" on nextTrack
+  - refactor nextTrack to share logic with prev and obey settings
 - implement shuffle
   - on playlist creation, make shuffle array pointing to same track objs
   - on next/prev, check shuffle arg to determine which arr to use for lookup
