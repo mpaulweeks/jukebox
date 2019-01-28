@@ -2,22 +2,44 @@ import fs from 'fs';
 import itunes from 'itunes-data';
 import { Logger } from 'jukebox-utils';
 
+interface iTunesTrackData {
+  itunesId: string,
+  name: string,
+  location: string,
+  path: string,
+  summary: string,
+  id: string,
+};
+
+interface iTunesPlaylistData {
+  id: string,
+  name: string,
+  iTunesIds: Array<string>,
+  tracks: Array<iTunesTrackData>,
+  trackIds: Array<string>,
+}
+
 interface iTunesLibraryData {
-  tracks: {
-    [id: string]: any,
+  iTunesPlaylists: {
+    [id: string]: iTunesPlaylistData,
   },
-  playlists: {
-    [id: string]: any,
-  }
+  iTunesTracks: {
+    [id: string]: iTunesTrackData,
+  },
+  tracks: {
+    [id: string]: iTunesTrackData,
+  },
 };
 
 export class iTunesLibrary {
   data: iTunesLibraryData;
+  trackCount = 0;
 
   constructor() {
     this.data = {
+      iTunesTracks: {},
       tracks: {},
-      playlists: {},
+      iTunesPlaylists: {},
     };
   }
 
@@ -32,21 +54,27 @@ export class iTunesLibrary {
 
   addTrack(track: any) {
     const newTrack = {
-      id: String(track['Track ID']),
+      id: track['Persistent ID'],
+      itunesId: String(track['Track ID']),
       name: track.Name,
       location: track.Location,
       path: this.decodeLocation(track.Location),
       summary: (track.Album ? `${track.Album} - ` : '') + `${track.Artist} - ${track.Name}`,
     };
-    const { tracks } = this.data;
+    const { tracks, iTunesTracks } = this.data;
+    iTunesTracks[newTrack.itunesId] = newTrack;
     tracks[newTrack.id] = newTrack;
+    this.trackCount += 1;
   }
   getTracks() {
     const { tracks } = this.data;
     return Object.keys(tracks).map(key => tracks[key]);
   }
-  getTrack(id) {
+  getTrack(id: string) {
     return this.data.tracks[id];
+  }
+  getTrackByTunes(itunesId: string) {
+    return this.data.iTunesTracks[itunesId];
   }
 
   addPlaylist(playlist: any) {
@@ -58,22 +86,26 @@ export class iTunesLibrary {
     const newPlaylist = {
       id: String(playlist['Playlist ID']),
       name: playlist['Name'],
-      // todo 'Persistent ID' lookup
-      trackIds: items.map(pi => String(pi['Track ID'])),
-    }
-
-    const { playlists } = this.data;
-    playlists[newPlaylist.id] = newPlaylist;
+      iTunesIds: items.map(pi => String(pi['Track ID'])),
+      tracks: [],
+      trackIds: [],
+    };
+    const { iTunesPlaylists } = this.data;
+    iTunesPlaylists[newPlaylist.id] = newPlaylist;
   }
   getPlaylists(filter?: Array<string>) {
-    const { tracks, playlists } = this.data;
-    return Object.keys(playlists)
-      .map(key => playlists[key])
+    const { iTunesPlaylists } = this.data;
+    return Object.keys(iTunesPlaylists)
+      .map(key => iTunesPlaylists[key])
       .filter(playlist => filter ? filter.includes(playlist.name) : true)
-      .map(playlist => ({
-        ...playlist,
-        tracks: playlist.trackIds.map(id => tracks[id]),
-      }));
+      .map(playlist => {
+        const tracks = playlist.iTunesIds.map(itunesId => this.getTrackByTunes(itunesId)).filter(t => t);
+        return {
+          ...playlist,
+          tracks,
+          trackIds: tracks.map(track => track.id),
+        };
+      });
   }
 
 }
