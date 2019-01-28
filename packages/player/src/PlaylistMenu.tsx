@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Playlist, Manager } from 'jukebox-utils';
+import { PlayableTrackList, Manager } from 'jukebox-utils';
 import { DisplayConstants } from './DisplayConstants';
 
 const SidebarContainer = styled.div`
@@ -24,21 +24,21 @@ const PlaylistName = styled('div') <{ isCurrent: boolean }>`
 `;
 
 interface Props {
-  loadPlaylist: (playlist: Playlist) => void,
+  loadPlaylist: (playlist: PlayableTrackList) => void,
   manager: Manager,
-  currentPlaylist?: Playlist,
+  currentTrackList?: PlayableTrackList,
 };
 
 export default class PlaylistMenu extends React.Component<Props> {
   render() {
-    const { manager, loadPlaylist, currentPlaylist } = this.props;
+    const { manager, loadPlaylist, currentTrackList } = this.props;
     return (
       <SidebarContainer>
         {manager.playlists.map((pl, index) => (
           <PlaylistName
             key={`playlist-name-${index}`}
             onClick={() => loadPlaylist(pl)}
-            isCurrent={pl === currentPlaylist}
+            isCurrent={pl === currentTrackList}
           >
             {pl.name}
           </PlaylistName>

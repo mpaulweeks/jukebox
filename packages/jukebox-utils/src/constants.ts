@@ -1,5 +1,9 @@
 const isDev = process.env.NODE_ENV === 'development';
-console.log('isDev:', isDev);
+
+const isBrowser = (typeof window !== 'undefined');
+const isTest = isBrowser && window.location.search === '?test';
+
+const LogDebug = isTest;
 
 const LocalFileServerRoot = 'http://localhost:8081';
 const AwsRoot = 'https://s3.amazonaws.com/mpaulweeks-jukebox';
@@ -17,6 +21,8 @@ const InfoLookupPath = `${DataRootPath}/${InfoLookupFileName}`;
 
 export const Constants = {
   isDev,
+  isTest,
+  LogDebug,
   AudioRootPath,
   ImageRootPath,
   CollectionFileName,

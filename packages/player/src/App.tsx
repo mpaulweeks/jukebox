@@ -1,5 +1,5 @@
 import React from 'react';
-import { Manager, PlayableTrack, PlayableTrackList } from 'jukebox-utils';
+import { Manager, Logger, PlayableTrack, PlayableTrackList } from 'jukebox-utils';
 import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
@@ -45,7 +45,7 @@ const PlaylistBox = styled(Box)`
 interface State {
   manager?: Manager,
   currentTrack?: PlayableTrack,
-  currentPlaylist?: PlayableTrackList,
+  currentTrackList?: PlayableTrackList,
 };
 
 export default class App extends React.Component<any, State> {
@@ -53,6 +53,17 @@ export default class App extends React.Component<any, State> {
   state: State = {};
 
   componentDidMount() {
+    document.addEventListener('keydown', evt => {
+      switch (evt.code) {
+        case 'ArrowLeft':
+          return this.prevTrack();
+        case 'ArrowRight':
+          return this.nextTrack();
+        default:
+        // nothing
+      }
+    });
+
     Manager.fetch().then(manager => this.setState({
       manager: manager,
     }, () => {
@@ -74,18 +85,33 @@ export default class App extends React.Component<any, State> {
   }
   loadPlaylist = (playlist: PlayableTrackList) => {
     // todo make this redux
-    const { currentPlaylist } = this.state;
-    if (!currentPlaylist || currentPlaylist.name !== playlist.name) {
+    const { currentTrackList } = this.state;
+    if (!currentTrackList || currentTrackList.name !== playlist.name) {
       this.setState({
-        currentPlaylist: playlist,
+        currentTrackList: playlist,
       });
     }
   }
 
-  render() {
-    console.log('state:', this.state);
+  nextTrack = () => {
+    const { currentTrack, currentTrackList } = this.state;
+    if (currentTrack && currentTrackList) {
+      const newTrack = currentTrackList.nextTrack(currentTrack);
+      this.loadTrack(newTrack);
+    }
+  }
+  prevTrack = () => {
+    const { currentTrack, currentTrackList } = this.state;
+    if (currentTrack && currentTrackList) {
+      const newTrack = currentTrackList.prevTrack(currentTrack);
+      this.loadTrack(newTrack);
+    }
+  }
 
-    const { manager, currentTrack, currentPlaylist } = this.state;
+  render() {
+    Logger.log('state:', this.state);
+
+    const { manager, currentTrack, currentTrackList } = this.state;
     if (!manager) {
       return (
         <h3> loading, please wait... </h3>
@@ -107,13 +133,13 @@ export default class App extends React.Component<any, State> {
             <PlaylistMenu
               loadPlaylist={loadPlaylist}
               manager={manager}
-              currentPlaylist={currentPlaylist}
+              currentTrackList={currentTrackList}
             />
           </SidebarBox>
           <PlaylistBox>
             <TrackListView
               loadTrack={loadTrack}
-              playlist={currentPlaylist}
+              playlist={currentTrackList}
               currentTrack={currentTrack}
             />
           </PlaylistBox>

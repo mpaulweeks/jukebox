@@ -1,4 +1,4 @@
-import { Collection, Constants, InfoLookup, MetaLoader, SongLoader } from 'jukebox-utils';
+import { Collection, Constants, InfoLookup, Logger, MetaLoader, SongLoader } from 'jukebox-utils';
 import { iTunesLibrary } from './iTunesLibrary';
 import Store from './store';
 
@@ -81,9 +81,6 @@ export class Loader {
   }
 
   async export() {
-    // console.log(this.collection);
-    // console.log(this.InfoLookup);
-
     const store = new Store();
 
     await store.uploadData(Constants.CollectionFileName, this.collection.data);
@@ -97,6 +94,6 @@ export class Loader {
     this.toUploadImage = [];
     await Promise.all(imagePromises);
 
-    console.log('success!')
+    Logger.log('success!')
   }
 }

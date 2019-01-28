@@ -10,6 +10,7 @@ export class SongLoader {
       artist: metaData.artist,
       title: metaData.title,
       year: metaData.year,
+      trackNumber: metaData.trackNumber,
       imageFormat: metaData.imageFormat,
 
       id: id,

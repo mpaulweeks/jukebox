@@ -93,12 +93,10 @@ export class iTunesLibraryLoader {
     const parser = itunes.parser();
 
     parser.on("track", function (track) {
-      // console.log("track:", track);
       library.addTrack(track);
     });
 
     parser.on("playlist", function (playlist) {
-      // console.log("playlist:", playlist);
       library.addPlaylist(playlist);
     });
 

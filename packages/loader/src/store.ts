@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
-import { Constants } from 'jukebox-utils';
+import { Constants, Logger } from 'jukebox-utils';
 
 export default class Store {
   s3: AWS.S3;
@@ -20,20 +20,20 @@ export default class Store {
       if (Constants.isDev) {
         fs.writeFile(`../../local/${config.Key}`, config.Body, error => {
           if (error) {
-            console.log('Failed to save locally: ' + error);
+            Logger.log('Failed to save locally: ' + error);
             reject(error);
           } else {
-            console.log('saved locally: ', config.Key);
+            Logger.log('saved locally: ', config.Key);
             resolve(config.Key);
           }
         })
       } else {
         this.s3.putObject(config, (error, data) => {
           if (error != null) {
-            console.log('Failed to put an object: ' + error);
+            Logger.log('Failed to put an object: ' + error);
             reject(error);
           } else {
-            console.log('uploaded: ', config.Key);
+            Logger.log('uploaded: ', config.Key);
             resolve(config.Key);
           }
         });

@@ -10,8 +10,13 @@ export class Track implements PlayableTrack {
   title: string;
   year: string;
 
+  imageFormat?: string;
+  trackNumber?: string;
+
   audioSrc: string;
   imageSrc?: string;
+  trackNumerator?: number;
+  trackDenominator?: number;
 
   constructor(trackData: TrackData) {
     const {
@@ -20,6 +25,7 @@ export class Track implements PlayableTrack {
       artist,
       title,
       year,
+      trackNumber,
       imageHash,
     } = trackData;
     this.id = id;
@@ -27,6 +33,12 @@ export class Track implements PlayableTrack {
     this.artist = artist;
     this.title = title;
     this.year = year;
+    this.trackNumber = trackNumber;
+
+    if (trackNumber && trackNumber.split('/').length === 2) {
+      this.trackNumerator = parseFloat(trackNumber.split('/')[0]);
+      this.trackDenominator = parseFloat(trackNumber.split('/')[1]);
+    }
 
     this.audioSrc = getAudioUrl(id);
     this.imageSrc = imageHash && `${Constants.ImageRootPath}/${imageHash}`;

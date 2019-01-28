@@ -77,6 +77,9 @@ export default class TrackView extends React.Component<Props> {
           <DetailsRow>
             {track.album}
           </DetailsRow>
+          <DetailsRow>
+            {track.trackNumerator && `${track.trackNumerator}/${track.trackDenominator}`}
+          </DetailsRow>
         </DetailsContainer>
       </TrackContainer>
     )

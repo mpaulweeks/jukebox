@@ -4,6 +4,7 @@ interface BasicData {
   artist: string,
   title: string,
   year: string,
+  trackNumber?: string,
   imageFormat?: string,
 }
 
@@ -23,13 +24,17 @@ export interface InfoLookupData {
 
 export interface PlayableTrack extends BasicData {
   id: string,
+  trackNumerator?: number,
+  trackDenominator?: number,
   audioSrc: string,
   imageSrc?: string,
 }
 
 export interface PlayableTrackList {
-  name: string;
-  tracks: Array<PlayableTrack>;
+  name: string,
+  tracks: Array<PlayableTrack>,
+  nextTrack(PlayableTrack): PlayableTrack,
+  prevTrack(PlayableTrack): PlayableTrack,
 }
 
 /////////////////////

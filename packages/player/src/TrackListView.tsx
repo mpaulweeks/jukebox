@@ -71,21 +71,51 @@ export default class TrackListView extends React.Component<Props> {
         <TracksTable>
           <thead>
             <tr>
-              <th><TrackInfo>art</TrackInfo></th>
-              <th><TrackInfo>title</TrackInfo></th>
-              <th><TrackInfo>artist</TrackInfo></th>
-              <th><TrackInfo>album</TrackInfo></th>
-              <th><TrackInfo>id</TrackInfo></th>
+              <th><TrackInfo>
+                art
+              </TrackInfo></th>
+              <th><TrackInfo>
+                title
+              </TrackInfo></th>
+              <th><TrackInfo>
+                artist
+              </TrackInfo></th>
+              <th><TrackInfo>
+                track#
+              </TrackInfo></th>
+              <th><TrackInfo>
+                album
+              </TrackInfo></th>
+              <th><TrackInfo>
+                id
+              </TrackInfo></th>
             </tr>
           </thead>
           <tbody>
             {playlist.tracks.map((track, index) => (
-              <TrackRow key={`track-${index}`} onClick={() => loadTrack(track)} isCurrent={track === currentTrack}>
-                <td><TrackInfo><TrackImage src={track.imageSrc || PlaceholderImage} /></TrackInfo></td>
-                <td><TrackInfo>{track.title}</TrackInfo></td>
-                <td><TrackInfo>{this.truncate(track.artist)}</TrackInfo></td>
-                <td><TrackInfo>{track.album}</TrackInfo></td>
-                <td><TrackInfo>{track.id}</TrackInfo></td>
+              <TrackRow
+                key={`track-${index}`}
+                onClick={() => loadTrack(track)}
+                isCurrent={track === currentTrack}
+              >
+                <td><TrackInfo>
+                  <TrackImage src={track.imageSrc || PlaceholderImage} />
+                </TrackInfo></td>
+                <td><TrackInfo>
+                  {track.title}
+                </TrackInfo></td>
+                <td><TrackInfo>
+                  {this.truncate(track.artist)}
+                </TrackInfo></td>
+                <td><TrackInfo>
+                  {track.trackNumerator && `${track.trackNumerator}/${track.trackDenominator}`}
+                </TrackInfo></td>
+                <td><TrackInfo>
+                  {track.album}
+                </TrackInfo></td>
+                <td><TrackInfo>
+                  {track.id}
+                </TrackInfo></td>
               </TrackRow>
             ))}
           </tbody>

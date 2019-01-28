@@ -1,11 +1,26 @@
 import React from 'react';
-import { Manager, Track, TrackData, SongLoader } from 'jukebox-utils';
+import { Manager, Logger, PlayableTrack, Track, SongLoader } from 'jukebox-utils';
 import CurrentTrackView from './CurrentTrackView';
+import styled from 'styled-components';
 
 interface State {
   manager?: Manager;
-  tracks: Array<Track>;
+  tracks: Array<PlayableTrack>;
 };
+
+const TracksHolder = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+`;
+const TrackHolder = styled.div`
+  height: 100px;
+  width: 600px;
+  border: 1px solid black;
+  margin: 10px;
+`;
 
 export default class TestBed extends React.Component<any, State> {
   audioElm = new Audio();
@@ -32,7 +47,7 @@ export default class TestBed extends React.Component<any, State> {
   }
 
   componentDidMount() {
-    console.log(process.env);
+    Logger.log(process.env);
     Manager.fetch().then(manager => this.setState({
       manager: manager,
     }, this.test));
@@ -43,12 +58,15 @@ export default class TestBed extends React.Component<any, State> {
     return (
       <div>
         loaded
-        {tracks.map((track, index) => (
-          <CurrentTrackView
-            key={`track-${index}`}
-            track={track}
-          />
-        ))}
+        <TracksHolder>
+          {tracks.map((track, index) => (
+            <TrackHolder key={`track-${index}`}>
+              <CurrentTrackView
+                track={track}
+              />
+            </TrackHolder>
+          ))}
+        </TracksHolder>
       </div>
     )
 
