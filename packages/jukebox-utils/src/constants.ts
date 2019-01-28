@@ -21,8 +21,8 @@ const DataRootPath = `${StorageRootPath}/${DataLocalPath}`;
 const AudioRootPath = `${StorageRootPath}/${AudioLocalPath}`;
 const ImageRootPath = `${StorageRootPath}/${ImageLocalPath}`;
 
-const CollectionFileName = `collection.json`;
-const InfoLookupFileName = `metaData.json`;
+const CollectionFileName = `collection.min.json`;
+const InfoLookupFileName = `metaData.min.json`;
 
 const CollectionPath = `${DataRootPath}/${CollectionFileName}`;
 const InfoLookupPath = `${DataRootPath}/${InfoLookupFileName}`;

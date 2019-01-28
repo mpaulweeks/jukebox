@@ -1,6 +1,13 @@
 # todo
 
 - move library.xml location into env.json
+- how to export as vanilla js?
+- use `now` to deploy player to s3
+- switch to more reliable IDs
+  - try persistent id?
+    - test to make sure they're unique
+  - better solution: hash the summary
+    - again, test to make sure they're unique
 - implement shuffle
   - on playlist creation, make shuffle array pointing to same track objs
   - on next/prev, check shuffle arg to determine which arr to use for lookup

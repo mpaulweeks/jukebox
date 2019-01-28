@@ -75,11 +75,16 @@ export class Store {
 
   uploadData(filename: string, data: any) {
     // eg: https://s3.amazonaws.com/mpaulweeks-jukebox/data/collection.json
+    const key = `${Constants.DataLocalPath}/${filename}`;
     return this.upload({
       Bucket: this.bucket,
-      Key: `${Constants.DataLocalPath}/${filename}`,
+      Key: key.split('.min.').join('.'),
       Body: JSON.stringify(data, null, 2),
-    });
+    }).then(() => this.upload({
+      Bucket: this.bucket,
+      Key: key,
+      Body: JSON.stringify(data),
+    }));
   }
 
   uploadAudio(id: string, location: string) {
