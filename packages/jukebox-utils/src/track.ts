@@ -8,6 +8,7 @@ export class Track implements PlayableTrack {
   artist: string;
   title: string;
   year: string;
+  duration: number;
 
   imageFormat?: string;
   trackNumber?: string;
@@ -26,6 +27,7 @@ export class Track implements PlayableTrack {
       artist,
       title,
       year,
+      duration,
       trackNumber,
       imageHash,
     } = trackData;
@@ -34,6 +36,7 @@ export class Track implements PlayableTrack {
     this.artist = artist;
     this.title = title;
     this.year = year;
+    this.duration = duration;
     this.trackNumber = trackNumber;
 
     if (trackNumber) {

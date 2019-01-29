@@ -60,6 +60,10 @@ export default class App extends React.Component<any, State> {
   };
 
   componentDidMount() {
+    // debuging
+    const debugWindow: any = window;
+    debugWindow.app = this;
+
     document.addEventListener('keydown', evt => {
       switch (evt.code) {
         case 'ArrowLeft':

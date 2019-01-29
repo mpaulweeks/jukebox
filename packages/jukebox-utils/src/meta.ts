@@ -25,6 +25,7 @@ export class MetaLoader {
           artist: tags.artist,
           title: tags.title,
           year: tags.year,
+          duration: 0,
           trackNumber: tags.trackNumber,
           imageFormat: tags.image.mime,
           imageBuffer: tags.image.imageBuffer,
@@ -52,6 +53,7 @@ export class MetaLoader {
             artist: tags.artist,
             title: tags.title,
             year: tags.year,
+            duration: 0,
             trackNumber: tags.track,
             imageFormat: tags.picture && tags.picture.format,
             imageBuffer: imageBuffer,
@@ -65,17 +67,29 @@ export class MetaLoader {
     });
   }
 
-  static parseBuffer(buffer: Buffer): Promise<MetaData> {
-    return this.tryParseNodeId3(buffer)
-      .catch(() => this.tryParseJsMediaTags(buffer))
-      .catch(() => ({
-        album: 'Unknown Album',
-        artist: 'Unknown Artist',
-        title: 'Unknown Title',
-        year: '????',
-        trackNumber: undefined,
-        imageSrc: undefined,
-      }));
+  static async parseBuffer(buffer: Buffer): Promise<MetaData> {
+    const metaData = await (
+      this.tryParseNodeId3(buffer)
+        .catch(() => this.tryParseJsMediaTags(buffer))
+        .catch(() => ({
+          album: 'Unknown Album',
+          artist: 'Unknown Artist',
+          title: 'Unknown Title',
+          year: '????',
+          duration: 0,
+          trackNumber: undefined,
+          imageSrc: undefined,
+        }))
+    );
+    return new Promise((resolve, reject) => {
+      const audioElm = new Audio();
+      audioElm.addEventListener('load', () => {
+        metaData.duration = audioElm.duration;
+        resolve(metaData);
+      });
+      // todo get src from buffer
+      resolve(metaData);
+    })
   }
 
   static async fromUrl(source: string): Promise<MetaData> {

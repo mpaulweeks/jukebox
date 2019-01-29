@@ -1,27 +1,19 @@
 import React from 'react';
 import { Manager, Logger, PlayableTrack, Track, SongLoader, Playlist } from 'jukebox-utils';
-import CurrentTrackView from './CurrentTrackView';
-import styled from 'styled-components';
 import TrackListView from './TrackListView';
+
+function range(length: number) {
+  const toReturn = [];
+  for (let i = 0; i < length; i++) {
+    toReturn.push(i);
+  }
+  return toReturn;
+}
 
 interface State {
   manager?: Manager;
   tracks: Array<PlayableTrack>;
 };
-
-const TracksHolder = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-wrap: wrap;
-`;
-const TrackHolder = styled.div`
-  height: 100px;
-  width: 600px;
-  border: 1px solid black;
-  margin: 10px;
-`;
 
 export default class TestBed extends React.Component<any, State> {
   audioElm = new Audio();
@@ -29,21 +21,16 @@ export default class TestBed extends React.Component<any, State> {
     tracks: [],
   };
 
-  test = async () => {
-    const ids = [
-      '168',
-      '141', // hai
-      '137', // groove bias
-      '18921', // hello
-      '269', // disco fever
-      '251', // we'll go from there
-      '19267', // genesis of next
-      '19290', // yooka
-    ];
+  test = async (manager: Manager) => {
+    const randomIds = range(5).map(i => manager.randomTrack().id);
+    const ids: Array<string> = [
+      // put test ids here
+      '???'
+    ].concat(randomIds);
     ids.forEach(async id => {
       const trackData = await SongLoader.fromId(id);
       const track = new Track(trackData);
-      const tracks = (this.state.tracks || []).concat(track);
+      const tracks = this.state.tracks.concat(track);
       this.setState({
         tracks,
       });
@@ -54,7 +41,7 @@ export default class TestBed extends React.Component<any, State> {
     Logger.log(process.env);
     Manager.fetch().then(manager => this.setState({
       manager: manager,
-    }, this.test));
+    }, () => this.test(manager)));
   }
 
   render() {

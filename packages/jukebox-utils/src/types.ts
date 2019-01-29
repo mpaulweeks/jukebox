@@ -4,6 +4,7 @@ interface BasicData {
   artist: string,
   title: string,
   year: string,
+  duration: number,
   trackNumber?: string,
   imageFormat?: string,
 }
@@ -77,6 +78,7 @@ export interface CollectionData {
 // playing //
 /////////////
 export interface PlayerSettings {
+  isPlaying: boolean,
   repeat: boolean,
   shuffle: boolean,
 };

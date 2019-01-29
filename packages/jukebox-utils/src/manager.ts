@@ -9,6 +9,7 @@ export class Manager {
   infoLookup: InfoLookup;
 
   playlists: Array<Playlist>;
+  allSongs: Playlist;
   otherLists: Array<Playlist>;
 
   constructor(collection: Collection, infoLookup: InfoLookup) {
@@ -35,11 +36,16 @@ export class Manager {
     this.playlists = unsortedPlaylists;
 
 
-    const allSongs = Playlist.fromLookup(infoLookup, {
+    this.allSongs = Playlist.fromLookup(infoLookup, {
       name: 'All Songs',
       trackIds: Object.keys(PlaylistWhitelist ? playlistTracks : collection.data.tracks),
     }, false);
-    this.otherLists = [allSongs];
+    this.otherLists = [this.allSongs];
+  }
+
+  randomTrack() {
+    const { tracks } = this.allSongs;
+    return tracks[Math.floor(Math.random() * tracks.length)];
   }
 
   static async fetch(): Promise<Manager> {
