@@ -67,7 +67,7 @@ export class MetaLoader {
     });
   }
 
-  static async parseBuffer(buffer: Buffer): Promise<MetaData> {
+  static async parseBuffer(buffer: Buffer, mediaStream?: MediaStream): Promise<MetaData> {
     const metaData = await (
       this.tryParseNodeId3(buffer)
         .catch(() => this.tryParseJsMediaTags(buffer))
@@ -82,13 +82,17 @@ export class MetaLoader {
         }))
     );
     return new Promise((resolve, reject) => {
-      const audioElm = new Audio();
-      audioElm.addEventListener('load', () => {
-        metaData.duration = audioElm.duration;
+      if (mediaStream) {
+        const audioElm = new Audio();
+        audioElm.addEventListener('load', () => {
+          metaData.duration = audioElm.duration;
+          resolve(metaData);
+        });
+        audioElm.srcObject = mediaStream;
+      } else {
+        // todo get mediaStream from buffer
         resolve(metaData);
-      });
-      // todo get src from buffer
-      resolve(metaData);
+      }
     })
   }
 

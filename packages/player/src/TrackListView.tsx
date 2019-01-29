@@ -74,7 +74,7 @@ export default class TrackListView extends React.Component<Props> {
         <TracksTable>
           <thead>
             <tr>
-              {['', 'title', 'artist', 'album', '', ''].map((text, index) => (
+              {['', 'title', 'artist', 'length', 'album', '#', ''].map((text, index) => (
                 <th key={`header-${index}`}>
                   <TrackInfo>
                     {text}
@@ -89,6 +89,7 @@ export default class TrackListView extends React.Component<Props> {
                 <TrackImage src={track.imageSrc || PlaceholderImage} />,
                 track.title,
                 this.truncate(track.artist),
+                track.duration,
                 track.album,
                 track.trackNumberDisplay,
                 track.id,
