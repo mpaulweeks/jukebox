@@ -1,10 +1,11 @@
 import { InfoLookup } from "./infoLookup";
 import { Track } from "./track";
-import { PlayableTrack, PlayableTrackList, PlaylistData } from "./types";
+import { PlayableTrack, PlayableTrackList, PlayerSettings, PlaylistData } from "./types";
 
 export class Playlist implements PlayableTrackList {
   name: string;
   tracks: Array<PlayableTrack>;
+  shuffled: Array<PlayableTrack>;
   ordered: boolean;
 
   constructor(data: PlaylistData, tracks: Array<PlayableTrack>, ordered: boolean) {
@@ -15,6 +16,18 @@ export class Playlist implements PlayableTrackList {
     if (!ordered) {
       this.tracks.sort(Track.compare);
     }
+    this.shuffled = Playlist.shuffle(this.tracks);
+  }
+
+  static shuffle(tracks: Array<PlayableTrack>): Array<PlayableTrack> {
+    const toShuffle = tracks.concat();
+    const toReturn: Array<PlayableTrack> = [];
+    while (toShuffle.length > 0) {
+      const index = Math.floor(Math.random() * toShuffle.length);
+      const track = toShuffle.splice(index, 1)[0];
+      toReturn.push(track);
+    }
+    return toReturn;
   }
 
   static compare(a: PlayableTrackList, b: PlayableTrackList) {
@@ -27,15 +40,18 @@ export class Playlist implements PlayableTrackList {
     return 1;
   }
 
-  nextTrack(track: PlayableTrack): PlayableTrack {
-    const index = this.tracks.indexOf(track);
-    const newIndex = (this.tracks.length + index + 1) % this.tracks.length;
-    return this.tracks[newIndex];
+  jumpToTrack(settings: PlayerSettings, current: PlayableTrack, delta: number) {
+    const { tracks, shuffled } = this;
+    const arr = settings.shuffle ? shuffled : tracks;
+    const index = arr.indexOf(current);
+    const newIndex = (arr.length + index + delta) % arr.length;
+    return arr[newIndex];
   }
-  prevTrack(track: PlayableTrack): PlayableTrack {
-    const index = this.tracks.indexOf(track);
-    const newIndex = (this.tracks.length + index - 1) % this.tracks.length;
-    return this.tracks[newIndex];
+  nextTrack(settings: PlayerSettings, current: PlayableTrack): PlayableTrack {
+    return this.jumpToTrack(settings, current, 1);
+  }
+  prevTrack(settings: PlayerSettings, current: PlayableTrack): PlayableTrack {
+    return this.jumpToTrack(settings, current, -1);
   }
 
   static fromLookup(infoLookup: InfoLookup, data: PlaylistData, ordered = true) {

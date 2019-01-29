@@ -7,12 +7,10 @@
   - simplify update by just deleting meta file?
   - split out step that reads mp3s for meta, probably the slow part
 - nextTrack on song end
+- add spacebar for pause
 - implement repeat
   - notion of "force" on nextTrack
   - refactor nextTrack to share logic with prev and obey settings
-- implement shuffle
-  - on playlist creation, make shuffle array pointing to same track objs
-  - on next/prev, check shuffle arg to determine which arr to use for lookup
 - playlist for By Album, By Artist that lead to secondary view
   - enum on App for browsing album/artist
   - album view uses meta from first track

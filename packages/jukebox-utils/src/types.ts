@@ -36,8 +36,8 @@ export interface PlayableTrackList {
   name: string,
   tracks: Array<PlayableTrack>,
   ordered: boolean;
-  nextTrack(PlayableTrack): PlayableTrack,
-  prevTrack(PlayableTrack): PlayableTrack,
+  nextTrack(PlayerSettings, PlayableTrack): PlayableTrack,
+  prevTrack(PlayerSettings, PlayableTrack): PlayableTrack,
 }
 
 /////////////////////
@@ -71,4 +71,12 @@ export interface CollectionData {
   playlists: CollectionPlaylists,
   tracks: CollectionTrackLists,
   images: CollectionImageLists,
+};
+
+/////////////
+// playing //
+/////////////
+export interface PlayerSettings {
+  repeat: boolean,
+  shuffle: boolean,
 };

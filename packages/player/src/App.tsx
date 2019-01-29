@@ -1,5 +1,5 @@
 import React from 'react';
-import { Manager, Logger, PlayableTrack, PlayableTrackList } from 'jukebox-utils';
+import { Manager, Logger, PlayableTrack, PlayerSettings, PlayableTrackList } from 'jukebox-utils';
 import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
@@ -44,25 +44,35 @@ const PlaylistBox = styled(Box)`
 
 interface State {
   manager?: Manager,
+  settings: PlayerSettings,
   currentTrack?: PlayableTrack,
   currentTrackList?: PlayableTrackList,
 };
 
 export default class App extends React.Component<any, State> {
   audioElm = new Audio();
-  state: State = {};
+  state: State = {
+    settings: {
+      repeat: false,
+      shuffle: true,
+    },
+  };
 
   componentDidMount() {
     document.addEventListener('keydown', evt => {
       switch (evt.code) {
         case 'ArrowLeft':
-          return this.prevTrack();
+          return this.prevTrack(evt);
         case 'ArrowRight':
-          return this.nextTrack();
+          return this.nextTrack(evt);
+        case 'Space':
+          return this.onSpaceBar(evt);
         default:
+          Logger.log(evt);
         // nothing
       }
     });
+    this.audioElm.addEventListener('ended', () => this.onTrackEnd());
 
     Manager.fetch().then(manager => this.setState({
       manager: manager,
@@ -71,10 +81,10 @@ export default class App extends React.Component<any, State> {
     }));
   }
 
-  loadTrack = (track: PlayableTrack) => {
+  loadTrack = (track: PlayableTrack, force?: boolean) => {
     // todo make this redux
     const newSource = track.audioSrc;
-    if (newSource !== this.audioElm.src) {
+    if (force || newSource !== this.audioElm.src) {
       this.audioElm.src = newSource;
       this.audioElm.play();
 
@@ -93,24 +103,46 @@ export default class App extends React.Component<any, State> {
     }
   }
 
-  nextTrack = () => {
-    const { currentTrack, currentTrackList } = this.state;
+  nextTrack = (keyboardEvent?: any) => {
+    const { settings, currentTrack, currentTrackList } = this.state;
     if (currentTrack && currentTrackList) {
-      const newTrack = currentTrackList.nextTrack(currentTrack);
+      const newTrack = currentTrackList.nextTrack(settings, currentTrack);
       this.loadTrack(newTrack);
     }
   }
-  prevTrack = () => {
-    const { currentTrack, currentTrackList } = this.state;
+  prevTrack = (keyboardEvent?: any) => {
+    const { settings, currentTrack, currentTrackList } = this.state;
     if (currentTrack && currentTrackList) {
-      const newTrack = currentTrackList.prevTrack(currentTrack);
+      const newTrack = currentTrackList.prevTrack(settings, currentTrack);
       this.loadTrack(newTrack);
+    }
+  }
+  onTrackEnd = (keyboardEvent?: any) => {
+    const { settings } = this.state;
+    if (settings.repeat) {
+      this.audioElm.play();
+    } else {
+      this.nextTrack();
+    }
+  }
+  onSpaceBar = (keyboardEvent?: any) => {
+    const { currentTrack, currentTrackList } = this.state;
+    if (currentTrack) {
+      const { audioElm } = this;
+      if (audioElm.paused) {
+        audioElm.play();
+      } else {
+        audioElm.pause();
+      }
+    } else if (currentTrackList) {
+      this.loadTrack(currentTrackList.tracks[0]);
+    }
+    if (keyboardEvent) {
+      keyboardEvent.preventDefault();
     }
   }
 
   render() {
-    Logger.log('state:', this.state);
-
     const { manager, currentTrack, currentTrackList } = this.state;
     if (!manager) {
       return (
