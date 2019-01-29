@@ -31,60 +31,65 @@ const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: stretch;
   flex-wrap: no-wrap;
 `;
 
-const Header = styled(CollapseAble)`
-  position: relative;
+const Header = styled.div`
   width: 100%;
-  height: 200px;
-  margin: var(--jukebox-frame-gap);
-
-  ${props => props.isCollapsed && `
-    margin-top: -210px;
-  `}
 `;
 const Body = styled.div`
-  width: 100%;
   flex-grow: 1;
 
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: stretch;
   flex-wrap: no-wrap;
 `;
 
-const Box = styled(CollapseAble)`
+const BoxWrapper = styled(CollapseAble)`
+  padding: var(--jukebox-frame-gap);
+`;
+const HeaderBoxWrapper = styled(BoxWrapper)`
+  padding-bottom: 0px;
+  height: 200px;
+  ${props => props.isCollapsed && `
+    margin-top: calc(-200px - var(--jukebox-frame-gap));
+  `}
+`;
+const SidebarBoxWrapper = styled(BoxWrapper)`
+  padding-right: 0px;
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+  ${props => props.isCollapsed && `
+    margin-left: calc(-200px - var(--jukebox-frame-gap));
+  `}
+`;
+const MainViewBoxWrapper = styled(BoxWrapper)`
+  flex-grow: 1;
+`;
+
+const Box = styled.div`
+  position: relative;
+  height: 100%;
+
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   flex-wrap: no-wrap;
 
-  height: 100%;
-
   border: 1px solid black;
   box-sizing: border-box;
-  margin: var(--jukebox-frame-gap);
   padding: 10px;
+
+  overflow: hidden;
 `;
 
-const SidebarBox = styled(Box)`
-  position: relative;
-  width: 200px;
-  min-width: 200px;
-  max-width: 200px;
-  margin-right: 0px;
+const MainViewScrollable = styled.div`
 
-  ${props => props.isCollapsed && `
-    margin-left: -200px;
-  `}
-`;
-
-const PlaylistBox = styled(Box)`
-  flex-grow: 1;
 `;
 
 interface State {
@@ -261,51 +266,59 @@ export default class App extends React.Component<any, State> {
     const { loadTrack, loadPlaylist, loadBrowser } = this;
     return (
       <RootContainer>
-        <Header isCollapsed={collapseHeader}>
-          <Box>
-            <CurrentTrackView
-              track={currentTrack}
-              settings={settings}
-              nextTrack={this.nextTrack}
-              prevTrack={this.prevTrack}
-              togglePlay={this.togglePlay}
-              toggleShuffle={this.toggleShuffle}
-              toggleRepeat={this.toggleRepeat}
-            />
-            <CollapseBottom
-              onClick={this.toggleHeader}
-              isCollapsed={collapseHeader}
-            />
-          </Box>
+        <Header>
+          <HeaderBoxWrapper isCollapsed={collapseHeader}>
+            <Box>
+              <CurrentTrackView
+                track={currentTrack}
+                settings={settings}
+                nextTrack={this.nextTrack}
+                prevTrack={this.prevTrack}
+                togglePlay={this.togglePlay}
+                toggleShuffle={this.toggleShuffle}
+                toggleRepeat={this.toggleRepeat}
+              />
+              <CollapseBottom
+                onClick={this.toggleHeader}
+                isCollapsed={collapseHeader}
+              />
+            </Box>
+          </HeaderBoxWrapper>
         </Header>
         <Body>
-          <SidebarBox isCollapsed={collapseSidebar}>
-            <PlaylistMenu
-              loadPlaylist={loadPlaylist}
-              loadBrowser={loadBrowser}
-              manager={manager}
-              currentTrackList={currentTrackList}
-              currentBrowser={currentBrowser}
-            />
-            <CollapseSidebar
-              onClick={this.toggleSidebar}
-              isCollapsed={collapseSidebar}
-            />
-          </SidebarBox>
-          <PlaylistBox>
-            {currentBrowser ? (
-              <BrowserView
+          <SidebarBoxWrapper isCollapsed={collapseSidebar}>
+            <Box>
+              <PlaylistMenu
                 loadPlaylist={loadPlaylist}
-                browser={currentBrowser}
+                loadBrowser={loadBrowser}
+                manager={manager}
+                currentTrackList={currentTrackList}
+                currentBrowser={currentBrowser}
               />
-            ) : (
-                <TrackListView
-                  loadTrack={loadTrack}
-                  playlist={currentTrackList}
-                  currentTrack={currentTrack}
-                />
-              )}
-          </PlaylistBox>
+              <CollapseSidebar
+                onClick={this.toggleSidebar}
+                isCollapsed={collapseSidebar}
+              />
+            </Box>
+          </SidebarBoxWrapper>
+          <MainViewBoxWrapper>
+            <Box>
+              <MainViewScrollable>
+                {currentBrowser ? (
+                  <BrowserView
+                    loadPlaylist={loadPlaylist}
+                    browser={currentBrowser}
+                  />
+                ) : (
+                    <TrackListView
+                      loadTrack={loadTrack}
+                      playlist={currentTrackList}
+                      currentTrack={currentTrack}
+                    />
+                  )}
+              </MainViewScrollable>
+            </Box>
+          </MainViewBoxWrapper>
         </Body>
       </RootContainer>
     )
