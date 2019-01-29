@@ -1,7 +1,8 @@
 import React from 'react';
-import { Manager, Logger, PlayableTrack, Track, SongLoader } from 'jukebox-utils';
+import { Manager, Logger, PlayableTrack, Track, SongLoader, Playlist } from 'jukebox-utils';
 import CurrentTrackView from './CurrentTrackView';
 import styled from 'styled-components';
+import TrackListView from './TrackListView';
 
 interface State {
   manager?: Manager;
@@ -58,18 +59,15 @@ export default class TestBed extends React.Component<any, State> {
 
   render() {
     const { tracks } = this.state;
+    const playlist = new Playlist('test playlist', tracks, false);
     return (
       <div>
         loaded
-        <TracksHolder>
-          {tracks.map((track, index) => (
-            <TrackHolder key={`track-${index}`}>
-              <CurrentTrackView
-                track={track}
-              />
-            </TrackHolder>
-          ))}
-        </TracksHolder>
+        <TrackListView
+          loadTrack={() => { }}
+          currentTrack={undefined}
+          playlist={playlist}
+        />
       </div>
     )
 

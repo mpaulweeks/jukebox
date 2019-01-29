@@ -8,8 +8,8 @@ export class Playlist implements PlayableTrackList {
   shuffled: Array<PlayableTrack>;
   ordered: boolean;
 
-  constructor(data: PlaylistData, tracks: Array<PlayableTrack>, ordered: boolean) {
-    this.name = data.name;
+  constructor(name: string, tracks: Array<PlayableTrack>, ordered: boolean) {
+    this.name = name;
     this.tracks = tracks;
     this.ordered = ordered;
 
@@ -56,6 +56,6 @@ export class Playlist implements PlayableTrackList {
 
   static fromLookup(infoLookup: InfoLookup, data: PlaylistData, ordered = true) {
     const tracks = data.trackIds.map(id => Track.fromLookup(id, infoLookup));
-    return new Playlist(data, tracks, ordered);
+    return new Playlist(data.name, tracks, ordered);
   }
 }

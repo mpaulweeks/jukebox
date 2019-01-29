@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { PlayableTrack } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
+import { PlaybackControlProps, PlaybackControls } from './PlaybackControls';
 
 const TrackContainer = styled.div`
   width: 100%;
@@ -43,7 +44,7 @@ const TrackTitle = styled(DetailsRow)`
   text-decoration: underline;
 `;
 
-interface Props {
+interface Props extends PlaybackControlProps {
   track?: PlayableTrack,
 };
 
@@ -80,6 +81,10 @@ export default class TrackView extends React.Component<Props> {
           <DetailsRow>
             {track.trackNumberDisplay}
           </DetailsRow>
+
+          <PlaybackControls
+            {...this.props}
+          />
         </DetailsContainer>
       </TrackContainer>
     )

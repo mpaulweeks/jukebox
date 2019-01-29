@@ -53,8 +53,9 @@ export default class App extends React.Component<any, State> {
   audioElm = new Audio();
   state: State = {
     settings: {
+      isPlaying: false,
       repeat: false,
-      shuffle: true,
+      shuffle: false,
     },
   };
 
@@ -68,8 +69,7 @@ export default class App extends React.Component<any, State> {
         case 'Space':
           return this.onSpaceBar(evt);
         default:
-          Logger.log(evt);
-        // nothing
+        // Logger.log(evt);
       }
     });
     this.audioElm.addEventListener('ended', () => this.onTrackEnd());
@@ -86,10 +86,13 @@ export default class App extends React.Component<any, State> {
     const newSource = track.audioSrc;
     if (force || newSource !== this.audioElm.src) {
       this.audioElm.src = newSource;
-      this.audioElm.play();
 
       this.setState({
         currentTrack: track,
+        settings: {
+          ...this.state.settings,
+          isPlaying: true,
+        },
       });
     }
   }
@@ -128,12 +131,7 @@ export default class App extends React.Component<any, State> {
   onSpaceBar = (keyboardEvent?: any) => {
     const { currentTrack, currentTrackList } = this.state;
     if (currentTrack) {
-      const { audioElm } = this;
-      if (audioElm.paused) {
-        audioElm.play();
-      } else {
-        audioElm.pause();
-      }
+      this.togglePlay();
     } else if (currentTrackList) {
       this.loadTrack(currentTrackList.tracks[0]);
     }
@@ -142,12 +140,48 @@ export default class App extends React.Component<any, State> {
     }
   }
 
+  togglePlay = () => {
+    const { settings } = this.state;
+    this.setState({
+      settings: {
+        ...settings,
+        isPlaying: !settings.isPlaying,
+      },
+    });
+  }
+  toggleShuffle = () => {
+    const { settings } = this.state;
+    this.setState({
+      settings: {
+        ...settings,
+        shuffle: !settings.shuffle,
+      },
+    });
+  }
+  toggleRepeat = () => {
+    const { settings } = this.state;
+    this.setState({
+      settings: {
+        ...settings,
+        repeat: !settings.repeat,
+      },
+    });
+  }
+
   render() {
-    const { manager, currentTrack, currentTrackList } = this.state;
+    const { manager, settings, currentTrack, currentTrackList } = this.state;
     if (!manager) {
       return (
         <h3> loading, please wait... </h3>
       );
+    }
+
+    // todo move into DidReceiveProps
+    const { audioElm } = this;
+    if (settings.isPlaying) {
+      audioElm.play();
+    } else {
+      audioElm.pause();
     }
 
     const { loadTrack, loadPlaylist } = this;
@@ -157,6 +191,12 @@ export default class App extends React.Component<any, State> {
           <Box>
             <CurrentTrackView
               track={currentTrack}
+              settings={settings}
+              nextTrack={this.nextTrack}
+              prevTrack={this.prevTrack}
+              togglePlay={this.togglePlay}
+              toggleShuffle={this.toggleShuffle}
+              toggleRepeat={this.toggleRepeat}
             />
           </Box>
         </Header>
