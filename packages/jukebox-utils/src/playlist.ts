@@ -7,6 +7,8 @@ export class Playlist implements PlayableTrackList {
   tracks: Array<PlayableTrack>;
   shuffled: Array<PlayableTrack>;
   ordered: boolean;
+  imageSrc?: string;
+  album?: string;
 
   constructor(name: string, tracks: Array<PlayableTrack>, ordered: boolean) {
     this.name = name;
@@ -17,6 +19,14 @@ export class Playlist implements PlayableTrackList {
       this.tracks.sort(Track.compare);
     }
     this.shuffled = Playlist.shuffle(this.tracks);
+
+    this.imageSrc = this.tracks.length ? this.tracks[0].imageSrc : undefined;
+    this.album = this.tracks.length ? (this.tracks[0].album || this.tracks[0].title) : undefined;
+  }
+
+  randomTrack() {
+    const { tracks } = this;
+    return tracks[Math.floor(Math.random() * tracks.length)];
   }
 
   static shuffle(tracks: Array<PlayableTrack>): Array<PlayableTrack> {

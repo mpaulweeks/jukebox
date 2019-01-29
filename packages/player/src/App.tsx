@@ -1,9 +1,10 @@
 import React from 'react';
-import { Manager, Logger, PlayableTrack, PlayerSettings, PlayableTrackList } from 'jukebox-utils';
+import { Manager, PlaylistBrowser, PlayableTrack, PlayerSettings, PlayableTrackList } from 'jukebox-utils';
 import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
 import styled from 'styled-components';
+import { BrowserView } from './BrowserView';
 
 const Header = styled.div`
   height: 200px;
@@ -47,6 +48,7 @@ interface State {
   settings: PlayerSettings,
   currentTrack?: PlayableTrack,
   currentTrackList?: PlayableTrackList,
+  currentBrowser?: PlaylistBrowser,
 };
 
 export default class App extends React.Component<any, State> {
@@ -81,7 +83,8 @@ export default class App extends React.Component<any, State> {
     Manager.fetch().then(manager => this.setState({
       manager: manager,
     }, () => {
-      this.loadPlaylist(manager.playlists[0]);
+      // this.loadPlaylist(manager.playlists[0]);
+      this.loadBrowser(manager.browseAlbums);
     }));
   }
 
@@ -106,8 +109,16 @@ export default class App extends React.Component<any, State> {
     if (!currentTrackList || currentTrackList.name !== playlist.name) {
       this.setState({
         currentTrackList: playlist,
+        currentBrowser: undefined,
       });
     }
+  }
+  loadBrowser = (browser: PlaylistBrowser) => {
+    // todo make this redux
+    this.setState({
+      currentTrackList: undefined,
+      currentBrowser: browser,
+    });
   }
 
   nextTrack = (keyboardEvent?: any) => {
@@ -173,7 +184,7 @@ export default class App extends React.Component<any, State> {
   }
 
   render() {
-    const { manager, settings, currentTrack, currentTrackList } = this.state;
+    const { manager, settings, currentTrack, currentTrackList, currentBrowser } = this.state;
     if (!manager) {
       return (
         <h3> loading, please wait... </h3>
@@ -188,7 +199,7 @@ export default class App extends React.Component<any, State> {
       audioElm.pause();
     }
 
-    const { loadTrack, loadPlaylist } = this;
+    const { loadTrack, loadPlaylist, loadBrowser } = this;
     return (
       <div>
         <Header>
@@ -208,16 +219,25 @@ export default class App extends React.Component<any, State> {
           <SidebarBox>
             <PlaylistMenu
               loadPlaylist={loadPlaylist}
+              loadBrowser={loadBrowser}
               manager={manager}
               currentTrackList={currentTrackList}
+              currentBrowser={currentBrowser}
             />
           </SidebarBox>
           <PlaylistBox>
-            <TrackListView
-              loadTrack={loadTrack}
-              playlist={currentTrackList}
-              currentTrack={currentTrack}
-            />
+            {currentBrowser ? (
+              <BrowserView
+                loadPlaylist={loadPlaylist}
+                browser={currentBrowser}
+              />
+            ) : (
+                <TrackListView
+                  loadTrack={loadTrack}
+                  playlist={currentTrackList}
+                  currentTrack={currentTrack}
+                />
+              )}
           </PlaylistBox>
         </Body>
       </div>

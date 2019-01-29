@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PlayableTrackList, Manager, Config } from 'jukebox-utils';
+import { PlayableTrackList, Manager, Config, PlaylistBrowser } from 'jukebox-utils';
 import { DisplayConstants } from './DisplayConstants';
 
 const SidebarContainer = styled.div`
@@ -25,26 +25,37 @@ const PlaylistName = styled('div') <{ isCurrent: boolean }>`
 
 interface Props {
   loadPlaylist: (playlist: PlayableTrackList) => void,
+  loadBrowser: (browser: PlaylistBrowser) => void,
   manager: Manager,
   currentTrackList?: PlayableTrackList,
+  currentBrowser?: PlaylistBrowser,
 };
 
 export default class PlaylistMenu extends React.Component<Props> {
   render() {
-    const { manager, loadPlaylist, currentTrackList } = this.props;
+    const { manager, loadPlaylist, loadBrowser, currentTrackList, currentBrowser } = this.props;
     return (
       <SidebarContainer>
         {!Config.HideOtherLists && (
           <div>
-            {manager.otherLists.map((pl, index) => (
-              <PlaylistName
-                key={`list-name-${index}`}
-                onClick={() => loadPlaylist(pl)}
-                isCurrent={pl === currentTrackList}
-              >
-                {pl.name}
-              </PlaylistName>
-            ))}
+            <PlaylistName
+              onClick={() => loadPlaylist(manager.allSongs)}
+              isCurrent={manager.allSongs === currentTrackList}
+            >
+              {manager.allSongs.name}
+            </PlaylistName>
+            <PlaylistName
+              onClick={() => loadBrowser(manager.browseAlbums)}
+              isCurrent={manager.browseAlbums === currentBrowser}
+            >
+              {manager.browseAlbums.name}
+            </PlaylistName>
+            <PlaylistName
+              onClick={() => loadBrowser(manager.browseArtists)}
+              isCurrent={manager.browseArtists === currentBrowser}
+            >
+              {manager.browseArtists.name}
+            </PlaylistName>
             <hr />
           </div>
         )}

@@ -1,3 +1,4 @@
+export * from './browser';
 export * from './collection';
 export * from './config';
 export * from './constants';

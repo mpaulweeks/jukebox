@@ -14,7 +14,7 @@ export default class TestBed extends React.Component<any, State> {
   };
 
   test = async (manager: Manager) => {
-    const randomIds = range(5).map(() => manager.randomTrack().id);
+    const randomIds = range(5).map(() => manager.allSongs.randomTrack().id);
     const ids: Array<string> = [
       // put test ids here
       '???'

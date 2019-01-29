@@ -38,10 +38,18 @@ export interface PlayableTrack extends BasicData {
 export interface PlayableTrackList {
   name: string,
   tracks: Array<PlayableTrack>,
-  ordered: boolean;
+  ordered: boolean,
+  imageSrc?: string,
+  album?: string,
   nextTrack(PlayerSettings, PlayableTrack): PlayableTrack,
   prevTrack(PlayerSettings, PlayableTrack): PlayableTrack,
 }
+
+export interface PlaylistBrowserData {
+  // album/artist to trackIds
+  [key: string]: Array<string>,
+};
+
 
 /////////////////////
 // data.json stuff //

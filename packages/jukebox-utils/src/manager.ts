@@ -1,8 +1,10 @@
+import { PlaylistBrowser } from './browser';
 import { Collection } from './collection';
 import { Config } from './config';
 import { fetchCollection, fetchInfoLookup } from './fetch';
 import { InfoLookup } from './infoLookup';
 import { Playlist } from './playlist';
+import { PlaylistBrowserData } from './types';
 
 export class Manager {
   collection: Collection;
@@ -10,7 +12,8 @@ export class Manager {
 
   playlists: Array<Playlist>;
   allSongs: Playlist;
-  otherLists: Array<Playlist>;
+  browseAlbums: PlaylistBrowser;
+  browseArtists: PlaylistBrowser;
 
   constructor(collection: Collection, infoLookup: InfoLookup) {
     this.collection = collection;
@@ -36,16 +39,21 @@ export class Manager {
     this.playlists = unsortedPlaylists;
 
 
-    this.allSongs = Playlist.fromLookup(infoLookup, {
+    const allSongs = Playlist.fromLookup(infoLookup, {
       name: 'All Songs',
       trackIds: Object.keys(PlaylistWhitelist ? playlistTracks : collection.data.tracks),
     }, false);
-    this.otherLists = [this.allSongs];
-  }
 
-  randomTrack() {
-    const { tracks } = this.allSongs;
-    return tracks[Math.floor(Math.random() * tracks.length)];
+    const trackIdsByAlbum: PlaylistBrowserData = {};
+    const trackIdsByArtist: PlaylistBrowserData = {};
+    allSongs.tracks.forEach(track => {
+      trackIdsByAlbum[track.album] = (trackIdsByAlbum[track.album] || []).concat(track.id);
+      trackIdsByArtist[track.artist] = (trackIdsByArtist[track.artist] || []).concat(track.id);
+    });
+
+    this.allSongs = allSongs;
+    this.browseAlbums = new PlaylistBrowser(infoLookup, 'Albums', trackIdsByAlbum);
+    this.browseArtists = new PlaylistBrowser(infoLookup, 'Artists', trackIdsByAlbum);
   }
 
   static async fetch(): Promise<Manager> {
