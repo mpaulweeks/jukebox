@@ -73,7 +73,10 @@ export class BrowserView extends React.Component<Props> {
                 <TrackListImage src={pl.imageSrc || PlaceholderImage} />
               </TrackListInfo>
               <TrackListInfo>
-                {pl.album || '???'}
+                <b>{pl.album || '???'}</b>
+              </TrackListInfo>
+              <TrackListInfo>
+                {pl.artist || '???'}
               </TrackListInfo>
             </TrackList>
           ))}

@@ -9,6 +9,7 @@ export class Playlist implements PlayableTrackList {
   ordered: boolean;
   imageSrc?: string;
   album?: string;
+  artist?: string;
 
   constructor(name: string, tracks: Array<PlayableTrack>, ordered: boolean) {
     this.name = name;
@@ -22,6 +23,7 @@ export class Playlist implements PlayableTrackList {
 
     this.imageSrc = this.tracks.length ? this.tracks[0].imageSrc : undefined;
     this.album = this.tracks.length ? (this.tracks[0].album || this.tracks[0].title) : undefined;
+    this.artist = this.tracks.length ? this.tracks[0].artist : undefined;
   }
 
   randomTrack() {

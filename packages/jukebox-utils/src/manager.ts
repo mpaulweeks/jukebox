@@ -53,7 +53,7 @@ export class Manager {
 
     this.allSongs = allSongs;
     this.browseAlbums = new PlaylistBrowser(infoLookup, 'Albums', trackIdsByAlbum);
-    this.browseArtists = new PlaylistBrowser(infoLookup, 'Artists', trackIdsByAlbum);
+    this.browseArtists = new PlaylistBrowser(infoLookup, 'Artists', trackIdsByArtist);
   }
 
   static async fetch(): Promise<Manager> {
