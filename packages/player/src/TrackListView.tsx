@@ -89,7 +89,7 @@ export default class TrackListView extends React.Component<Props> {
                 <TrackImage src={track.imageSrc || PlaceholderImage} />,
                 track.title,
                 this.truncate(track.artist),
-                track.duration,
+                track.durationDisplay,
                 track.album,
                 track.trackNumberDisplay,
                 track.id,

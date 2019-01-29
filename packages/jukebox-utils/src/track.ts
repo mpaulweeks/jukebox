@@ -8,7 +8,6 @@ export class Track implements PlayableTrack {
   artist: string;
   title: string;
   year: string;
-  duration: number;
 
   imageFormat?: string;
   trackNumber?: string;
@@ -18,6 +17,7 @@ export class Track implements PlayableTrack {
   trackNumerator?: number;
   trackDenominator?: number;
   trackNumberDisplay?: string;
+  durationDisplay: string;
   sortKey: string;
 
   constructor(trackData: TrackData) {
@@ -36,7 +36,6 @@ export class Track implements PlayableTrack {
     this.artist = artist;
     this.title = title;
     this.year = year;
-    this.duration = duration;
     this.trackNumber = trackNumber;
 
     if (trackNumber) {
@@ -49,6 +48,9 @@ export class Track implements PlayableTrack {
         this.trackNumberDisplay = `${this.trackNumerator}`;
       }
     }
+
+    this.durationDisplay = (duration ? `${Math.floor(duration / 60)}:${Math.floor(duration % 60)}` : '')
+
     this.sortKey = `${this.album} ${String(this.trackNumerator || 0).padStart(4, '0')}`;
 
     this.audioSrc = `${Constants.AudioRootPath}/${id}`;

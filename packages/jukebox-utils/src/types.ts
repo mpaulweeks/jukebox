@@ -4,19 +4,20 @@ interface BasicData {
   artist: string,
   title: string,
   year: string,
-  duration: number,
   trackNumber?: string,
   imageFormat?: string,
 }
 
 export interface MetaData extends BasicData {
   imageBuffer?: Buffer,
+  duration: number,
 };
 
 export interface TrackData extends BasicData {
   id: string,
   updated: Date,
   imageHash?: string,
+  duration: number,
 };
 
 export interface InfoLookupData {
@@ -31,6 +32,7 @@ export interface PlayableTrack extends BasicData {
   sortKey: string,
   audioSrc: string,
   imageSrc?: string,
+  durationDisplay: string,
 }
 
 export interface PlayableTrackList {
