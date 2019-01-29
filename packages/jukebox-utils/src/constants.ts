@@ -1,6 +1,6 @@
 const isDev = process.env.REACT_APP_JUKEBOX_ENV === 'development';
 const isStaging = process.env.REACT_APP_JUKEBOX_ENV === 'staging';
-const isProduction = process.env.REACT_APP_JUKEBOX_ENV === 'production';
+const isProduction = !(isDev || isStaging);
 
 const isBrowser = (typeof window !== 'undefined');
 const isTest = isBrowser && window.location.search === '?test';

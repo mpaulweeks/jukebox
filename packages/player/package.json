@@ -4,6 +4,7 @@
   "license": "ISC",
   "private": true,
   "description": "react app for playing songs",
+  "homepage": ".",
   "dependencies": {
     "@types/jest": "^23.3.13",
     "@types/node": "^10.12.18",
