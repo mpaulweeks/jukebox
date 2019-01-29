@@ -8,6 +8,7 @@ export * from './manager';
 export * from './meta';
 export * from './playlist';
 export * from './song';
+export * from './tools';
 export * from './track';
 export * from './types';
 

@@ -1,4 +1,4 @@
-import { Collection, Constants, InfoLookup, Logger, MetaLoader, SongLoader } from 'jukebox-utils';
+import { asyncMap, Collection, Constants, InfoLookup, Logger, MetaLoader, SongLoader } from 'jukebox-utils';
 import { iTunesLibrary } from './iTunesLibrary';
 import { Store } from './store';
 
@@ -82,16 +82,6 @@ export class Loader {
     }, {});
   }
 
-  async asyncMap<E, T>(array: Array<E>, callback: (elm: E, index: number, array: Array<E>) => Promise<T>): Promise<Array<T>> {
-    // https://codeburst.io/javascript-async-await-with-foreach-b6ba62bbf404
-    const output: Array<T> = [];
-    for (let index = 0; index < array.length; index++) {
-      const result = await callback(array[index], index, array);
-      output.push(result);
-    }
-    return output;
-  }
-
   async export() {
     Logger.log('begin exporting...');
     const { store, collection, infoLookup, toUploadAudio, toUploadImage } = this;
@@ -99,10 +89,10 @@ export class Loader {
     await store.uploadData(Constants.CollectionFileName, collection.data);
     await store.uploadData(Constants.InfoLookupFileName, infoLookup.data);
 
-    await this.asyncMap(toUploadAudio, (track => store.uploadAudio(track.id, track.path)));
+    await asyncMap(toUploadAudio, (track => store.uploadAudio(track.id, track.path)));
     this.toUploadAudio = [];
 
-    await this.asyncMap(toUploadImage, (image => store.uploadImage(image.hash, image.buffer)));
+    await asyncMap(toUploadImage, (image => store.uploadImage(image.hash, image.buffer)));
     this.toUploadImage = [];
 
     Logger.log('success!')
