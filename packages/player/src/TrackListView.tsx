@@ -2,20 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import { PlayableTrackList, PlayableTrack } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
-import { DisplayConstants } from './DisplayConstants';
+import { MainViewContainer, MainViewScrollable } from './Components';
 
-const TrackListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-wrap: no-wrap;
+const TrackListContainer = styled(MainViewContainer)`
+`;
 
-  width: 100%;
+const TracksTableContainer = styled(MainViewScrollable)`
 `;
 
 const TracksTable = styled.table`
   width: 100%;
+  height: 100%;
   border-collapse: collapse;
 
   & th, & td {
@@ -28,7 +25,6 @@ const TracksTable = styled.table`
     border-top-width: 0px;
   }
 `;
-
 const TrackRow = styled('tr') <{ isCurrent: boolean }>`
   cursor: pointer;
 
@@ -71,46 +67,48 @@ export default class TrackListView extends React.Component<Props> {
           {playlist.name}
           {!playlist.ordered && <em> (sortable) </em>}
         </h1>
-        <TracksTable>
-          <thead>
-            <tr>
-              {['', 'title', 'artist', 'length', 'album', '#'].map((text, index) => (
-                <th key={`header-${index}`}>
-                  <TrackInfo>
-                    {text}
-                  </TrackInfo>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {playlist.tracks.map((track, row) => {
-              const columns = [
-                <TrackImage src={track.imageSrc || PlaceholderImage} />,
-                track.title,
-                this.truncate(track.artist),
-                track.durationDisplay,
-                track.album,
-                track.trackNumberDisplay,
-              ];
-              return (
-                <TrackRow
-                  key={`track-${row}`}
-                  onClick={() => loadTrack(track)}
-                  isCurrent={track === currentTrack}
-                >
-                  {columns.map((comp, column) => (
-                    <td key={`body-${row}-${column}`}>
-                      <TrackInfo>
-                        {comp}
-                      </TrackInfo>
-                    </td>
-                  ))}
-                </TrackRow>
-              );
-            })}
-          </tbody>
-        </TracksTable>
+        <TracksTableContainer>
+          <TracksTable>
+            <thead>
+              <tr>
+                {['', 'title', 'artist', 'length', 'album', '#'].map((text, index) => (
+                  <th key={`header-${index}`}>
+                    <TrackInfo>
+                      {text}
+                    </TrackInfo>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {playlist.tracks.map((track, row) => {
+                const columns = [
+                  <TrackImage src={track.imageSrc || PlaceholderImage} />,
+                  track.title,
+                  this.truncate(track.artist),
+                  track.durationDisplay,
+                  track.album,
+                  track.trackNumberDisplay,
+                ];
+                return (
+                  <TrackRow
+                    key={`track-${row}`}
+                    onClick={() => loadTrack(track)}
+                    isCurrent={track === currentTrack}
+                  >
+                    {columns.map((comp, column) => (
+                      <td key={`body-${row}-${column}`}>
+                        <TrackInfo>
+                          {comp}
+                        </TrackInfo>
+                      </td>
+                    ))}
+                  </TrackRow>
+                );
+              })}
+            </tbody>
+          </TracksTable>
+        </TracksTableContainer>
       </TrackListContainer>
     )
   }

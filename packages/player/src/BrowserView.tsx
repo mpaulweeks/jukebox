@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { PlayableTrackList, PlaylistBrowser } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
+import { MainViewScrollable, MainViewContainer } from './Components';
 
-const BrowserContainer = styled.div`
-  width: 100%;
+const BrowserContainer = styled(MainViewContainer)`
 `;
 
-const TrackListsContainer = styled.div`
+const TrackListsContainer = styled(MainViewScrollable)`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;

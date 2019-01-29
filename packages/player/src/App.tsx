@@ -78,18 +78,12 @@ const Box = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: stretch;
   flex-wrap: no-wrap;
 
   border: 1px solid black;
   box-sizing: border-box;
   padding: 10px;
-
-  overflow: hidden;
-`;
-
-const MainViewScrollable = styled.div`
-
 `;
 
 interface State {
@@ -137,6 +131,7 @@ export default class App extends React.Component<any, State> {
       manager: manager,
     }, () => {
       // this.loadPlaylist(manager.playlists[0]);
+      // this.loadPlaylist(manager.allSongs);
       this.loadBrowser(manager.browseAlbums);
     }));
   }
@@ -303,20 +298,18 @@ export default class App extends React.Component<any, State> {
           </SidebarBoxWrapper>
           <MainViewBoxWrapper>
             <Box>
-              <MainViewScrollable>
-                {currentBrowser ? (
-                  <BrowserView
-                    loadPlaylist={loadPlaylist}
-                    browser={currentBrowser}
+              {currentBrowser ? (
+                <BrowserView
+                  loadPlaylist={loadPlaylist}
+                  browser={currentBrowser}
+                />
+              ) : (
+                  <TrackListView
+                    loadTrack={loadTrack}
+                    playlist={currentTrackList}
+                    currentTrack={currentTrack}
                   />
-                ) : (
-                    <TrackListView
-                      loadTrack={loadTrack}
-                      playlist={currentTrackList}
-                      currentTrack={currentTrack}
-                    />
-                  )}
-              </MainViewScrollable>
+                )}
             </Box>
           </MainViewBoxWrapper>
         </Body>
