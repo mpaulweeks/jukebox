@@ -5,9 +5,36 @@ import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
 import styled from 'styled-components';
 import { BrowserView } from './BrowserView';
+import { CollapseBottom, CollapseSidebar } from './Collapse';
+import { CollapseAble } from './Components';
 
-const Header = styled.div`
+// todo pass colors as props
+const RootContainer = styled.div`
+  font-size: 16px;
+
+  --jukebox-foreground: black;
+  --jukebox-background: white;
+  --jukebox-highlight: lightblue;
+  --jukebox-collapse-foreground: white;
+  --jukebox-collapse-background: green;
+
+  background-color: var(--jukebox-background);
+  color: var(--jukebox-foreground);
+
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+`;
+
+const Header = styled(CollapseAble)`
+  position: relative;
   height: 200px;
+
+  ${props => props.isCollapsed && `
+    margin-top: -200px;
+  `}
 `;
 const Body = styled.div`
   height: calc(100% - 200px);
@@ -19,7 +46,7 @@ const Body = styled.div`
   flex-wrap: no-wrap;
 `;
 
-const Box = styled.div`
+const Box = styled(CollapseAble)`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -35,8 +62,15 @@ const Box = styled.div`
 `;
 
 const SidebarBox = styled(Box)`
+  position: relative;
   width: 200px;
+  min-width: 200px;
+  max-width: 200px;
   margin-right: 0px;
+
+  ${props => props.isCollapsed && `
+    margin-left: -200px;
+  `}
 `;
 
 const PlaylistBox = styled(Box)`
@@ -49,6 +83,8 @@ interface State {
   currentTrack?: PlayableTrack,
   currentTrackList?: PlayableTrackList,
   currentBrowser?: PlaylistBrowser,
+  collapseHeader: boolean,
+  collapseSidebar: boolean,
 };
 
 export default class App extends React.Component<any, State> {
@@ -59,6 +95,8 @@ export default class App extends React.Component<any, State> {
       repeat: false,
       shuffle: false,
     },
+    collapseHeader: false,
+    collapseSidebar: false,
   };
 
   componentDidMount() {
@@ -183,8 +221,19 @@ export default class App extends React.Component<any, State> {
     });
   }
 
+  toggleHeader = () => {
+    this.setState({
+      collapseHeader: !this.state.collapseHeader,
+    });
+  }
+  toggleSidebar = () => {
+    this.setState({
+      collapseSidebar: !this.state.collapseSidebar,
+    });
+  }
+
   render() {
-    const { manager, settings, currentTrack, currentTrackList, currentBrowser } = this.state;
+    const { manager, settings, currentTrack, currentTrackList, currentBrowser, collapseHeader, collapseSidebar } = this.state;
     if (!manager) {
       return (
         <h3> loading, please wait... </h3>
@@ -201,8 +250,8 @@ export default class App extends React.Component<any, State> {
 
     const { loadTrack, loadPlaylist, loadBrowser } = this;
     return (
-      <div>
-        <Header>
+      <RootContainer>
+        <Header isCollapsed={collapseHeader}>
           <Box>
             <CurrentTrackView
               track={currentTrack}
@@ -214,15 +263,23 @@ export default class App extends React.Component<any, State> {
               toggleRepeat={this.toggleRepeat}
             />
           </Box>
+          <CollapseBottom
+            onClick={this.toggleHeader}
+            isCollapsed={collapseHeader}
+          />
         </Header>
         <Body>
-          <SidebarBox>
+          <SidebarBox isCollapsed={collapseSidebar}>
             <PlaylistMenu
               loadPlaylist={loadPlaylist}
               loadBrowser={loadBrowser}
               manager={manager}
               currentTrackList={currentTrackList}
               currentBrowser={currentBrowser}
+            />
+            <CollapseSidebar
+              onClick={this.toggleSidebar}
+              isCollapsed={collapseSidebar}
             />
           </SidebarBox>
           <PlaylistBox>
@@ -240,7 +297,7 @@ export default class App extends React.Component<any, State> {
               )}
           </PlaylistBox>
         </Body>
-      </div>
+      </RootContainer>
     )
 
   }

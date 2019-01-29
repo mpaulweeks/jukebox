@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PlayableTrackList, Manager, Config, PlaylistBrowser } from 'jukebox-utils';
-import { DisplayConstants } from './DisplayConstants';
 
 const SidebarContainer = styled.div`
   display: flex;
@@ -19,7 +18,7 @@ const PlaylistName = styled('div') <{ isCurrent: boolean }>`
   padding: 5px;
 
   ${props => props.isCurrent && `
-    background-color: ${DisplayConstants.Highlight};
+    background-color: var(--jukebox-highlight);
   `}
 `;
 

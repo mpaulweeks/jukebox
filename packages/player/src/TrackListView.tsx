@@ -33,7 +33,7 @@ const TrackRow = styled('tr') <{ isCurrent: boolean }>`
   cursor: pointer;
 
   ${props => props.isCurrent && `
-    background-color: ${DisplayConstants.Highlight};
+    background-color: var(--jukebox-highlight);
   `}
 `;
 

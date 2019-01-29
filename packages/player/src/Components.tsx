@@ -1,10 +1,15 @@
 import styled from "styled-components";
-import { DisplayConstants } from "./DisplayConstants";
+
+export const CollapseAble = styled('div') <{ isCollapsed?: boolean }>`
+  transition-duration: 1s;
+  transition-delay: 0s;
+  transition-timing-function: ease-in-out;
+`;
 
 export const CanHighlight = styled('div') <{ highlight?: boolean }>`
   cursor: pointer;
 
   ${props => props.highlight && `
-    background-color: ${DisplayConstants.Highlight};
+    background-color: var(--jukebox-highlight);
   `}
 `;
