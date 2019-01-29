@@ -22,8 +22,9 @@ const TrackList = styled.div`
   align-items: center;
   flex-wrap: no-wrap;
 
-  width: 300px;
+  width: 20%;
   padding: 5px;
+  box-sizing: border-box;
 
   cursor: pointer;
   &:hover {
@@ -34,20 +35,23 @@ const TrackList = styled.div`
 `;
 
 const TrackListImage = styled.img`
-  width: 200px;
+  width: 90%;
   height: auto;
 `;
 const TrackListInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   flex-wrap: wrap;
 
   text-align: center;
-  margin: 5px 0px;
-`;
+  margin: 2px 0px;
 
+  &:first-child {
+    margin-bottom: 8px;
+  }
+`;
 
 interface Props {
   loadPlaylist: (playlist: PlayableTrackList) => void,
