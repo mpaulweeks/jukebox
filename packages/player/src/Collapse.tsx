@@ -38,17 +38,15 @@ const genCollapseBox = (Container: StyledComponent<'div', any, { isCollapsed: bo
 }
 
 export const CollapseBottom = genCollapseBox(styled(CollapseBox)`
+  right: 0px;
   bottom: 0px;
-  left: 50%;
-  transform: translateX(-50%);
   ${props => props.isCollapsed && `
     bottom: -50px;
   `}
 `);
 export const CollapseSidebar = genCollapseBox(styled(CollapseBox)`
+  top: 0px;
   right: 0px;
-  top: 50%;
-  transform: translateY(-50%);
   ${props => props.isCollapsed && `
     right: -50px;
   `}

@@ -17,6 +17,7 @@ const RootContainer = styled.div`
   --jukebox-highlight: lightblue;
   --jukebox-collapse-foreground: white;
   --jukebox-collapse-background: green;
+  --jukebox-frame-gap: 10px;
 
   background-color: var(--jukebox-background);
   color: var(--jukebox-foreground);
@@ -26,18 +27,27 @@ const RootContainer = styled.div`
   position: fixed;
   top: 0px;
   left: 0px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: no-wrap;
 `;
 
 const Header = styled(CollapseAble)`
   position: relative;
+  width: 100%;
   height: 200px;
+  margin: var(--jukebox-frame-gap);
 
   ${props => props.isCollapsed && `
-    margin-top: -200px;
+    margin-top: -210px;
   `}
 `;
 const Body = styled.div`
-  height: calc(100% - 200px);
+  width: 100%;
+  flex-grow: 1;
 
   display: flex;
   flex-direction: row;
@@ -57,7 +67,7 @@ const Box = styled(CollapseAble)`
 
   border: 1px solid black;
   box-sizing: border-box;
-  margin: 10px;
+  margin: var(--jukebox-frame-gap);
   padding: 10px;
 `;
 
@@ -262,11 +272,11 @@ export default class App extends React.Component<any, State> {
               toggleShuffle={this.toggleShuffle}
               toggleRepeat={this.toggleRepeat}
             />
+            <CollapseBottom
+              onClick={this.toggleHeader}
+              isCollapsed={collapseHeader}
+            />
           </Box>
-          <CollapseBottom
-            onClick={this.toggleHeader}
-            isCollapsed={collapseHeader}
-          />
         </Header>
         <Body>
           <SidebarBox isCollapsed={collapseSidebar}>
