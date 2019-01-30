@@ -1,17 +1,13 @@
 # todo
 
+- `yarn stage:loader` isnt reading the existing json
+
 - how to export as vanilla js?
-- use `now` to deploy player to s3
+- use `now` to deploy player to s3?
 - add redux for currentTrack/Playlist and player settings
 - capture meta on track length
   - simplify update by just deleting meta file?
   - split out step that reads mp3s for meta, probably the slow part
-- playlist for By Album, By Artist that lead to secondary view
-  - enum on App for browsing album/artist
-  - album view uses meta from first track
-- put entire App into box thats perfectly fit to screen
-  - have the top and sidebar collapse by going into negative margin
-  - have everything flex-fill in its dimmension to seamlessly animate when other comps disappear
 - constant that reads windw.config, determines "whitelist" and "sidebar visible"
   - if whitelist, only use songs from those playlists to populate AllSong, Albums, etc
   - else, use collection.tracks

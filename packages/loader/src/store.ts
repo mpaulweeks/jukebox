@@ -1,6 +1,7 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
-import { Collection, Constants, fetchCollection, fetchInfoLookup, InfoLookup, Logger } from 'jukebox-utils';
+import { Collection, Constants, DataLoaderWithDefault, InfoLookup, Logger } from 'jukebox-utils';
+import fetch from 'node-fetch';
 import { iTunesLibrary, iTunesLibraryLoader } from './iTunesLibrary';
 
 export class Store {
@@ -22,36 +23,29 @@ export class Store {
     return iTunesLibraryLoader.fromFile(this.iTunesLibraryPath);
   }
 
-  downloadCollection(): Promise<Collection> {
-    if (Constants.isDev) {
-      return new Promise((resolve, reject) => {
-        try {
-          const path = `${Constants.LocalDataRoot}/${Constants.DataLocalPath}/${Constants.CollectionFileName}`;
-          const jsonStr = fs.readFileSync(path, 'utf8');
-          resolve(new Collection(JSON.parse(jsonStr)));
-        } catch (err) {
-          resolve(Collection.default());
-        }
-      });
-    } else {
-      return fetchCollection();
+  private async downloadData<Data, Loader>(ClassRef: DataLoaderWithDefault<Data, Loader>, fileName: string): Promise<Loader> {
+    try {
+      if (Constants.isDev) {
+        const path = `${Constants.LocalDataRoot}/${Constants.DataDirectory}/${fileName}`;
+        Logger.log('fetching:', path);
+        const jsonStr = fs.readFileSync(path, 'utf8');
+        return new ClassRef(JSON.parse(jsonStr));
+      } else {
+        const resp = await fetch(`${Constants.DataPath}/${fileName}`);
+        const jsonObj = await resp.json();
+        return new ClassRef(jsonObj);
+      }
+    } catch (error) {
+      return ClassRef.default();
     }
   }
 
+  downloadCollection(): Promise<Collection> {
+    return this.downloadData(Collection, Constants.CollectionFileName);
+  }
+
   downloadInfoLookup(): Promise<InfoLookup> {
-    if (Constants.isDev) {
-      return new Promise((resolve, reject) => {
-        try {
-          const path = `${Constants.LocalDataRoot}/${Constants.DataLocalPath}/${Constants.InfoLookupFileName}`;
-          const jsonStr = fs.readFileSync(path, 'utf8');
-          resolve(new InfoLookup(JSON.parse(jsonStr)));
-        } catch (err) {
-          resolve(InfoLookup.default());
-        }
-      });
-    } else {
-      return fetchInfoLookup();
-    }
+    return this.downloadData(InfoLookup, Constants.InfoLookupFileName);
   }
 
   upload(config: AWS.S3.PutObjectRequest): Promise<string> {
@@ -82,7 +76,7 @@ export class Store {
 
   uploadData(filename: string, data: any) {
     // eg: https://s3.amazonaws.com/mpaulweeks-jukebox/data/collection.json
-    const key = `${Constants.DataLocalPath}/${filename}`;
+    const key = `${Constants.DataDirectory}/${filename}`;
     return this.upload({
       Bucket: this.bucket,
       Key: key.split('.min.').join('.'),
@@ -100,7 +94,7 @@ export class Store {
       fs.readFile(location, (err, buffer) => {
         const promise = this.upload({
           Bucket: this.bucket,
-          Key: `${Constants.AudioLocalPath}/${id}`,
+          Key: `${Constants.AudioDirectory}/${id}`,
           Body: buffer,
         });
         resolve(promise);
@@ -112,7 +106,7 @@ export class Store {
     // eg: https://s3.amazonaws.com/mpaulweeks-jukebox/image/12345
     return this.upload({
       Bucket: this.bucket,
-      Key: `${Constants.ImageLocalPath}/${hash}`,
+      Key: `${Constants.ImageDirectory}/${hash}`,
       Body: buffer,
     });
   }

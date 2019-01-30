@@ -10,21 +10,27 @@ interface ImageFile {
 
 export class Loader {
   store: Store;
+  library: iTunesLibrary;
   collection: Collection;
   infoLookup: InfoLookup;
-  toUploadImage: Array<ImageFile>;
   toUploadAudio: Array<any>;
 
-  constructor(store: Store, existingCollection: Collection, existingDataBase: InfoLookup) {
+  constructor(store: Store, library: iTunesLibrary, existingCollection: Collection, existingDataBase: InfoLookup) {
     this.store = store;
+    this.library = library;
     this.collection = existingCollection;
     this.infoLookup = existingDataBase;
-    this.toUploadImage = [];
     this.toUploadAudio = [];
+
+    Logger.log('created new loader!');
+    Logger.log('collection size:', Object.keys(this.collection.data.tracks).length);
+    Logger.log('infoLookup size:', Object.keys(this.infoLookup.data).length);
   }
 
-  async addPlaylists(library: iTunesLibrary, whitelist: Array<string>) {
-    const { collection, infoLookup } = this;
+  async addPlaylists(whitelist: Array<string>) {
+    Logger.log('adding playlists to loader...');
+
+    const { collection, library } = this;
     const allTracks = {};
     library.getPlaylists().forEach(playlist => {
       if (whitelist.includes(playlist.name)) {
@@ -46,11 +52,18 @@ export class Loader {
       obj[id] = allTracks[id].summary;
       return obj;
     }, {});
+    Logger.log('tracks to upload:', this.toUploadAudio.length);
+  }
+
+  async export() {
+    Logger.log('begin exporting...');
+    const { store, library, collection, infoLookup, toUploadAudio } = this;
 
     const toUpdateMeta = Object.keys(collection.data.tracks).filter(id => !infoLookup.containsTrack(id));
     const imageBuffers = {};
     const songPromises = toUpdateMeta.map(async id => {
       const { path } = library.getTrack(id);
+      // todo re-use this file read for uploading audio
       const metaData = await MetaLoader.fromFile(path);
       const song = SongLoader.compileTrackData(id, metaData);
       if (song.imageHash) {
@@ -73,28 +86,22 @@ export class Loader {
     };
 
     // determine what images are missing in collection
-    this.toUploadImage = Object.keys(imageBuffers)
+    const toUploadImage = Object.keys(imageBuffers)
       .filter(id => !collection.containsImage(id))
       .map(id => imageBuffers[id]);
     collection.data.images = Object.keys(imageBuffers).reduce((obj, id) => {
       obj[id] = imageBuffers[id].summary;
       return obj;
     }, {});
-  }
-
-  async export() {
-    Logger.log('begin exporting...');
-    const { store, collection, infoLookup, toUploadAudio, toUploadImage } = this;
+    Logger.log('images to upload:', toUploadImage.length);
 
     await store.uploadData(Constants.CollectionFileName, collection.data);
     await store.uploadData(Constants.InfoLookupFileName, infoLookup.data);
 
     await asyncMap(toUploadAudio, (track => store.uploadAudio(track.id, track.path)));
-    this.toUploadAudio = [];
-
     await asyncMap(toUploadImage, (image => store.uploadImage(image.hash, image.buffer)));
-    this.toUploadImage = [];
 
+    this.toUploadAudio = [];
     Logger.log('success!')
   }
 }

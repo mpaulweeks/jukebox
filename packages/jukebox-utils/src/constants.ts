@@ -10,35 +10,31 @@ const LogDebug = isTest;
 const LocalDataRoot = '../../local';
 const LocalFileServerRoot = 'http://localhost:8080';
 const AwsRoot = 'https://s3.amazonaws.com/mpaulweeks-jukebox';
-const StorageRootPath = isDev ? LocalFileServerRoot : AwsRoot;
+const StorageBasePath = isDev ? LocalFileServerRoot : AwsRoot;
 const BucketPath = isProduction ? 'production' : 'staging';
 
-const DataLocalPath = `${BucketPath}/data`;
-const AudioLocalPath = `${BucketPath}/audio`;
-const ImageLocalPath = `${BucketPath}/image`;
+const DataDirectory = `${BucketPath}/data`;
+const AudioDirectory = `${BucketPath}/audio`;
+const ImageDirectory = `${BucketPath}/image`;
 
-const DataRootPath = `${StorageRootPath}/${DataLocalPath}`;
-const AudioRootPath = `${StorageRootPath}/${AudioLocalPath}`;
-const ImageRootPath = `${StorageRootPath}/${ImageLocalPath}`;
+const DataPath = `${StorageBasePath}/${DataDirectory}`;
+const AudioPath = `${StorageBasePath}/${AudioDirectory}`;
+const ImagePath = `${StorageBasePath}/${ImageDirectory}`;
 
 const CollectionFileName = `collection.min.json`;
 const InfoLookupFileName = `metaData.min.json`;
-
-const CollectionPath = `${DataRootPath}/${CollectionFileName}`;
-const InfoLookupPath = `${DataRootPath}/${InfoLookupFileName}`;
 
 export const Constants = {
   isDev,
   isTest,
   LogDebug,
   LocalDataRoot,
-  AudioRootPath,
-  ImageRootPath,
-  DataLocalPath,
-  AudioLocalPath,
-  ImageLocalPath,
+  DataPath,
+  AudioPath,
+  ImagePath,
+  DataDirectory,
+  AudioDirectory,
+  ImageDirectory,
   CollectionFileName,
   InfoLookupFileName,
-  CollectionPath,
-  InfoLookupPath,
 };

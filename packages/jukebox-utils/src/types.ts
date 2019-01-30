@@ -84,6 +84,11 @@ export interface CollectionData {
   images: CollectionImageLists,
 };
 
+export interface DataLoaderWithDefault<Data, Loader> {
+  new(data: Data): Loader;
+  default(): Loader,
+}
+
 /////////////
 // playing //
 /////////////

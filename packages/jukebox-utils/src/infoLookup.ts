@@ -14,11 +14,6 @@ export class InfoLookup {
     return this.data[trackId];
   }
 
-  static async fromUrl(source: string): Promise<InfoLookup> {
-    const resp = await fetch(source);
-    const json = await resp.json();
-    return new InfoLookup(json);
-  }
   static default(): InfoLookup {
     return new InfoLookup({});
   }

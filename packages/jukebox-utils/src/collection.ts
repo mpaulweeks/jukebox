@@ -14,11 +14,6 @@ export class Collection {
     return !!this.data.images[imageHash];
   }
 
-  static async fromUrl(source: string): Promise<Collection> {
-    const resp = await fetch(source);
-    const json = await resp.json();
-    return new Collection(json);
-  }
   static default(): Collection {
     return new Collection({
       playlists: {},

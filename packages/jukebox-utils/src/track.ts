@@ -53,8 +53,8 @@ export class Track implements PlayableTrack {
 
     this.sortKey = `${this.album} ${String(this.trackNumerator || 0).padStart(4, '0')}`;
 
-    this.audioSrc = `${Constants.AudioRootPath}/${id}`;
-    this.imageSrc = imageHash && `${Constants.ImageRootPath}/${imageHash}`;
+    this.audioSrc = `${Constants.AudioPath}/${id}`;
+    this.imageSrc = imageHash && `${Constants.ImagePath}/${imageHash}`;
   }
 
   static compare(a: PlayableTrack, b: PlayableTrack) {
