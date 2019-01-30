@@ -88,16 +88,15 @@ export class Store {
     }));
   }
 
-  uploadAudio(id: string, location: string) {
+  uploadAudio(id: string, location: string): Promise<Buffer> {
     // eg: https://s3.amazonaws.com/mpaulweeks-jukebox/audio/12345
     return new Promise((resolve, reject) => {
       fs.readFile(location, (err, buffer) => {
-        const promise = this.upload({
+        this.upload({
           Bucket: this.bucket,
           Key: `${Constants.AudioDirectory}/${id}`,
           Body: buffer,
-        });
-        resolve(promise);
+        }).then(() => resolve(buffer));
       });
     });
   }

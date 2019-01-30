@@ -67,7 +67,7 @@ export class MetaLoader {
     });
   }
 
-  static async parseBuffer(buffer: Buffer, mediaStream?: MediaStream): Promise<MetaData> {
+  static async fromBuffer(buffer: Buffer, mediaStream?: MediaStream): Promise<MetaData> {
     const metaData = await (
       this.tryParseNodeId3(buffer)
         .catch(() => this.tryParseJsMediaTags(buffer))
@@ -100,7 +100,7 @@ export class MetaLoader {
     const resp = await fetch(source);
     const arrayBuffer = await resp.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    return this.parseBuffer(buffer);
+    return this.fromBuffer(buffer);
   }
 
   static async fromFile(path: string): Promise<MetaData> {
@@ -110,7 +110,7 @@ export class MetaLoader {
           Logger.debug('error reading meta:', err);
           reject(err);
         } else {
-          const dataPromise = this.parseBuffer(buffer);
+          const dataPromise = this.fromBuffer(buffer);
           resolve(dataPromise);
         }
       });
