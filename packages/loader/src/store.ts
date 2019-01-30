@@ -2,25 +2,19 @@ import AWS from 'aws-sdk';
 import fs from 'fs';
 import { Collection, Constants, DataLoaderWithDefault, InfoLookup, Logger } from 'jukebox-utils';
 import fetch from 'node-fetch';
+import { LoaderConfig } from './config';
 import { iTunesLibrary, iTunesLibraryLoader } from './iTunesLibrary';
 
 export class Store {
   s3: AWS.S3;
   bucket = 'mpaulweeks-jukebox';
-  iTunesLibraryPath: string;
 
   constructor() {
-    const json = fs.readFileSync('../../local/env.json', 'utf8');
-    const envData = JSON.parse(json);
-    process.env.AWS_ACCESS_KEY_ID = envData.AWS_ACCESS_KEY_ID;
-    process.env.AWS_SECRET_ACCESS_KEY = envData.AWS_SECRET_ACCESS_KEY;
-
-    this.iTunesLibraryPath = envData.ITUNES_MUSIC_LIBRARY;
     this.s3 = new AWS.S3();
   }
 
   iTunesLibrary(): Promise<iTunesLibrary> {
-    return iTunesLibraryLoader.fromFile(this.iTunesLibraryPath);
+    return iTunesLibraryLoader.fromFile(LoaderConfig.iTunesLibraryPath);
   }
 
   private async downloadData<Data, Loader>(ClassRef: DataLoaderWithDefault<Data, Loader>, fileName: string): Promise<Loader> {

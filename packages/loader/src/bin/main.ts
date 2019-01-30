@@ -2,10 +2,10 @@ import { Loader, Store } from "..";
 
 async function main() {
   const whitelist = [
-    // 'Anime',
+    'Anime',
     'Broadway',
     'Sample',
-    // 'Yooka',
+    'Yooka',
     // 'iPod',
   ]
 
