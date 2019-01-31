@@ -103,4 +103,8 @@ export class Store {
       Body: buffer,
     });
   }
+
+  async deployPlayer() {
+    // todo list folder, upload to s3
+  }
 }

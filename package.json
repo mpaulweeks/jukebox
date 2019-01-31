@@ -15,8 +15,10 @@
     "loader:deploy": "yarn bs && cd packages/loader && yarn deploy",
     "dev:files": "http-server local --cors=If-Modified-Since, Range",
     "dev:itunes": "REACT_APP_JUKEBOX_ENV=development yarn loader:itunes",
+    "dev:deploy": "REACT_APP_JUKEBOX_ENV=development yarn loader:deploy",
     "dev:player": "REACT_APP_JUKEBOX_ENV=development yarn player",
     "stage:itunes": "REACT_APP_JUKEBOX_ENV=staging yarn loader:itunes",
+    "stage:deploy": "REACT_APP_JUKEBOX_ENV=staging yarn loader:deploy",
     "stage:player": "REACT_APP_JUKEBOX_ENV=staging yarn player"
   },
   "dependencies": {
