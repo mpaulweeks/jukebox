@@ -5,7 +5,7 @@ import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
 import styled from 'styled-components';
 import { BrowserView } from './BrowserView';
-import { CollapseBottom, CollapseSidebar } from './Collapse';
+import { CollapseRoot, CollapseBottom, CollapseSidebar } from './Collapse';
 import { CollapseAble } from './Components';
 
 // todo pass colors as props
@@ -139,6 +139,9 @@ export default class App extends React.Component<any, State> {
       // this.loadPlaylist(manager.allSongs);
       this.loadBrowser(manager.browseAlbums);
     }));
+
+    // public API
+    window.openJukebox = this.toggleCollapseRoot;
   }
 
   loadTrack = (track: PlayableTrack, force?: boolean) => {
@@ -274,13 +277,6 @@ export default class App extends React.Component<any, State> {
         <Header>
           <HeaderBoxWrapper isCollapsed={collapseHeader}>
             <Box>
-              {!Config.OnlyJukebox && (
-                <button
-                  onClick={this.toggleCollapseRoot}
-                >
-                  exit jukebox
-                </button>
-              ))
               <CurrentTrackView
                 track={currentTrack}
                 settings={settings}
@@ -290,11 +286,18 @@ export default class App extends React.Component<any, State> {
                 toggleShuffle={this.toggleShuffle}
                 toggleRepeat={this.toggleRepeat}
               />
-              {Config.OnlyJukebox && (
+              {Config.OnlyJukebox ? (
                 <CollapseBottom
                   onClick={this.toggleCollapseHeader}
                   isCollapsed={collapseHeader}
                 />
+              ) : (
+                <CollapseRoot
+                  onClick={this.toggleCollapseRoot}
+                  isCollapsed={false}
+                >
+                  exit jukebox
+                </CollapseRoot>
               )}
             </Box>
           </HeaderBoxWrapper>

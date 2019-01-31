@@ -23,7 +23,7 @@ interface Props {
   isCollapsed: boolean,
 };
 
-const genCollapseBox = (Container: StyledComponent<'div', any, { isCollapsed: boolean }, never>) => {
+const genCollapseBox = (openText: string, collapsedText: string, Container: StyledComponent<'div', any, { isCollapsed: boolean }, never>) => {
   return (props: Props) => {
     const { onClick, isCollapsed } = props;
     return (
@@ -31,20 +31,25 @@ const genCollapseBox = (Container: StyledComponent<'div', any, { isCollapsed: bo
         onClick={onClick}
         isCollapsed={isCollapsed}
       >
-        +
+        {isCollapsed ? collapsedText : openText}
       </Container>
     );
   }
 }
 
-export const CollapseBottom = genCollapseBox(styled(CollapseBox)`
+export CollapseRoot = genCollapseBox('v', '^', styled(CollapseBox))`
+  top: 0px;
+  right: 0px;
+`);
+
+export const CollapseBottom = genCollapseBox('v', '^', styled(CollapseBox)`
   right: 0px;
   bottom: 0px;
   ${props => props.isCollapsed && `
     bottom: -50px;
   `}
 `);
-export const CollapseSidebar = genCollapseBox(styled(CollapseBox)`
+export const CollapseSidebar = genCollapseBox('>', '<', styled(CollapseBox)`
   top: 0px;
   right: 0px;
   ${props => props.isCollapsed && `
