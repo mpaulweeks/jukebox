@@ -122,31 +122,39 @@ export class Store {
   }
 
   async deployPlayer() {
-    // https://gist.github.com/jlouros/9abc14239b0d9d8947a3345b99c4ebcb
-    const distFolderPath = Constants.PlayerBuildPath;
+    interface ExploreDir {
+      relativePath: string,
+      location: string,
+    }
+    const toExplore: Array<ExploreDir> = [{
+      relativePath: '',
+      location: Constants.PlayerBuildPath,
+    }];
     const toUpload: Array<toUploadFile> = [];
 
-    const files = await new Promise<Array<string>>((resolve, reject) => {
-      fs.readdir(distFolderPath, (err, files) => {
-        if (!files || files.length === 0) {
-          console.log(`provided folder '${distFolderPath}' is empty or does not exist.`);
-          console.log('Make sure your project was compiled!');
-          return;
-        }
-        resolve(files);
-      });
-    });
-
-    files.forEach(fileName => {
-      const location = `${distFolderPath}/${fileName}`;
-      if (fs.lstatSync(location).isDirectory()) {
-        return;
+    while (toExplore.length > 0) {
+      const currentDir: ExploreDir = toExplore.pop()!;
+      const files = fs.readdirSync(currentDir.location);
+      if (!files) {
+        continue;
       }
-      toUpload.push({
-        fileName: fileName,
-        location: location,
+      files.forEach(fileName => {
+        const newRelativePath = currentDir.relativePath ? `${currentDir.relativePath}/${fileName}` : fileName;
+        const newLocation = `${currentDir.location}/${fileName}`;
+        if (fs.lstatSync(newLocation).isDirectory()) {
+          toExplore.push({
+            relativePath: newRelativePath,
+            location: newLocation,
+          });
+        } else {
+          toUpload.push({
+            fileName: newRelativePath,
+            location: newLocation,
+          });
+        }
       });
-    });
+    }
+
     await asyncMap(toUpload, async fileInfo => {
       const { fileName, location } = fileInfo;
       this.uploadWeb(fileName, location);
