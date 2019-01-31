@@ -1,6 +1,6 @@
 import { Loader, Store } from "..";
 
-async function main() {
+(async () => {
   const whitelist = [
     'Anime',
     'Broadway',
@@ -16,6 +16,4 @@ async function main() {
   const loader = new Loader(store, library, collection, infoLookup);
   await loader.addPlaylists(whitelist);
   await loader.export();
-}
-
-main();
+})();

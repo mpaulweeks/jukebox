@@ -6,7 +6,8 @@
   "description": "scripts to upload music and scrape metadata",
   "scripts": {
     "build": "tsc",
-    "main": "ts-node src/bin/main.ts",
+    "deploy": "ts-node src/bin/deploy.ts",
+    "itunes": "ts-node src/bin/itunes.ts",
     "test": "jest"
   },
   "dependencies": {
