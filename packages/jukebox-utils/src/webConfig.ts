@@ -29,11 +29,11 @@ function readConfigArray(name: string, defaultValue?: Array<string>): undefined 
 }
 
 const PlaylistWhitelist = readConfigArray('playlist', undefined);
-const HideOtherLists = !!readConfig('playlist_only', false);
+const HideAggregateLists = !!readConfig('playlist_only', false);
 const OnlyJukebox = !!readConfig('only_jukebox', false);
 
 export const WebConfig = {
   PlaylistWhitelist,
-  HideOtherLists,
+  HideAggregateLists,
   OnlyJukebox,
 }

@@ -35,7 +35,7 @@ export default class PlaylistMenu extends React.Component<Props> {
     const { manager, loadPlaylist, loadBrowser, currentTrackList, currentBrowser } = this.props;
     return (
       <SidebarContainer>
-        {!WebConfig.HideOtherLists && (
+        {!WebConfig.HideAggregateLists && (
           <div>
             <PlaylistName
               onClick={() => loadPlaylist(manager.allSongs)}

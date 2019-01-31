@@ -16,7 +16,7 @@ const RootContainer = styled(CollapseAble)`
   --jukebox-background: white;
   --jukebox-highlight: lightblue;
   --jukebox-collapse-foreground: white;
-  --jukebox-collapse-background: green;
+  --jukebox-collapse-background: grey;
   --jukebox-frame-gap: 10px;
 
   background-color: var(--jukebox-background);
