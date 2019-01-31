@@ -1,5 +1,5 @@
 import React from 'react';
-import { Manager, PlaylistBrowser, PlayableTrack, PlayerSettings, PlayableTrackList, Config } from 'jukebox-utils';
+import { Manager, PlaylistBrowser, PlayableTrack, PlayerSettings, PlayableTrackList, WebConfig, Logger } from 'jukebox-utils';
 import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
@@ -96,6 +96,7 @@ interface State {
   currentTrack?: PlayableTrack,
   currentTrackList?: PlayableTrackList,
   currentBrowser?: PlaylistBrowser,
+  collapseRoot: boolean,
   collapseHeader: boolean,
   collapseSidebar: boolean,
 };
@@ -108,15 +109,20 @@ export default class App extends React.Component<any, State> {
       repeat: false,
       shuffle: false,
     },
-    collapseRoot: !Config.OnlyJukebox,
+    collapseRoot: !WebConfig.OnlyJukebox,
     collapseHeader: false,
     collapseSidebar: false,
   };
 
   componentDidMount() {
     // debuging
-    const debugWindow: any = window;
-    debugWindow.app = this;
+    const appWindow: any = window;
+    appWindow.app = this;
+
+    // public API
+    appWindow.openJukebox = this.toggleCollapseRoot;
+
+    Logger.log(WebConfig);
 
     document.addEventListener('keydown', evt => {
       switch (evt.code) {
@@ -135,13 +141,10 @@ export default class App extends React.Component<any, State> {
     Manager.fetch().then(manager => this.setState({
       manager: manager,
     }, () => {
-      // this.loadPlaylist(manager.playlists[0]);
-      // this.loadPlaylist(manager.allSongs);
-      this.loadBrowser(manager.browseAlbums);
+      if (manager.playlists.length) {
+        this.loadPlaylist(manager.playlists[0]);
+      }
     }));
-
-    // public API
-    window.openJukebox = this.toggleCollapseRoot;
   }
 
   loadTrack = (track: PlayableTrack, force?: boolean) => {
@@ -286,19 +289,19 @@ export default class App extends React.Component<any, State> {
                 toggleShuffle={this.toggleShuffle}
                 toggleRepeat={this.toggleRepeat}
               />
-              {Config.OnlyJukebox ? (
+              {WebConfig.OnlyJukebox ? (
                 <CollapseBottom
                   onClick={this.toggleCollapseHeader}
                   isCollapsed={collapseHeader}
                 />
               ) : (
-                <CollapseRoot
-                  onClick={this.toggleCollapseRoot}
-                  isCollapsed={false}
-                >
-                  exit jukebox
+                  <CollapseRoot
+                    onClick={this.toggleCollapseRoot}
+                    isCollapsed={false}
+                  >
+                    exit jukebox
                 </CollapseRoot>
-              )}
+                )}
             </Box>
           </HeaderBoxWrapper>
         </Header>
@@ -313,7 +316,7 @@ export default class App extends React.Component<any, State> {
                   currentTrackList={currentTrackList}
                   currentBrowser={currentBrowser}
                 />
-                {Config.OnlyJukebox && (
+                {WebConfig.OnlyJukebox && (
                   <CollapseSidebar
                     onClick={this.toggleCollapseSidebar}
                     isCollapsed={collapseSidebar}

@@ -3,6 +3,7 @@ import styled, { StyledComponent } from 'styled-components';
 import { CollapseAble } from './Components';
 
 const CollapseBox = styled(CollapseAble)`
+  cursor: pointer;
   width: 50px;
   height: 50px;
   color: var(--jukebox-collapse-foreground);
@@ -37,19 +38,18 @@ const genCollapseBox = (openText: string, collapsedText: string, Container: Styl
   }
 }
 
-export CollapseRoot = genCollapseBox('v', '^', styled(CollapseBox))`
+export const CollapseRoot = genCollapseBox('^', 'v', styled(CollapseBox)`
   top: 0px;
   right: 0px;
 `);
-
-export const CollapseBottom = genCollapseBox('v', '^', styled(CollapseBox)`
+export const CollapseBottom = genCollapseBox('^', 'v', styled(CollapseBox)`
   right: 0px;
   bottom: 0px;
   ${props => props.isCollapsed && `
     bottom: -50px;
   `}
 `);
-export const CollapseSidebar = genCollapseBox('>', '<', styled(CollapseBox)`
+export const CollapseSidebar = genCollapseBox('<', '>', styled(CollapseBox)`
   top: 0px;
   right: 0px;
   ${props => props.isCollapsed && `

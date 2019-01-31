@@ -1,10 +1,10 @@
 import { PlaylistBrowser } from './browser';
 import { Collection } from './collection';
-import { Config } from './config';
 import { fetchCollection, fetchInfoLookup } from './fetch';
 import { InfoLookup } from './infoLookup';
 import { Playlist } from './playlist';
 import { PlaylistBrowserData } from './types';
+import { WebConfig } from './webConfig';
 
 export class Manager {
   collection: Collection;
@@ -19,7 +19,7 @@ export class Manager {
     this.collection = collection;
     this.infoLookup = infoLookup;
 
-    const { PlaylistWhitelist } = Config;
+    const { PlaylistWhitelist } = WebConfig;
 
     let playlistTracks = {};
     const unsortedPlaylists = Object.keys(collection.data.playlists)

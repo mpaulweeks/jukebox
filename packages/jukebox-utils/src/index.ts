@@ -1,6 +1,5 @@
 export * from './browser';
 export * from './collection';
-export * from './config';
 export * from './constants';
 export * from './fetch';
 export * from './infoLookup';
@@ -12,4 +11,5 @@ export * from './song';
 export * from './tools';
 export * from './track';
 export * from './types';
+export * from './webConfig';
 

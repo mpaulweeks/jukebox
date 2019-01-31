@@ -58,7 +58,7 @@ export default class TrackView extends React.Component<Props> {
             <AlbumCover src={PlaceholderImage} />
           </AlbumContainer>
           <DetailsContainer>
-            loading
+            Click on a track to start playing
           </DetailsContainer>
         </TrackContainer>
       );
