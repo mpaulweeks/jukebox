@@ -1,9 +1,14 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
-import { Collection, Constants, DataLoaderWithDefault, InfoLookup, Logger } from 'jukebox-utils';
+import { asyncMap, Collection, Constants, DataLoaderWithDefault, InfoLookup, Logger } from 'jukebox-utils';
 import fetch from 'node-fetch';
 import { LoaderConfig } from './config';
 import { iTunesLibrary, iTunesLibraryLoader } from './iTunesLibrary';
+
+interface toUploadFile {
+  fileName: string,
+  location: string,
+};
 
 export class Store {
   s3: AWS.S3;
@@ -104,7 +109,50 @@ export class Store {
     });
   }
 
+  uploadWeb(filePath: string, location: string) {
+    return new Promise((resolve, reject) => {
+      fs.readFile(location, (err, buffer) => {
+        this.upload({
+          Bucket: this.bucket,
+          Key: `${Constants.WebDirectory}/${filePath}`,
+          Body: buffer,
+        }).then(() => resolve(buffer));
+      });
+    });
+  }
+
   async deployPlayer() {
-    // todo list folder, upload to s3
+    // https://gist.github.com/jlouros/9abc14239b0d9d8947a3345b99c4ebcb
+    const distFolderPath = Constants.PlayerBuildPath;
+    const toUpload: Array<toUploadFile> = [];
+
+    const files = await new Promise<Array<string>>((resolve, reject) => {
+      fs.readdir(distFolderPath, (err, files) => {
+        if (!files || files.length === 0) {
+          console.log(`provided folder '${distFolderPath}' is empty or does not exist.`);
+          console.log('Make sure your project was compiled!');
+          return;
+        }
+        resolve(files);
+      });
+    });
+
+    files.forEach(fileName => {
+      const location = `${distFolderPath}/${fileName}`;
+      if (fs.lstatSync(location).isDirectory()) {
+        return;
+      }
+      toUpload.push({
+        fileName: fileName,
+        location: location,
+      });
+    });
+    await asyncMap(toUpload, async fileInfo => {
+      const { fileName, location } = fileInfo;
+      this.uploadWeb(fileName, location);
+      if (fileName.endsWith('.js')) {
+        console.log('should re-package:', fileName);
+      }
+    });
   }
 }

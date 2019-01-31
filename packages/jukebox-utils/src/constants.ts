@@ -8,6 +8,7 @@ const isTest = isBrowser && window.location.search === '?test';
 const LogDebug = isTest;
 
 const LocalDataRoot = '../../local';
+const PlayerBuildPath = '../player/build';
 const LocalFileServerRoot = 'http://localhost:8080';
 const AwsRoot = 'https://s3.amazonaws.com/mpaulweeks-jukebox';
 const StorageBasePath = isDev ? LocalFileServerRoot : AwsRoot;
@@ -16,6 +17,7 @@ const BucketPath = isProduction ? 'production' : 'staging';
 const DataDirectory = `${BucketPath}/data`;
 const AudioDirectory = `${BucketPath}/audio`;
 const ImageDirectory = `${BucketPath}/image`;
+const WebDirectory = `${BucketPath}/web`;
 
 const DataPath = `${StorageBasePath}/${DataDirectory}`;
 const AudioPath = `${StorageBasePath}/${AudioDirectory}`;
@@ -29,12 +31,14 @@ export const Constants = {
   isTest,
   LogDebug,
   LocalDataRoot,
-  DataPath,
-  AudioPath,
-  ImagePath,
+  PlayerBuildPath,
   DataDirectory,
   AudioDirectory,
   ImageDirectory,
+  WebDirectory,
+  DataPath,
+  AudioPath,
+  ImagePath,
   CollectionFileName,
   InfoLookupFileName,
 };
