@@ -1,5 +1,5 @@
 import React from 'react';
-import { Manager, PlaylistBrowser, PlayableTrack, PlayerSettings, PlayableTrackList } from 'jukebox-utils';
+import { Manager, PlaylistBrowser, PlayableTrack, PlayerSettings, PlayableTrackList, Config } from 'jukebox-utils';
 import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
@@ -9,7 +9,7 @@ import { CollapseBottom, CollapseSidebar } from './Collapse';
 import { CollapseAble } from './Components';
 
 // todo pass colors as props
-const RootContainer = styled.div`
+const RootContainer = styled(CollapseAble)`
   font-size: 16px;
 
   --jukebox-foreground: black;
@@ -33,6 +33,10 @@ const RootContainer = styled.div`
   justify-content: flex-start;
   align-items: stretch;
   flex-wrap: no-wrap;
+
+  ${props => props.isCollapsed && `
+    top: -100%;
+  `};
 `;
 
 const Header = styled.div`
@@ -104,6 +108,7 @@ export default class App extends React.Component<any, State> {
       repeat: false,
       shuffle: false,
     },
+    collapseRoot: !Config.OnlyJukebox,
     collapseHeader: false,
     collapseSidebar: false,
   };
@@ -231,19 +236,24 @@ export default class App extends React.Component<any, State> {
     });
   }
 
-  toggleHeader = () => {
+  toggleCollapseRoot = () => {
+    this.setState({
+      collapseRoot: !this.state.collapseRoot,
+    });
+  }
+  toggleCollapseHeader = () => {
     this.setState({
       collapseHeader: !this.state.collapseHeader,
     });
   }
-  toggleSidebar = () => {
+  toggleCollapseSidebar = () => {
     this.setState({
       collapseSidebar: !this.state.collapseSidebar,
     });
   }
 
   render() {
-    const { manager, settings, currentTrack, currentTrackList, currentBrowser, collapseHeader, collapseSidebar } = this.state;
+    const { manager, settings, currentTrack, currentTrackList, currentBrowser, collapseRoot, collapseHeader, collapseSidebar } = this.state;
     if (!manager) {
       return (
         <h3> loading, please wait... </h3>
@@ -260,10 +270,17 @@ export default class App extends React.Component<any, State> {
 
     const { loadTrack, loadPlaylist, loadBrowser } = this;
     return (
-      <RootContainer>
+      <RootContainer isCollapsed={collapseRoot}>
         <Header>
           <HeaderBoxWrapper isCollapsed={collapseHeader}>
             <Box>
+              {!Config.OnlyJukebox && (
+                <button
+                  onClick={this.toggleCollapseRoot}
+                >
+                  exit jukebox
+                </button>
+              ))
               <CurrentTrackView
                 track={currentTrack}
                 settings={settings}
@@ -273,29 +290,35 @@ export default class App extends React.Component<any, State> {
                 toggleShuffle={this.toggleShuffle}
                 toggleRepeat={this.toggleRepeat}
               />
-              <CollapseBottom
-                onClick={this.toggleHeader}
-                isCollapsed={collapseHeader}
-              />
+              {Config.OnlyJukebox && (
+                <CollapseBottom
+                  onClick={this.toggleCollapseHeader}
+                  isCollapsed={collapseHeader}
+                />
+              )}
             </Box>
           </HeaderBoxWrapper>
         </Header>
         <Body>
-          <SidebarBoxWrapper isCollapsed={collapseSidebar}>
-            <Box>
-              <PlaylistMenu
-                loadPlaylist={loadPlaylist}
-                loadBrowser={loadBrowser}
-                manager={manager}
-                currentTrackList={currentTrackList}
-                currentBrowser={currentBrowser}
-              />
-              <CollapseSidebar
-                onClick={this.toggleSidebar}
-                isCollapsed={collapseSidebar}
-              />
-            </Box>
-          </SidebarBoxWrapper>
+          {manager.playlists.length > 1 && (
+            <SidebarBoxWrapper isCollapsed={collapseSidebar}>
+              <Box>
+                <PlaylistMenu
+                  loadPlaylist={loadPlaylist}
+                  loadBrowser={loadBrowser}
+                  manager={manager}
+                  currentTrackList={currentTrackList}
+                  currentBrowser={currentBrowser}
+                />
+                {Config.OnlyJukebox && (
+                  <CollapseSidebar
+                    onClick={this.toggleCollapseSidebar}
+                    isCollapsed={collapseSidebar}
+                  />
+                )}
+              </Box>
+            </SidebarBoxWrapper>
+          )}
           <MainViewBoxWrapper>
             <Box>
               {currentBrowser ? (
