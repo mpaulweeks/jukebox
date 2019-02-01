@@ -44,9 +44,24 @@ export class iTunesLibrary {
   }
 
   decodeLocation(location) {
-    return location && decodeURI(
+    if (!location) {
+      return '';
+    }
+
+    // windows special case
+    if (/^file:\/\/localhost\/[A-Z]:/.test(location)) {
+      location = location.split('file://localhost/')[1];
+      const driveLetter = location[0].toLowerCase();
+      location = `/mnt/${driveLetter}/${location.substring(3)}`;
+    }
+
+    // mac special case
+    if (/^file:\/\/\//.test(location)) {
+      location = location.substring(7)
+    }
+
+    return decodeURI(
       location
-        .split('file:///').join('/')
         .split('%3B').join(';')
         .split('%23').join('#')
     )
