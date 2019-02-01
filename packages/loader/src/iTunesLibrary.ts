@@ -140,7 +140,6 @@ export class iTunesLibraryLoader {
   }
 
   static async fromFile(source: string): Promise<iTunesLibrary> {
-    Logger.log('loading iTunes library...');
     const stream = fs.createReadStream(source);
     return new iTunesLibraryLoader(stream).dataPromise;
   }

@@ -19,6 +19,7 @@ export class Store {
   }
 
   iTunesLibrary(): Promise<iTunesLibrary> {
+    Logger.log('loading iTunes library...');
     return iTunesLibraryLoader.fromFile(LoaderConfig.iTunesLibraryPath);
   }
 
@@ -40,10 +41,12 @@ export class Store {
   }
 
   downloadCollection(): Promise<Collection> {
+    Logger.log('downloading collection...');
     return this.downloadData(Collection, Constants.CollectionFileName);
   }
 
   downloadInfoLookup(): Promise<InfoLookup> {
+    Logger.log('downloading infoLookup...');
     return this.downloadData(InfoLookup, Constants.InfoLookupFileName);
   }
 
