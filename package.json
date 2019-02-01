@@ -4,6 +4,7 @@
   "license": "ISC",
   "private": true,
   "description": "online music player / backup",
+  "homepage": ".",
   "scripts": {
     "tsc-utils": "cd packages/jukebox-utils && yarn tsc",
     "tsc-player": "cd packages/player && yarn tsc",
@@ -20,9 +21,11 @@
     "dev:player": "REACT_APP_JUKEBOX_ENV=development yarn player",
     "stage:itunes": "REACT_APP_JUKEBOX_ENV=staging yarn loader:itunes",
     "stage:deploy": "REACT_APP_JUKEBOX_ENV=staging yarn loader:deploy",
-    "stage:player": "REACT_APP_JUKEBOX_ENV=staging yarn player"
+    "stage:player": "REACT_APP_JUKEBOX_ENV=staging yarn player",
+    "prod:deploy": "yarn player:build && gh-pages -d packages/player/build"
   },
   "dependencies": {
+    "gh-pages": "^2.0.1",
     "http-server": "^0.11.1",
     "lerna": "^3.10.7"
   }
