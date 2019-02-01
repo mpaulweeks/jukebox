@@ -7,17 +7,17 @@ export class Playlist implements PlayableTrackList {
   name: string;
   tracks: Array<PlayableTrack>;
   shuffled: Array<PlayableTrack>;
-  ordered: boolean;
+  custom: boolean;
   imageSrc?: string;
   album?: string;
   artist?: string;
 
-  constructor(name: string, tracks: Array<PlayableTrack>, ordered: boolean) {
+  constructor(name: string, tracks: Array<PlayableTrack>, custom: boolean) {
     this.name = name;
     this.tracks = tracks;
-    this.ordered = ordered;
+    this.custom = custom;
 
-    if (!ordered) {
+    if (!custom) {
       this.tracks.sort(Track.compare);
     }
     this.shuffled = Playlist.shuffle(this.tracks);
@@ -67,10 +67,10 @@ export class Playlist implements PlayableTrackList {
     return this.jumpToTrack(settings, current, -1);
   }
 
-  static fromLookup(infoLookup: InfoLookup, data: PlaylistData, ordered = true) {
+  static fromLookup(infoLookup: InfoLookup, data: PlaylistData, custom?: boolean) {
     const tracks = data.trackIds
       .map(id => Track.fromLookup(id, infoLookup))
       .filter(notEmpty);
-    return new Playlist(data.name, tracks, ordered);
+    return new Playlist(data.name, tracks, !!custom);
   }
 }

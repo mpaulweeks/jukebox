@@ -42,11 +42,11 @@ export class Track implements PlayableTrack {
       if (trackNumber.split('/').length === 2) {
         this.trackNumerator = parseFloat(trackNumber.split('/')[0]);
         this.trackDenominator = parseFloat(trackNumber.split('/')[1]);
-        this.trackNumberDisplay = `${this.trackNumerator}/${this.trackDenominator}`;
+        // this.trackNumberDisplay = `${this.trackNumerator}/${this.trackDenominator}`;
       } else if (!trackNumber.includes('/')) {
         this.trackNumerator = parseFloat(trackNumber);
-        this.trackNumberDisplay = `${this.trackNumerator}`;
       }
+      this.trackNumberDisplay = `${this.trackNumerator}`;
     }
 
     this.durationDisplay = (duration ? `${Math.floor((duration / 1000) / 60)}:${String(Math.floor((duration / 1000) % 60)).padStart(2, '0')}` : '')

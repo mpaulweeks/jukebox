@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PlayableTrackList, PlayableTrack } from 'jukebox-utils';
+import { PlayableTrackList, PlayableTrack, notEmpty } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
 import { MainViewContainer, MainViewScrollable } from './Components';
 
@@ -52,6 +52,13 @@ interface Props {
   playlist?: PlayableTrackList,
 };
 
+function trimColumns<T>(playlist: PlayableTrackList, arr: Array<T>): Array<T> {
+  if (playlist.custom) {
+    arr.splice(5, 1);
+  }
+  return arr;
+}
+
 export default class TrackListView extends React.Component<Props> {
   truncate(info: string) {
     return (info || '').substring(0, 20);
@@ -61,17 +68,26 @@ export default class TrackListView extends React.Component<Props> {
     if (!playlist) {
       return 'loading';
     }
+    console.log(playlist);
+    const columnHeaders = trimColumns(playlist, [
+      '',
+      'title',
+      'artist',
+      'length',
+      'album',
+      'track #',
+    ]);
     return (
       <TrackListContainer>
         <h1>
           {playlist.name}
-          {!playlist.ordered && <em> (sortable) </em>}
+          {!playlist.custom && <em> (sortable) </em>}
         </h1>
         <TracksTableContainer>
           <TracksTable>
             <thead>
               <tr>
-                {['', 'title', 'artist', 'length', 'album', '#'].map((text, index) => (
+                {columnHeaders.map((text, index) => (
                   <th key={`header-${index}`}>
                     <TrackInfo>
                       {text}
@@ -82,14 +98,14 @@ export default class TrackListView extends React.Component<Props> {
             </thead>
             <tbody>
               {playlist.tracks.map((track, row) => {
-                const columns = [
+                const columns = trimColumns(playlist, [
                   <TrackImage src={track.imageSrc || PlaceholderImage} />,
                   track.title,
                   this.truncate(track.artist),
                   track.durationDisplay,
                   track.album,
                   track.trackNumberDisplay,
-                ];
+                ]);
                 return (
                   <TrackRow
                     key={`track-${row}`}

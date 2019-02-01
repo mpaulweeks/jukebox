@@ -38,7 +38,7 @@ export interface PlayableTrack extends BasicData {
 export interface PlayableTrackList {
   name: string,
   tracks: Array<PlayableTrack>,
-  ordered: boolean,
+  custom: boolean,
   imageSrc?: string,
   album?: string,
   nextTrack(PlayerSettings, PlayableTrack): PlayableTrack,

@@ -11,6 +11,6 @@ export class PlaylistBrowser {
     this.playlists = Object.keys(browserData).map(key => Playlist.fromLookup(infoLookup, {
       name: key,
       trackIds: browserData[key],
-    }, false));
+    }));
   }
 }

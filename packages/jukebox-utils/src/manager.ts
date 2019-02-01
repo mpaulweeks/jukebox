@@ -33,7 +33,7 @@ export class Manager {
             return obj;
           }, {}),
         }
-        return Playlist.fromLookup(infoLookup, data);
+        return Playlist.fromLookup(infoLookup, data, true);
       });
     unsortedPlaylists.sort(Playlist.compare);
     this.playlists = unsortedPlaylists;
@@ -42,7 +42,7 @@ export class Manager {
     const allSongs = Playlist.fromLookup(infoLookup, {
       name: 'All Songs',
       trackIds: Object.keys(PlaylistWhitelist ? playlistTracks : collection.data.tracks),
-    }, false);
+    });
 
     const trackIdsByAlbum: PlaylistBrowserData = {};
     const trackIdsByArtist: PlaylistBrowserData = {};
