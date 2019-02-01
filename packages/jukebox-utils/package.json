@@ -15,6 +15,7 @@
     "@types/md5": "^2.1.33",
     "@types/node": "^10.12.18",
     "@types/query-string": "^6.2.0",
+    "get-mp3-duration": "^1.0.0",
     "jest": "^23.6.0",
     "jsmediatags": "^3.8.1",
     "md5": "^2.2.1",

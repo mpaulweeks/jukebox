@@ -1,4 +1,5 @@
 import { InfoLookup } from "./infoLookup";
+import { notEmpty } from "./tools";
 import { Track } from "./track";
 import { PlayableTrack, PlayableTrackList, PlayerSettings, PlaylistData } from "./types";
 
@@ -67,7 +68,9 @@ export class Playlist implements PlayableTrackList {
   }
 
   static fromLookup(infoLookup: InfoLookup, data: PlaylistData, ordered = true) {
-    const tracks = data.trackIds.map(id => Track.fromLookup(id, infoLookup));
+    const tracks = data.trackIds
+      .map(id => Track.fromLookup(id, infoLookup))
+      .filter(notEmpty);
     return new Playlist(data.name, tracks, ordered);
   }
 }

@@ -1,10 +1,9 @@
 import fs from 'fs';
+import getMP3Duration from 'get-mp3-duration';
 import jsmediatags from 'jsmediatags';
 import NodeID3 from 'node-id3';
 import { Logger } from './logger';
 import { MetaData } from './types';
-
-const AudioCtx = new AudioContext();
 
 export class MetaLoader {
 
@@ -83,19 +82,12 @@ export class MetaLoader {
           imageSrc: undefined,
         }))
     );
-
-    const arrayBuffer = new Uint8Array(buffer).buffer;
-    const audioPromise = new Promise<AudioBuffer>((resolve, reject) => {
-      AudioCtx.decodeAudioData(arrayBuffer, resolve, reject);
-    });
-    await audioPromise
-      .then(data => {
-        console.log('audio loaded!', metaData.title, data)
-        metaData.duration = data.duration;
-      })
-      .catch(error => {
-        console.log('audio error, doing nothing:', error);
-      });
+    try {
+      const duration = getMP3Duration(buffer);
+      metaData.duration = duration;
+    } catch (error) {
+      Logger.log('error during duration calc:', error);
+    }
     return metaData;
   }
 

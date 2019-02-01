@@ -67,7 +67,11 @@ export class Track implements PlayableTrack {
     return 1;
   }
 
-  static fromLookup(id: string, infoLookup: InfoLookup) {
-    return new Track(infoLookup.get(id));
+  static fromLookup(id: string, infoLookup: InfoLookup): (undefined | Track) {
+    const info = infoLookup.get(id);
+    if (!info) {
+      console.log('failed track lookup! ID:', id);
+    }
+    return info && new Track(info);
   }
 }
