@@ -23,7 +23,9 @@
     "stage:itunes": "REACT_APP_JUKEBOX_ENV=staging yarn loader:itunes",
     "stage:deploy": "REACT_APP_JUKEBOX_ENV=staging yarn loader:deploy",
     "stage:player": "REACT_APP_JUKEBOX_ENV=staging yarn player",
-    "prod:deploy": "yarn player:build && gh-pages -d packages/player/build"
+    "prod:deploy": "yarn player:build && gh-pages -d packages/player/build",
+    "crontask": "yarn loader:itunes",
+    "cronjob": "git pull && yarn crontask"
   },
   "dependencies": {
     "gh-pages": "^2.0.1",
