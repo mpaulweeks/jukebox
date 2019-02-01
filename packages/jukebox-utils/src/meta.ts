@@ -26,7 +26,7 @@ export class MetaLoader {
           title: tags.title,
           year: tags.year,
           duration: 0,
-          trackNumber: String(tags.trackNumber),
+          trackNumber: tags.trackNumber === undefined ? undefined : String(tags.trackNumber),
           imageFormat: tags.image.mime,
           imageBuffer: tags.image.imageBuffer,
         });
@@ -54,7 +54,7 @@ export class MetaLoader {
             title: tags.title,
             year: tags.year,
             duration: 0,
-            trackNumber: String(tags.track),
+            trackNumber: tags.track === undefined ? undefined : String(tags.track),
             imageFormat: tags.picture && tags.picture.format,
             imageBuffer: imageBuffer,
           });

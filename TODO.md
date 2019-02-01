@@ -7,3 +7,4 @@
 - capture meta on track length
   - simplify update by just deleting meta file?
   - split out step that reads mp3s for meta, probably the slow part
+- only show track# on album/artist playlists view
