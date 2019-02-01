@@ -1,5 +1,5 @@
 import React from 'react';
-import { Manager, PlaylistBrowser, PlayableTrack, PlayerSettings, PlayableTrackList, WebConfig, Logger } from 'jukebox-utils';
+import { Manager, PlaylistBrowser, PlayableTrack, PlayerSettings, PlayableTrackList, WebConfig, Logger, Constants } from 'jukebox-utils';
 import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
@@ -117,12 +117,15 @@ export default class App extends React.Component<any, State> {
   componentDidMount() {
     // debuging
     const appWindow: any = window;
-    appWindow.app = this;
-
+    appWindow.JD = {
+      app: this,
+      config: WebConfig,
+      constants: Constants,
+    };
     // public API
-    appWindow.openJukebox = this.toggleCollapseRoot;
-
-    Logger.log(WebConfig);
+    appWindow.JUKEBOX = {
+      toggle: this.toggleCollapseRoot,
+    };
 
     document.addEventListener('keydown', evt => {
       switch (evt.code) {

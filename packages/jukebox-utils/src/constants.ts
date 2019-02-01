@@ -1,9 +1,15 @@
-const isDev = process.env.REACT_APP_JUKEBOX_ENV === 'development';
-const isStaging = process.env.REACT_APP_JUKEBOX_ENV === 'staging';
-const isProduction = !(isDev || isStaging);
-
 const isBrowser = (typeof window !== 'undefined');
 const isTest = isBrowser && window.location.search === '?test';
+
+const isStaging = (
+  (process.env.REACT_APP_JUKEBOX_ENV === 'staging') ||
+  (isBrowser && window.location.pathname.includes('/staging/'))
+);
+const isDev = (
+  !isStaging &&
+  (process.env.REACT_APP_JUKEBOX_ENV === 'development')
+);
+const isProduction = !(isDev || isStaging);
 
 const LogDebug = isTest;
 
@@ -28,6 +34,7 @@ const InfoLookupFileName = `metaData.min.json`;
 
 export const Constants = {
   isDev,
+  isStaging,
   isTest,
   LogDebug,
   LocalDataRoot,
