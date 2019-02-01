@@ -301,9 +301,7 @@ export default class App extends React.Component<any, State> {
                   <CollapseRoot
                     onClick={this.toggleCollapseRoot}
                     isCollapsed={false}
-                  >
-                    exit jukebox
-                </CollapseRoot>
+                  />
                 )}
             </Box>
           </HeaderBoxWrapper>

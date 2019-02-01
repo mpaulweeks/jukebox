@@ -19,10 +19,10 @@
     "dev:files": "http-server local --cors=If-Modified-Since, Range",
     "dev:itunes": "REACT_APP_JUKEBOX_ENV=development yarn loader:itunes",
     "dev:deploy": "REACT_APP_JUKEBOX_ENV=development yarn loader:deploy",
-    "dev:player": "REACT_APP_JUKEBOX_ENV=development yarn player",
+    "dev:player": "REACT_APP_JUKEBOX_ENV=development yarn player:start",
     "stage:itunes": "REACT_APP_JUKEBOX_ENV=staging yarn loader:itunes",
     "stage:deploy": "REACT_APP_JUKEBOX_ENV=staging yarn loader:deploy",
-    "stage:player": "REACT_APP_JUKEBOX_ENV=staging yarn player",
+    "stage:player": "REACT_APP_JUKEBOX_ENV=staging yarn player:start",
     "prod:deploy": "yarn player:build && gh-pages -d packages/player/build",
     "crontask": "yarn loader:itunes",
     "cronjob": "git pull && yarn crontask"
