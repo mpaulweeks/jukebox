@@ -1,13 +1,8 @@
 import { Loader, Store } from "..";
+import { LoaderConfig } from "../loaderConfig";
 
 (async () => {
-  const whitelist = [
-    'Anime',
-    'Broadway',
-    'Sample',
-    'Yooka',
-    // 'iPod',
-  ]
+  const { whitelist } = LoaderConfig;
 
   const store = new Store();
   const collection = await store.downloadCollection();

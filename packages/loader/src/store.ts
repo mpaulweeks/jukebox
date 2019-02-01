@@ -2,8 +2,8 @@ import AWS from 'aws-sdk';
 import fs from 'fs';
 import { asyncMap, Collection, Constants, DataLoaderWithDefault, InfoLookup, Logger } from 'jukebox-utils';
 import fetch from 'node-fetch';
-import { LoaderConfig } from './config';
 import { iTunesLibrary, iTunesLibraryLoader } from './iTunesLibrary';
+import { LoaderConfig } from './loaderConfig';
 
 interface toUploadFile {
   fileName: string,
