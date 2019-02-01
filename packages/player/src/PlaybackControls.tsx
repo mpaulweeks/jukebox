@@ -1,27 +1,44 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PlayerSettings } from 'jukebox-utils';
-import { CanHighlight } from './Components';
+import { CanHighlight, HoverMixin } from './Components';
 
 const ControlsContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   flex-wrap: no-wrap;
 `;
-const ControlsRow = styled.div`
+const ControlsBlock = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 `;
+const CenterControlsBlock = styled(ControlsBlock)`
+  flex-grow: 1;
+`;
 const Control = styled(CanHighlight)`
+  ${HoverMixin}
+
   border: 1px solid black;
   border-radius: 5px;
-  padding: 5px;
   margin: 5px;
+  font-size: 1.5em;
+  height: 2em;
+  width: 2em;
+
+  & i {
+    font-size: 1.5em;
+  }
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: no-wrap;
 `;
 
 export interface PlaybackControlProps {
@@ -35,39 +52,42 @@ export interface PlaybackControlProps {
 export class PlaybackControls extends React.Component<PlaybackControlProps>{
   render() {
     const { settings } = this.props;
+
+    // <i className="material-icons">volume_up</i>
+    // <i className="material-icons">volume_down</i>
+    // <i className="material-icons">volume_mute</i>
+    // <i className="material-icons">volume_off</i>
+
     return (
       <ControlsContainer>
-        <ControlsRow>
-          <Control
-            onClick={this.props.prevTrack}
-          >
-            prev
-        </Control>
-          <Control
-            onClick={this.props.togglePlay}
-          >
-            {settings.isPlaying ? 'pause' : 'play'}
+        <ControlsBlock>
+          <Control>
+            ?
           </Control>
-          <Control
-            onClick={this.props.nextTrack}
-          >
-            next
-        </Control>
-        </ControlsRow>
-        <ControlsRow>
-          <Control
-            onClick={this.props.toggleShuffle}
-            highlight={settings.shuffle}
-          >
-            shuffle?
-        </Control>
-          <Control
-            onClick={this.props.toggleRepeat}
-            highlight={settings.repeat}
-          >
-            repeat?
-        </Control>
-        </ControlsRow>
+        </ControlsBlock>
+        <CenterControlsBlock>
+          <Control onClick={this.props.prevTrack}>
+            <i className="material-icons">skip_previous</i>
+          </Control>
+          <Control onClick={this.props.togglePlay}>
+            {settings.isPlaying ? (
+              <i className="material-icons">pause_circle_outline</i>
+            ) : (
+                <i className="material-icons">play_circle_outline</i>
+              )}
+          </Control>
+          <Control onClick={this.props.nextTrack}>
+            <i className="material-icons">skip_next</i>
+          </Control>
+        </CenterControlsBlock>
+        <ControlsBlock>
+          <Control onClick={this.props.toggleShuffle} highlight={settings.shuffle}>
+            <i className="material-icons">shuffle</i>
+          </Control>
+          <Control onClick={this.props.toggleRepeat} highlight={settings.repeat}>
+            <i className="material-icons">repeat</i>
+          </Control>
+        </ControlsBlock>
       </ControlsContainer>
     )
   }

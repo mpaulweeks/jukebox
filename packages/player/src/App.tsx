@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { BrowserView } from './BrowserView';
 import { CollapseRoot, CollapseBottom, CollapseSidebar } from './Collapse';
 import { CollapseAble } from './Components';
+import { link } from 'fs';
+import { PlaybackControls } from './PlaybackControls';
 
 // todo pass colors as props
 const RootContainer = styled(CollapseAble)`
@@ -14,6 +16,7 @@ const RootContainer = styled(CollapseAble)`
 
   --jukebox-foreground: black;
   --jukebox-background: white;
+  --jukebox-hover: darkgrey;
   --jukebox-highlight: lightblue;
   --jukebox-collapse-foreground: white;
   --jukebox-collapse-background: grey;
@@ -61,6 +64,9 @@ const HeaderBoxWrapper = styled(BoxWrapper)`
   ${props => props.isCollapsed && `
     margin-top: calc(-200px - var(--jukebox-frame-gap));
   `}
+`;
+const FooterBoxWrapper = styled(BoxWrapper)`
+  padding-top: 0px;
 `;
 const SidebarBoxWrapper = styled(BoxWrapper)`
   padding-right: 0px;
@@ -127,6 +133,7 @@ export default class App extends React.Component<any, State> {
       toggle: this.toggleCollapseRoot,
     };
 
+    // setup listeners
     document.addEventListener('keydown', evt => {
       switch (evt.code) {
         case 'ArrowLeft':
@@ -141,6 +148,18 @@ export default class App extends React.Component<any, State> {
     });
     this.audioElm.addEventListener('ended', () => this.onTrackEnd());
 
+    // load fonts
+    [
+      // https://stackoverflow.com/a/27053825
+      'https://fonts.googleapis.com/icon?family=Material+Icons',
+    ].forEach(fontSrc => {
+      const linkElm = document.createElement('link');
+      linkElm.setAttribute('rel', 'stylesheet');
+      linkElm.setAttribute('href', fontSrc);
+      document.head.appendChild(linkElm);
+    });
+
+    // fetch data, start app
     Manager.fetch().then(manager => this.setState({
       manager: manager,
     }, () => {
@@ -206,19 +225,21 @@ export default class App extends React.Component<any, State> {
     }
   }
   onSpaceBar = (keyboardEvent?: any) => {
-    const { currentTrack, currentTrackList } = this.state;
-    if (currentTrack) {
-      this.togglePlay();
-    } else if (currentTrackList) {
-      this.loadTrack(currentTrackList.tracks[0]);
-    }
+    this.togglePlay();
     if (keyboardEvent) {
       keyboardEvent.preventDefault();
     }
   }
 
   togglePlay = () => {
-    const { settings } = this.state;
+    const { currentTrack, currentTrackList, settings } = this.state;
+    if (!currentTrack && !currentTrackList) {
+      // on app load. dont do anything
+      return;
+    }
+    if (!currentTrack && currentTrackList) {
+      this.loadTrack(currentTrackList.tracks[0]);
+    }
     this.setState({
       settings: {
         ...settings,
@@ -285,12 +306,6 @@ export default class App extends React.Component<any, State> {
             <Box>
               <CurrentTrackView
                 track={currentTrack}
-                settings={settings}
-                nextTrack={this.nextTrack}
-                prevTrack={this.prevTrack}
-                togglePlay={this.togglePlay}
-                toggleShuffle={this.toggleShuffle}
-                toggleRepeat={this.toggleRepeat}
               />
               {WebConfig.OnlyJukebox ? (
                 <CollapseBottom
@@ -343,6 +358,20 @@ export default class App extends React.Component<any, State> {
             </Box>
           </MainViewBoxWrapper>
         </Body>
+        <Header>
+          <FooterBoxWrapper>
+            <Box>
+              <PlaybackControls
+                settings={settings}
+                nextTrack={this.nextTrack}
+                prevTrack={this.prevTrack}
+                togglePlay={this.togglePlay}
+                toggleShuffle={this.toggleShuffle}
+                toggleRepeat={this.toggleRepeat}
+              />
+            </Box>
+          </FooterBoxWrapper>
+        </Header>
       </RootContainer>
     )
 
