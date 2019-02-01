@@ -6,6 +6,7 @@
   "description": "online music player / backup",
   "homepage": ".",
   "scripts": {
+    "setup": "yarn install && cd packages/jukebox-utils && yarn install && cd ../.. && yarn bs",
     "tsc-utils": "cd packages/jukebox-utils && yarn tsc",
     "tsc-player": "cd packages/player && yarn tsc",
     "tsc-loader": "cd packages/loader && yarn tsc",
