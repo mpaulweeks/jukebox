@@ -49,7 +49,7 @@ export class Track implements PlayableTrack {
       }
     }
 
-    this.durationDisplay = (duration ? `${Math.floor(duration / 60)}:${Math.floor(duration % 60)}` : '')
+    this.durationDisplay = (duration ? `${Math.floor(duration / 60)}:${String(Math.floor(duration % 60)).padStart(2, '0')}` : '')
 
     this.sortKey = `${this.album} ${String(this.trackNumerator || 0).padStart(4, '0')}`;
 

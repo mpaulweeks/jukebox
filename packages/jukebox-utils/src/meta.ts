@@ -4,6 +4,8 @@ import NodeID3 from 'node-id3';
 import { Logger } from './logger';
 import { MetaData } from './types';
 
+const AudioCtx = new AudioContext();
+
 export class MetaLoader {
 
   static dataUrl(metaData: MetaData) {
@@ -67,7 +69,7 @@ export class MetaLoader {
     });
   }
 
-  static async fromBuffer(buffer: Buffer, mediaStream?: MediaStream): Promise<MetaData> {
+  static async fromBuffer(buffer: Buffer): Promise<MetaData> {
     const metaData = await (
       this.tryParseNodeId3(buffer)
         .catch(() => this.tryParseJsMediaTags(buffer))
@@ -81,19 +83,20 @@ export class MetaLoader {
           imageSrc: undefined,
         }))
     );
-    return new Promise((resolve, reject) => {
-      if (mediaStream) {
-        const audioElm = new Audio();
-        audioElm.addEventListener('load', () => {
-          metaData.duration = audioElm.duration;
-          resolve(metaData);
-        });
-        audioElm.srcObject = mediaStream;
-      } else {
-        // todo get mediaStream from buffer
-        resolve(metaData);
-      }
-    })
+
+    const arrayBuffer = new Uint8Array(buffer).buffer;
+    const audioPromise = new Promise<AudioBuffer>((resolve, reject) => {
+      AudioCtx.decodeAudioData(arrayBuffer, resolve, reject);
+    });
+    await audioPromise
+      .then(data => {
+        console.log('audio loaded!', metaData.title, data)
+        metaData.duration = data.duration;
+      })
+      .catch(error => {
+        console.log('audio error, doing nothing:', error);
+      });
+    return metaData;
   }
 
   static async fromUrl(source: string): Promise<MetaData> {
