@@ -1,4 +1,14 @@
 
+export function calcTimestamp(date: Date){
+  const YYYY = String(date.getFullYear()).padStart(4, '0');
+  const MM = String(date.getMonth() + 1).padStart(2, '0');
+  const DD = String(date.getDate()).padStart(2, '0');
+  const hh = String(date.getHours()).padStart(2, '0');
+  const mm = String(date.getMinutes()).padStart(2, '0');
+  const dd = String(date.getSeconds()).padStart(2, '0');
+  return `${YYYY}${MM}${DD}-${hh}${mm}${dd}`;
+}
+
 export function range(length: number): Array<number> {
   const toReturn: Array<number> = [];
   for (let i = 0; i < length; i++) {

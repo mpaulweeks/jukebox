@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
-import { asyncMap, Collection, Constants, DataLoaderWithDefault, InfoLookup, Logger } from 'jukebox-utils';
+import { asyncMap, calcTimestamp, Collection, Constants, DataLoaderWithDefault, InfoLookup, Logger } from 'jukebox-utils';
 import fetch from 'node-fetch';
 import { iTunesLibrary, iTunesLibraryLoader } from './iTunesLibrary';
 import { LoaderConfig } from './loaderConfig';
@@ -76,12 +76,16 @@ export class Store {
     });
   }
 
+  private getDataKeyWithTimestamp(key: string){
+    return key.split('.min.').join(`.${calcTimestamp(new Date())}.`);
+  }
+
   uploadData(filename: string, data: any) {
     // eg: https://s3.amazonaws.com/mpaulweeks-jukebox/data/collection.json
     const key = `${Constants.DataDirectory}/${filename}`;
     return this.upload({
       Bucket: this.bucket,
-      Key: key.split('.min.').join('.'),
+      Key: this.getDataKeyWithTimestamp(key),
       Body: JSON.stringify(data, null, 2),
     }).then(() => this.upload({
       Bucket: this.bucket,

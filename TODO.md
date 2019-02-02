@@ -7,4 +7,3 @@
 
 - check logic for updating existing playlists
 - diff tool to compare audio with playlist ids to detect orphans
-- upload non-min with timestamp
