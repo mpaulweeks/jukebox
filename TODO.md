@@ -4,4 +4,7 @@
   - see todo in store
 - use `now` to deploy player to s3?
 - add redux for currentTrack/Playlist and player settings
-- only show track# on album/artist playlists view
+
+- check logic for updating existing playlists
+- diff tool to compare audio with playlist ids to detect orphans
+- upload non-min with timestamp
