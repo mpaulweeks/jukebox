@@ -3,8 +3,7 @@ import { Collection } from './collection';
 import { fetchCollection, fetchInfoLookup } from './fetch';
 import { InfoLookup } from './infoLookup';
 import { Playlist } from './playlist';
-import { PlaylistBrowserData } from './types';
-import { WebConfig } from './webConfig';
+import { PlaylistBrowserData, WebConfig } from './types';
 
 export class Manager {
   webConfig: WebConfig;

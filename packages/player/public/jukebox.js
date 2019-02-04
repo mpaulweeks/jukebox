@@ -1,4 +1,3 @@
-window.JUKEBOX_CONFIG = {
+window.createJukebox({
   only_jukebox: true,
-};
-window.openJukebox();
+});

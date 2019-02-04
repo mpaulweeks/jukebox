@@ -97,3 +97,13 @@ export interface PlayerSettings {
   repeat: boolean,
   shuffle: boolean,
 };
+export interface DefaultWebConfig {
+  playlist?: undefined | Array<string>,
+  playlist_only?: boolean,
+  only_jukebox?: boolean,
+};
+export interface WebConfig {
+  PlaylistWhitelist: undefined | Array<string>,
+  HideAggregateLists: boolean,
+  OnlyJukebox: boolean,
+};

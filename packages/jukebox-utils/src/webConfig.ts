@@ -1,24 +1,20 @@
 import queryString from 'query-string';
+import { DefaultWebConfig, WebConfig } from './types';
 
 const isBrowser = (typeof window !== 'undefined');
 
 // function readConfig(name: string): (undefined | boolean | string | Array<string>) {
-function readConfig(name: string, defaultValue?: any): undefined | any {
+function readConfig(name: string, defaults: DefaultWebConfig): undefined | any {
   if (isBrowser) {
-    const appWindow: any = window;
     const parsed = queryString.parse(location.search);
     if (parsed[name] !== undefined) {
       return parsed[name];
     }
-    const configObj = appWindow.JUKEBOX_CONFIG || {};
-    if (configObj[name] !== undefined) {
-      return configObj[name];
-    }
   }
-  return defaultValue;
+  return defaults[name];
 }
-function readConfigArray(name: string, defaultValue?: Array<string>): undefined | Array<string> {
-  const value = readConfig(name, defaultValue);
+function readConfigArray(name: string, defaults: DefaultWebConfig): undefined | Array<string> {
+  const value = readConfig(name, defaults);
   if (value === undefined) {
     return undefined;
   }
@@ -28,16 +24,16 @@ function readConfigArray(name: string, defaultValue?: Array<string>): undefined 
   return [String(value)];
 }
 
-export interface WebConfig {
-  PlaylistWhitelist: undefined | Array<string>,
-  HideAggregateLists: boolean,
-  OnlyJukebox: boolean,
-}
-
-export const getWebConfig = (): WebConfig => {
+export const getWebConfig = (codeConfig?: DefaultWebConfig): WebConfig => {
+  const defaults: DefaultWebConfig = {
+    playlist: undefined,
+    playlist_only: false,
+    only_jukebox: false,
+    ...codeConfig,
+  };
   return {
-    PlaylistWhitelist: readConfigArray('playlist', undefined),
-    HideAggregateLists: !!readConfig('playlist_only', false),
-    OnlyJukebox: !!readConfig('only_jukebox', false),
+    PlaylistWhitelist: readConfigArray('playlist', defaults),
+    HideAggregateLists: !!readConfig('playlist_only', defaults),
+    OnlyJukebox: !!readConfig('only_jukebox', defaults),
   };
 }

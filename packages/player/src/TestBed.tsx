@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Manager, Logger, PlayableTrack, Track, SongLoader, Playlist, range, asyncMap, getWebConfig } from 'jukebox-utils';
 import TrackListView from './TrackListView';
 
@@ -7,7 +8,7 @@ interface State {
   tracks: Array<PlayableTrack>;
 };
 
-export default class TestBed extends React.Component<any, State> {
+class TestBed extends React.Component<any, State> {
   audioElm = new Audio();
   state: State = {
     tracks: [],
@@ -50,4 +51,10 @@ export default class TestBed extends React.Component<any, State> {
     )
 
   }
+}
+
+export const LoadTestBed = () => {
+  const root = document.createElement('jukebox');
+  document.body.appendChild(root);
+  ReactDOM.render(<TestBed />, root);
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Manager, PlaylistBrowser, PlayableTrack, PlayerSettings, PlayableTrackList, Logger, Constants, getWebConfig } from 'jukebox-utils';
+import { Manager, PlaylistBrowser, PlayableTrack, PlayerSettings, PlayableTrackList, Logger, Constants, DefaultWebConfig, getWebConfig } from 'jukebox-utils';
 import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
@@ -95,6 +95,9 @@ const Box = styled.div`
   padding: 10px;
 `;
 
+interface Props {
+  codeConfig: DefaultWebConfig,
+};
 interface State {
   manager?: Manager,
   settings: PlayerSettings,
@@ -106,9 +109,9 @@ interface State {
   collapseSidebar: boolean,
 };
 
-export default class App extends React.Component<any, State> {
+export default class App extends React.Component<Props, State> {
   audioElm = new Audio();
-  webConfig = getWebConfig();
+  webConfig = getWebConfig(this.props.codeConfig);
   state: State = {
     settings: {
       isPlaying: false,
