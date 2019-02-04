@@ -5,17 +5,16 @@ import PlaceholderImage from './placeholder.png';
 
 const TrackContainer = styled.div`
   width: 100%;
-  height: 100%;
 
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: center;
+  align-items: stretch;
   flex-wrap: no-wrap;
 `;
 
 const AlbumContainer = styled.div`
-  height: 100%;
+
 `;
 const AlbumCover = styled.img`
   width: auto;

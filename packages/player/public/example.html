@@ -1,0 +1,25 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title> jukebox.js Example</title>
+</head>
+
+<body>
+  <h1> jukebox.js Example</h1>
+  <button id="jukebox">open jukebox</button>
+
+  <script src="/static/js/bundle.js"></script>
+  <script src="/static/js/0.chunk.js"></script>
+  <script src="/static/js/main.chunk.js"></script>
+  <!-- <script src="https://s3.amazonaws.com/mpaulweeks-jukebox/jukebox.min.js"></script> -->
+  <script type="text/javascript">
+    createJukebox({
+      only_jukebox: true,
+    }).then(jukebox => {
+      document.getElementById('jukebox').addEventListener('click', jukebox.toggle);
+    });
+  </script>
+</body>
+
+</html>

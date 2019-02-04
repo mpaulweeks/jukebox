@@ -6,11 +6,13 @@ import PlaylistMenu from './PlaylistMenu';
 import styled from 'styled-components';
 import { BrowserView } from './BrowserView';
 import { CollapseRoot, CollapseBottom, CollapseSidebar } from './Collapse';
-import { CollapseAble } from './Components';
+import { CollapseAble, FlexStretchMixin } from './Components';
 import { PlaybackControls } from './PlaybackControls';
 
 // todo pass colors as props
 const RootContainer = styled(CollapseAble)`
+  ${FlexStretchMixin}
+
   font-size: 16px;
 
   --jukebox-foreground: black;
@@ -29,32 +31,20 @@ const RootContainer = styled(CollapseAble)`
   position: fixed;
   top: 0px;
   left: 0px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  flex-wrap: no-wrap;
-
   ${props => props.isCollapsed && `
     top: -100%;
   `};
 `;
 
 const Header = styled.div`
-  width: 100%;
 `;
-const Body = styled.div`
-  flex-grow: 1;
-
-  display: flex;
+const BodyContainer = styled.div`
+  ${FlexStretchMixin}
   flex-direction: row;
-  justify-content: flex-start;
-  align-items: stretch;
-  flex-wrap: no-wrap;
 `;
 
 const BoxWrapper = styled(CollapseAble)`
+  ${FlexStretchMixin}
   padding: var(--jukebox-frame-gap);
 `;
 const HeaderBoxWrapper = styled(BoxWrapper)`
@@ -82,13 +72,8 @@ const MainViewBoxWrapper = styled(BoxWrapper)`
 
 const Box = styled.div`
   position: relative;
-  height: 100%;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  flex-wrap: no-wrap;
+  ${FlexStretchMixin}
 
   border: 1px solid black;
   box-sizing: border-box;
@@ -324,7 +309,7 @@ export default class App extends React.Component<Props, State> {
             </Box>
           </HeaderBoxWrapper>
         </Header>
-        <Body>
+        <BodyContainer>
           {manager.playlists.length > 1 && (
             <SidebarBoxWrapper isCollapsed={collapseSidebar}>
               <Box>
@@ -360,7 +345,7 @@ export default class App extends React.Component<Props, State> {
                 )}
             </Box>
           </MainViewBoxWrapper>
-        </Body>
+        </BodyContainer>
         <Header>
           <FooterBoxWrapper>
             <Box>

@@ -1,15 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PlayableTrackList, Manager, PlaylistBrowser } from 'jukebox-utils';
+import { FlexStretchMixin } from './Components';
 
 const SidebarContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-wrap: no-wrap;
-
-  width: 100%;
+  ${FlexStretchMixin}
 `;
 
 const PlaylistName = styled('div') <{ isCurrent: boolean }>`

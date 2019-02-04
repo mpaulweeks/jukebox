@@ -19,7 +19,6 @@ export const CanHighlightIcon = styled(Highlightable)`
 `;
 
 export const ScrollableMixin = `
-  height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
 `;
@@ -30,17 +29,19 @@ export const HoverMixin = `
     background-color: var(--jukebox-hover);
     color: var(--jukebox-background);
   }
-`
+`;
 
-export const MainViewContainer = styled.div`
-  width: 100%;
-  height: 100%;
-
+export const FlexStretchMixin = `
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: stretch;
   align-items: stretch;
   flex-wrap: no-wrap;
+  flex-grow: 1;
+`;
+
+export const MainViewContainer = styled.div`
+  ${FlexStretchMixin}
 `;
 
 export const MainViewScrollable = styled.div`
