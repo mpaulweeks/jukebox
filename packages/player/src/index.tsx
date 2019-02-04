@@ -5,8 +5,13 @@ import TestBed from './TestBed';
 import { Constants } from 'jukebox-utils';
 import './index.css';
 
-let Component: any = App;
-if (Constants.isTest) {
-  Component = TestBed;
-}
-ReactDOM.render(<Component />, document.getElementById('root'));
+const devWindow: any = window;
+devWindow['openJukebox'] = () => new Promise((resolve, reject) => {
+  let Comp: any = App;
+  if (Constants.isTest) {
+    Comp = TestBed;
+  }
+  const root = document.createElement('jukebox');
+  document.body.appendChild(root);
+  ReactDOM.render(<Comp />, root, () => resolve(root));
+});

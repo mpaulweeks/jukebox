@@ -28,12 +28,16 @@ function readConfigArray(name: string, defaultValue?: Array<string>): undefined 
   return [String(value)];
 }
 
-const PlaylistWhitelist = readConfigArray('playlist', undefined);
-const HideAggregateLists = !!readConfig('playlist_only', false);
-const OnlyJukebox = !!readConfig('only_jukebox', false);
+export interface WebConfig {
+  PlaylistWhitelist: undefined | Array<string>,
+  HideAggregateLists: boolean,
+  OnlyJukebox: boolean,
+}
 
-export const WebConfig = {
-  PlaylistWhitelist,
-  HideAggregateLists,
-  OnlyJukebox,
+export const getWebConfig = (): WebConfig => {
+  return {
+    PlaylistWhitelist: readConfigArray('playlist', undefined),
+    HideAggregateLists: !!readConfig('playlist_only', false),
+    OnlyJukebox: !!readConfig('only_jukebox', false),
+  };
 }

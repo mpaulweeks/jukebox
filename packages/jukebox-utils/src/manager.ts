@@ -7,6 +7,7 @@ import { PlaylistBrowserData } from './types';
 import { WebConfig } from './webConfig';
 
 export class Manager {
+  webConfig: WebConfig;
   collection: Collection;
   infoLookup: InfoLookup;
 
@@ -15,11 +16,12 @@ export class Manager {
   browseAlbums: PlaylistBrowser;
   browseArtists: PlaylistBrowser;
 
-  constructor(collection: Collection, infoLookup: InfoLookup) {
+  constructor(webConfig: WebConfig, collection: Collection, infoLookup: InfoLookup) {
+    this.webConfig = webConfig;
     this.collection = collection;
     this.infoLookup = infoLookup;
 
-    const { PlaylistWhitelist } = WebConfig;
+    const { PlaylistWhitelist } = webConfig;
 
     let playlistTracks = {};
     const unsortedPlaylists = Object.keys(collection.data.playlists)
@@ -56,9 +58,9 @@ export class Manager {
     this.browseArtists = new PlaylistBrowser(infoLookup, 'Artists', trackIdsByArtist);
   }
 
-  static async fetch(): Promise<Manager> {
+  static async fetch(webConfig: WebConfig): Promise<Manager> {
     const collection = await fetchCollection();
     const infoLookup = await fetchInfoLookup();
-    return new Manager(collection, infoLookup);
+    return new Manager(webConfig, collection, infoLookup);
   }
 }

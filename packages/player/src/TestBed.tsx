@@ -1,5 +1,5 @@
 import React from 'react';
-import { Manager, Logger, PlayableTrack, Track, SongLoader, Playlist, range, asyncMap } from 'jukebox-utils';
+import { Manager, Logger, PlayableTrack, Track, SongLoader, Playlist, range, asyncMap, getWebConfig } from 'jukebox-utils';
 import TrackListView from './TrackListView';
 
 interface State {
@@ -30,7 +30,7 @@ export default class TestBed extends React.Component<any, State> {
 
   componentDidMount() {
     Logger.log(process.env);
-    Manager.fetch().then(manager => this.setState({
+    Manager.fetch(getWebConfig()).then(manager => this.setState({
       manager: manager,
     }, () => this.test(manager)));
   }

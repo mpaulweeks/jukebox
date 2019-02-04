@@ -1,5 +1,5 @@
 import React from 'react';
-import { Manager, PlaylistBrowser, PlayableTrack, PlayerSettings, PlayableTrackList, WebConfig, Logger, Constants } from 'jukebox-utils';
+import { Manager, PlaylistBrowser, PlayableTrack, PlayerSettings, PlayableTrackList, Logger, Constants, getWebConfig } from 'jukebox-utils';
 import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { BrowserView } from './BrowserView';
 import { CollapseRoot, CollapseBottom, CollapseSidebar } from './Collapse';
 import { CollapseAble } from './Components';
-import { link } from 'fs';
 import { PlaybackControls } from './PlaybackControls';
 
 // todo pass colors as props
@@ -109,13 +108,14 @@ interface State {
 
 export default class App extends React.Component<any, State> {
   audioElm = new Audio();
+  webConfig = getWebConfig();
   state: State = {
     settings: {
       isPlaying: false,
       repeat: false,
       shuffle: false,
     },
-    collapseRoot: !WebConfig.OnlyJukebox,
+    collapseRoot: !this.webConfig.OnlyJukebox,
     collapseHeader: false,
     collapseSidebar: false,
   };
@@ -125,7 +125,7 @@ export default class App extends React.Component<any, State> {
     const appWindow: any = window;
     appWindow.JD = {
       app: this,
-      config: WebConfig,
+      config: this.webConfig,
       constants: Constants,
     };
     // public API
@@ -160,7 +160,7 @@ export default class App extends React.Component<any, State> {
     });
 
     // fetch data, start app
-    Manager.fetch().then(manager => this.setState({
+    Manager.fetch(this.webConfig).then(manager => this.setState({
       manager: manager,
     }, () => {
       if (manager.playlists.length) {
@@ -298,7 +298,7 @@ export default class App extends React.Component<any, State> {
       audioElm.pause();
     }
 
-    const { loadTrack, loadPlaylist, loadBrowser } = this;
+    const { webConfig, loadTrack, loadPlaylist, loadBrowser } = this;
     return (
       <RootContainer isCollapsed={collapseRoot}>
         <Header>
@@ -307,7 +307,7 @@ export default class App extends React.Component<any, State> {
               <CurrentTrackView
                 track={currentTrack}
               />
-              {WebConfig.OnlyJukebox ? (
+              {webConfig.OnlyJukebox ? (
                 <CollapseBottom
                   onClick={this.toggleCollapseHeader}
                   isCollapsed={collapseHeader}
@@ -332,7 +332,7 @@ export default class App extends React.Component<any, State> {
                   currentTrackList={currentTrackList}
                   currentBrowser={currentBrowser}
                 />
-                {WebConfig.OnlyJukebox && (
+                {webConfig.OnlyJukebox && (
                   <CollapseSidebar
                     onClick={this.toggleCollapseSidebar}
                     isCollapsed={collapseSidebar}
@@ -374,6 +374,5 @@ export default class App extends React.Component<any, State> {
         </Header>
       </RootContainer>
     )
-
   }
 }

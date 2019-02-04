@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PlayableTrackList, Manager, WebConfig, PlaylistBrowser } from 'jukebox-utils';
+import { PlayableTrackList, Manager, PlaylistBrowser } from 'jukebox-utils';
 
 const SidebarContainer = styled.div`
   display: flex;
@@ -35,7 +35,7 @@ export default class PlaylistMenu extends React.Component<Props> {
     const { manager, loadPlaylist, loadBrowser, currentTrackList, currentBrowser } = this.props;
     return (
       <SidebarContainer>
-        {!WebConfig.HideAggregateLists && (
+        {!manager.webConfig.HideAggregateLists && (
           <div>
             <PlaylistName
               onClick={() => loadPlaylist(manager.allSongs)}
