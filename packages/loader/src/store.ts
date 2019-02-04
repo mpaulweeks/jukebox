@@ -76,21 +76,27 @@ export class Store {
     });
   }
 
-  private getDataKeyWithTimestamp(key: string){
-    return key.split('.min.').join(`.${calcTimestamp(new Date())}.`);
+  private getDataKeyWithoutMin(fileName: string) {
+    return fileName.split('.min.').join('.');
+  }
+  private getDataKeyWithTimestamp(fileName: string) {
+    return `${calcTimestamp(new Date())}_${this.getDataKeyWithoutMin(fileName)}`;
   }
 
-  uploadData(filename: string, data: any) {
+  uploadData(fileName: string, data: any) {
     // eg: https://s3.amazonaws.com/mpaulweeks-jukebox/data/collection.json
-    const key = `${Constants.DataDirectory}/${filename}`;
     return this.upload({
       Bucket: this.bucket,
-      Key: this.getDataKeyWithTimestamp(key),
-      Body: JSON.stringify(data, null, 2),
+      Key: `${Constants.DataDirectory}/${fileName}`,
+      Body: JSON.stringify(data),
     }).then(() => this.upload({
       Bucket: this.bucket,
-      Key: key,
-      Body: JSON.stringify(data),
+      Key: `${Constants.DataDirectory}/${this.getDataKeyWithoutMin(fileName)}`,
+      Body: JSON.stringify(data, null, 2),
+    })).then(() => this.upload({
+      Bucket: this.bucket,
+      Key: `${Constants.DataDirectory}/backup/${this.getDataKeyWithTimestamp(fileName)}`,
+      Body: JSON.stringify(data, null, 2),
     }));
   }
 
