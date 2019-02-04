@@ -15,6 +15,7 @@ const LogDebug = isTest;
 
 const LocalDataRoot = '../../local';
 const PlayerBuildPath = '../player/build';
+const PlayerDistPath = '../player/dist';
 const LocalFileServerRoot = 'http://localhost:8080';
 const AwsRoot = 'https://s3.amazonaws.com/mpaulweeks-jukebox';
 const StorageBasePath = isDev ? LocalFileServerRoot : AwsRoot;
@@ -39,6 +40,7 @@ export const Constants = {
   LogDebug,
   LocalDataRoot,
   PlayerBuildPath,
+  PlayerDistPath,
   DataDirectory,
   AudioDirectory,
   ImageDirectory,

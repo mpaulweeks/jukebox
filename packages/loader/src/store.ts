@@ -134,6 +134,19 @@ export class Store {
     });
   }
 
+  async deployJukebox() {
+    const fileName = 'jukebox.min.js';
+    return new Promise((resolve, reject) => {
+      fs.readFile(`${Constants.PlayerDistPath}/${fileName}`, (err, buffer) => {
+        this.upload({
+          Bucket: this.bucket,
+          Key: `${fileName}`,
+          Body: buffer,
+        }).then(() => resolve(buffer));
+      });
+    });
+  }
+
   async deployPlayer() {
     interface ExploreDir {
       relativePath: string,
