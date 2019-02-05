@@ -13,6 +13,7 @@ const TracksTableContainer = styled(MainViewScrollable)`
 const TracksTable = styled.table`
   width: 100%;
   border-collapse: collapse;
+  color: inherit;
 
   & th, & td {
     border-top: 1px solid black;

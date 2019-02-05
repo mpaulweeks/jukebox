@@ -6,7 +6,7 @@ import PlaylistMenu from './PlaylistMenu';
 import styled from 'styled-components';
 import { BrowserView } from './BrowserView';
 import { CollapseRoot, CollapseBottom, CollapseSidebar } from './Collapse';
-import { CollapseAble, FlexStretchMixin } from './Components';
+import { CollapseAble, FlexStretchMixin, ResetMixin } from './Components';
 import { PlaybackControls } from './PlaybackControls';
 
 // todo pass colors as props
@@ -29,6 +29,7 @@ const RootContainer = styled(CollapseAble)`
   width: 100%;
   height: 100%;
   position: fixed;
+  z-index: 2147483647; /* max possible */
   top: 0px;
   left: 0px;
   ${props => props.isCollapsed && `
