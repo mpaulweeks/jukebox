@@ -101,9 +101,11 @@ export interface DefaultWebConfig {
   playlist?: undefined | Array<string>,
   playlist_only?: boolean,
   only_jukebox?: boolean,
+  color_scheme?: string,
 };
 export interface WebConfig {
   PlaylistWhitelist: undefined | Array<string>,
   HideAggregateLists: boolean,
   OnlyJukebox: boolean,
+  ColorScheme: string,
 };

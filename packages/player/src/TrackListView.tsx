@@ -16,7 +16,7 @@ const TracksTable = styled.table`
   color: inherit;
 
   & th, & td {
-    border-top: 1px solid black;
+    border-top: 1px solid var(--jukebox-foreground);
     box-sizing: border-box;
     padding: 0px 5px;
     height: 60px;

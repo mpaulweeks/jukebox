@@ -23,7 +23,7 @@ const CenterControlsBlock = styled(ControlsBlock)`
 const Control = styled(CanHighlight)`
   ${HoverMixin}
 
-  border: 1px solid black;
+  border: 1px solid var(--jukebox-foreground);
   border-radius: 5px;
   margin: 5px;
   font-size: 1.5em;

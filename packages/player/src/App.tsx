@@ -8,33 +8,38 @@ import { BrowserView } from './BrowserView';
 import { CollapseRoot, CollapseBottom, CollapseSidebar } from './Collapse';
 import { CollapseAble, FlexStretchMixin, ResetMixin } from './Components';
 import { PlaybackControls } from './PlaybackControls';
+import { ColorScheme, getColorScheme } from './ColorScheme';
 
 // todo pass colors as props
 const RootContainer = styled(CollapseAble)`
   ${FlexStretchMixin}
 
-  font-size: 16px;
-
-  --jukebox-foreground: black;
-  --jukebox-background: white;
-  --jukebox-hover: darkgrey;
-  --jukebox-highlight: lightblue;
-  --jukebox-collapse-foreground: white;
-  --jukebox-collapse-background: grey;
-  --jukebox-frame-gap: 10px;
-
-  background-color: var(--jukebox-background);
-  color: var(--jukebox-foreground);
-
-  width: 100%;
-  height: 100%;
   position: fixed;
   z-index: 2147483647; /* max possible */
+  width: 100%;
+  height: 100%;
   top: 0px;
   left: 0px;
   ${props => props.isCollapsed && `
     top: -100%;
   `};
+`;
+
+const RootInner = styled('div') <{ colorScheme: ColorScheme }>`
+  ${FlexStretchMixin}
+
+  font-size: 16px;
+
+  --jukebox-foreground: ${props => props.colorScheme.foreground};
+  --jukebox-background: ${props => props.colorScheme.background};
+  --jukebox-hover: ${props => props.colorScheme.hover};
+  --jukebox-highlight: ${props => props.colorScheme.highlight};
+  --jukebox-collapse-foreground: ${props => props.colorScheme.collapseForeground};
+  --jukebox-collapse-background: ${props => props.colorScheme.collapseBackground};
+
+  --jukebox-frame-gap: 10px;
+  background-color: var(--jukebox-background);
+  color: var(--jukebox-foreground);
 `;
 
 const Header = styled.div`
@@ -76,7 +81,7 @@ const Box = styled.div`
 
   ${FlexStretchMixin}
 
-  border: 1px solid black;
+  border: 1px solid var(--jukebox-foreground);
   box-sizing: border-box;
   padding: 10px;
 `;
@@ -86,6 +91,7 @@ interface Props {
 };
 interface State {
   manager?: Manager,
+  colorScheme: ColorScheme,
   settings: PlayerSettings,
   currentTrack?: PlayableTrack,
   currentTrackList?: PlayableTrackList,
@@ -99,11 +105,16 @@ export default class App extends React.Component<Props, State> {
   audioElm = new Audio();
   webConfig = getWebConfig(this.props.codeConfig);
   state: State = {
+    manager: undefined,
+    colorScheme: getColorScheme(this.webConfig.ColorScheme),
     settings: {
       isPlaying: false,
       repeat: false,
       shuffle: false,
     },
+    currentTrack: undefined,
+    currentTrackList: undefined,
+    currentBrowser: undefined,
     collapseRoot: !this.webConfig.OnlyJukebox,
     collapseHeader: false,
     collapseSidebar: false,
@@ -272,7 +283,7 @@ export default class App extends React.Component<Props, State> {
   }
 
   render() {
-    const { manager, settings, currentTrack, currentTrackList, currentBrowser, collapseRoot, collapseHeader, collapseSidebar } = this.state;
+    const { manager, colorScheme, settings, currentTrack, currentTrackList, currentBrowser, collapseRoot, collapseHeader, collapseSidebar } = this.state;
     if (!manager) {
       return (
         <h3> loading, please wait... </h3>
@@ -290,77 +301,79 @@ export default class App extends React.Component<Props, State> {
     const { webConfig, loadTrack, loadPlaylist, loadBrowser } = this;
     return (
       <RootContainer isCollapsed={collapseRoot}>
-        <Header>
-          <HeaderBoxWrapper isCollapsed={collapseHeader}>
-            <Box>
-              <CurrentTrackView
-                track={currentTrack}
-              />
-              {webConfig.OnlyJukebox ? (
-                <CollapseBottom
-                  onClick={this.toggleCollapseHeader}
-                  isCollapsed={collapseHeader}
-                />
-              ) : (
-                  <CollapseRoot
-                    onClick={this.toggleCollapseRoot}
-                    isCollapsed={false}
-                  />
-                )}
-            </Box>
-          </HeaderBoxWrapper>
-        </Header>
-        <BodyContainer>
-          {manager.playlists.length > 1 && (
-            <SidebarBoxWrapper isCollapsed={collapseSidebar}>
+        <RootInner colorScheme={colorScheme}>
+          <Header>
+            <HeaderBoxWrapper isCollapsed={collapseHeader}>
               <Box>
-                <PlaylistMenu
-                  loadPlaylist={loadPlaylist}
-                  loadBrowser={loadBrowser}
-                  manager={manager}
-                  currentTrackList={currentTrackList}
-                  currentBrowser={currentBrowser}
+                <CurrentTrackView
+                  track={currentTrack}
                 />
-                {webConfig.OnlyJukebox && (
-                  <CollapseSidebar
-                    onClick={this.toggleCollapseSidebar}
-                    isCollapsed={collapseSidebar}
+                {webConfig.OnlyJukebox ? (
+                  <CollapseBottom
+                    onClick={this.toggleCollapseHeader}
+                    isCollapsed={collapseHeader}
                   />
-                )}
+                ) : (
+                    <CollapseRoot
+                      onClick={this.toggleCollapseRoot}
+                      isCollapsed={false}
+                    />
+                  )}
               </Box>
-            </SidebarBoxWrapper>
-          )}
-          <MainViewBoxWrapper>
-            <Box>
-              {currentBrowser ? (
-                <BrowserView
-                  loadPlaylist={loadPlaylist}
-                  browser={currentBrowser}
-                />
-              ) : (
-                  <TrackListView
-                    loadTrack={loadTrack}
-                    playlist={currentTrackList}
-                    currentTrack={currentTrack}
+            </HeaderBoxWrapper>
+          </Header>
+          <BodyContainer>
+            {manager.playlists.length > 1 && (
+              <SidebarBoxWrapper isCollapsed={collapseSidebar}>
+                <Box>
+                  <PlaylistMenu
+                    loadPlaylist={loadPlaylist}
+                    loadBrowser={loadBrowser}
+                    manager={manager}
+                    currentTrackList={currentTrackList}
+                    currentBrowser={currentBrowser}
                   />
-                )}
-            </Box>
-          </MainViewBoxWrapper>
-        </BodyContainer>
-        <Header>
-          <FooterBoxWrapper>
-            <Box>
-              <PlaybackControls
-                settings={settings}
-                nextTrack={this.nextTrack}
-                prevTrack={this.prevTrack}
-                togglePlay={this.togglePlay}
-                toggleShuffle={this.toggleShuffle}
-                toggleRepeat={this.toggleRepeat}
-              />
-            </Box>
-          </FooterBoxWrapper>
-        </Header>
+                  {webConfig.OnlyJukebox && (
+                    <CollapseSidebar
+                      onClick={this.toggleCollapseSidebar}
+                      isCollapsed={collapseSidebar}
+                    />
+                  )}
+                </Box>
+              </SidebarBoxWrapper>
+            )}
+            <MainViewBoxWrapper>
+              <Box>
+                {currentBrowser ? (
+                  <BrowserView
+                    loadPlaylist={loadPlaylist}
+                    browser={currentBrowser}
+                  />
+                ) : (
+                    <TrackListView
+                      loadTrack={loadTrack}
+                      playlist={currentTrackList}
+                      currentTrack={currentTrack}
+                    />
+                  )}
+              </Box>
+            </MainViewBoxWrapper>
+          </BodyContainer>
+          <Header>
+            <FooterBoxWrapper>
+              <Box>
+                <PlaybackControls
+                  settings={settings}
+                  nextTrack={this.nextTrack}
+                  prevTrack={this.prevTrack}
+                  togglePlay={this.togglePlay}
+                  toggleShuffle={this.toggleShuffle}
+                  toggleRepeat={this.toggleRepeat}
+                />
+              </Box>
+            </FooterBoxWrapper>
+          </Header>
+        </RootInner>
       </RootContainer>
     )
   }

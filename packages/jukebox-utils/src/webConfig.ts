@@ -29,11 +29,13 @@ export const getWebConfig = (codeConfig?: DefaultWebConfig): WebConfig => {
     playlist: undefined,
     playlist_only: false,
     only_jukebox: false,
+    color_scheme: undefined,
     ...codeConfig,
   };
   return {
     PlaylistWhitelist: readConfigArray('playlist', defaults),
     HideAggregateLists: !!readConfig('playlist_only', defaults),
     OnlyJukebox: !!readConfig('only_jukebox', defaults),
+    ColorScheme: readConfig('color_scheme', defaults),
   };
 }
