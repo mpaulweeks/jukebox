@@ -1,8 +1,6 @@
 # todo
 
-- how to export as vanilla js?
-  - see todo in store
-- use `now` to deploy player to s3?
+- Audio.onload fills song info with loading dialogue
 - add redux for currentTrack/Playlist and player settings
 
 - check logic for updating existing playlists
