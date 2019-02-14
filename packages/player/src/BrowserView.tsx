@@ -8,8 +8,7 @@ import { setCurrentTrackList } from './redux/actions';
 import { PlayerState } from './redux/reducers/player';
 import { MasterState } from './redux/reducers';
 
-const BrowserContainer = styled(MainViewContainer)`
-`;
+const BrowserContainer = styled(MainViewContainer)``;
 
 const TrackListsContainer = styled(MainViewScrollable)`
   display: flex;
@@ -58,9 +57,9 @@ const TrackListInfo = styled.div`
 `;
 
 interface Props {
-  player: PlayerState,
-  setCurrentTrackList(trackList: PlayableTrackList): void,
-};
+  player: PlayerState;
+  setCurrentTrackList(trackList: PlayableTrackList): void;
+}
 
 class BrowserView extends React.Component<Props> {
   truncate(info: string) {
@@ -72,7 +71,7 @@ class BrowserView extends React.Component<Props> {
 
     if (!browser) {
       // todo how to ensure?
-      return <div></div>
+      return <div />;
     }
     return (
       <BrowserContainer>
@@ -89,19 +88,20 @@ class BrowserView extends React.Component<Props> {
               <TrackListInfo>
                 <b>{pl.album || '???'}</b>
               </TrackListInfo>
-              <TrackListInfo>
-                {pl.artist || '???'}
-              </TrackListInfo>
+              <TrackListInfo>{pl.artist || '???'}</TrackListInfo>
             </TrackList>
           ))}
         </TrackListsContainer>
       </BrowserContainer>
-    )
+    );
   }
 }
 
-export default connect((state: MasterState) => ({
-  player: state.player,
-}), {
+export default connect(
+  (state: MasterState) => ({
+    player: state.player,
+  }),
+  {
     setCurrentTrackList,
-  })(BrowserView);
+  },
+)(BrowserView);

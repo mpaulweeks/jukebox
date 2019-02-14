@@ -1,19 +1,23 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const CollapseAble = styled('div') <{ isCollapsed?: boolean }>`
+export const CollapseAble = styled('div')<{ isCollapsed?: boolean }>`
   transition-duration: 1s;
   transition-delay: 0s;
   transition-timing-function: ease-in-out;
 `;
 
-const Highlightable = styled('div') <{ highlight?: boolean }>``;
+const Highlightable = styled('div')<{ highlight?: boolean }>``;
 export const CanHighlight = styled(Highlightable)`
-  ${props => props.highlight && `
+  ${props =>
+    props.highlight &&
+    `
     background-color: var(--jukebox-highlight);
   `}
 `;
 export const CanHighlightIcon = styled(Highlightable)`
-  ${props => props.highlight && `
+  ${props =>
+    props.highlight &&
+    `
     color: var(--jukebox-highlight);
   `}
 `;

@@ -1,13 +1,33 @@
-
-import { Manager, PlayableTrack, PlayableTrackList, PlaylistBrowser } from 'jukebox-utils';
-import { SEEK_NEXT_TRACK, SEEK_PREV_TRACK, SET_CURRENT_BROWSER, SET_CURRENT_TRACK, SET_CURRENT_TRACKLIST, SET_IS_PLAYING, SET_IS_REPEAT, SET_IS_SHUFFLE, SET_MANAGER, TOGGLE_COLLAPSE_HEADER, TOGGLE_COLLAPSE_ROOT, TOGGLE_COLLAPSE_SIDEBAR, TOGGLE_IS_PLAYING, TOGGLE_IS_REPEAT, TOGGLE_IS_SHUFFLE } from "./actionTypes";
+import {
+  Manager,
+  PlayableTrack,
+  PlayableTrackList,
+  PlaylistBrowser,
+} from 'jukebox-utils';
+import {
+  SEEK_NEXT_TRACK,
+  SEEK_PREV_TRACK,
+  SET_CURRENT_BROWSER,
+  SET_CURRENT_TRACK,
+  SET_CURRENT_TRACKLIST,
+  SET_IS_PLAYING,
+  SET_IS_REPEAT,
+  SET_IS_SHUFFLE,
+  SET_MANAGER,
+  TOGGLE_COLLAPSE_HEADER,
+  TOGGLE_COLLAPSE_ROOT,
+  TOGGLE_COLLAPSE_SIDEBAR,
+  TOGGLE_IS_PLAYING,
+  TOGGLE_IS_REPEAT,
+  TOGGLE_IS_SHUFFLE,
+} from './actionTypes';
 
 export const setManager = (manager: Manager) => ({
   type: SET_MANAGER,
   payload: {
     manager: manager,
-  }
-})
+  },
+});
 
 export const setCurrentTrack = (track: PlayableTrack) => ({
   type: SET_CURRENT_TRACK,

@@ -1,6 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { seekNextTrack, seekPrevTrack, toggleIsPlaying, toggleIsRepeat, toggleIsShuffle } from './redux/actions';
+import {
+  seekNextTrack,
+  seekPrevTrack,
+  toggleIsPlaying,
+  toggleIsRepeat,
+  toggleIsShuffle,
+} from './redux/actions';
 import { CanHighlight, HoverMixin } from './Components';
 import { connect } from 'react-redux';
 import { MasterState } from './redux/reducers';
@@ -45,28 +51,26 @@ const Control = styled(CanHighlight)`
 `;
 
 export interface PlaybackControlProps {
-  player: PlayerState,
-  seekNextTrack(): void,
-  seekPrevTrack(): void,
-  toggleIsPlaying(): void,
-  toggleIsShuffle(): void,
-  toggleIsRepeat(): void,
+  player: PlayerState;
+  seekNextTrack(): void;
+  seekPrevTrack(): void;
+  toggleIsPlaying(): void;
+  toggleIsShuffle(): void;
+  toggleIsRepeat(): void;
 }
-class PlaybackControls extends React.Component<PlaybackControlProps>{
+class PlaybackControls extends React.Component<PlaybackControlProps> {
   render() {
     const { player } = this.props;
 
-    // <i className="material-icons">volume_up</i>
-    // <i className="material-icons">volume_down</i>
-    // <i className="material-icons">volume_mute</i>
-    // <i className="material-icons">volume_off</i>
+    // <i className='material-icons'>volume_up</i>
+    // <i className='material-icons'>volume_down</i>
+    // <i className='material-icons'>volume_mute</i>
+    // <i className='material-icons'>volume_off</i>
 
     return (
       <ControlsContainer>
         <ControlsBlock>
-          <Control>
-            ?
-          </Control>
+          <Control>?</Control>
         </ControlsBlock>
         <CenterControlsBlock>
           <Control onClick={this.props.seekPrevTrack}>
@@ -76,32 +80,41 @@ class PlaybackControls extends React.Component<PlaybackControlProps>{
             {player.isPlaying ? (
               <i className="material-icons">pause_circle_outline</i>
             ) : (
-                <i className="material-icons">play_circle_outline</i>
-              )}
+              <i className="material-icons">play_circle_outline</i>
+            )}
           </Control>
           <Control onClick={this.props.seekNextTrack}>
             <i className="material-icons">skip_next</i>
           </Control>
         </CenterControlsBlock>
         <ControlsBlock>
-          <Control onClick={this.props.toggleIsShuffle} highlight={player.shuffle}>
+          <Control
+            onClick={this.props.toggleIsShuffle}
+            highlight={player.shuffle}
+          >
             <i className="material-icons">shuffle</i>
           </Control>
-          <Control onClick={this.props.toggleIsRepeat} highlight={player.repeat}>
+          <Control
+            onClick={this.props.toggleIsRepeat}
+            highlight={player.repeat}
+          >
             <i className="material-icons">repeat</i>
           </Control>
         </ControlsBlock>
       </ControlsContainer>
-    )
+    );
   }
 }
 
-export default connect((state: MasterState) => ({
-  player: state.player,
-}), {
+export default connect(
+  (state: MasterState) => ({
+    player: state.player,
+  }),
+  {
     seekNextTrack,
     seekPrevTrack,
     toggleIsPlaying,
     toggleIsShuffle,
     toggleIsRepeat,
-  })(PlaybackControls);
+  },
+)(PlaybackControls);

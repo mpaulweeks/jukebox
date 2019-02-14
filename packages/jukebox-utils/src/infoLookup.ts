@@ -1,6 +1,10 @@
 import { InfoLookupData } from './types';
 
 export class InfoLookup {
+  static default(): InfoLookup {
+    return new InfoLookup({});
+  }
+
   data: InfoLookupData;
 
   constructor(data: InfoLookupData) {
@@ -12,9 +16,5 @@ export class InfoLookup {
   }
   get(trackId) {
     return this.data[trackId];
-  }
-
-  static default(): InfoLookup {
-    return new InfoLookup({});
   }
 }

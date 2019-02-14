@@ -1,7 +1,7 @@
 import queryString from 'query-string';
 import { DefaultWebConfig, WebConfig } from './types';
 
-const isBrowser = (typeof window !== 'undefined');
+const isBrowser = typeof window !== 'undefined';
 
 // function readConfig(name: string): (undefined | boolean | string | Array<string>) {
 function readConfig(name: string, defaults: DefaultWebConfig): undefined | any {
@@ -13,7 +13,10 @@ function readConfig(name: string, defaults: DefaultWebConfig): undefined | any {
   }
   return defaults[name];
 }
-function readConfigArray(name: string, defaults: DefaultWebConfig): undefined | Array<string> {
+function readConfigArray(
+  name: string,
+  defaults: DefaultWebConfig,
+): undefined | Array<string> {
   const value = readConfig(name, defaults);
   if (value === undefined) {
     return undefined;
@@ -38,4 +41,4 @@ export const getWebConfig = (codeConfig?: DefaultWebConfig): WebConfig => {
     OnlyJukebox: !!readConfig('only_jukebox', defaults),
     ColorScheme: readConfig('color_scheme', defaults),
   };
-}
+};

@@ -1,12 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Manager, Logger, PlayableTrack, Track, SongLoader, Playlist, range, asyncMap, getWebConfig } from 'jukebox-utils';
+import {
+  Manager,
+  Logger,
+  PlayableTrack,
+  Track,
+  SongLoader,
+  Playlist,
+  range,
+  asyncMap,
+  getWebConfig,
+} from 'jukebox-utils';
 import TrackListView from './TrackListView';
 
 interface State {
   manager?: Manager;
   tracks: Array<PlayableTrack>;
-};
+}
 
 class TestBed extends React.Component<any, State> {
   audioElm = new Audio();
@@ -16,9 +26,7 @@ class TestBed extends React.Component<any, State> {
 
   test = async (manager: Manager) => {
     const randomIds = range(5).map(() => manager.allSongs.randomTrack().id);
-    const ids = [
-      '???',
-    ].concat(randomIds);
+    const ids = ['???'].concat(randomIds);
     asyncMap(ids, async (id: string) => {
       const trackData = await SongLoader.fromId(id);
       const track = new Track(trackData);
@@ -27,13 +35,18 @@ class TestBed extends React.Component<any, State> {
         tracks,
       });
     });
-  }
+  };
 
   componentDidMount() {
     Logger.log(process.env);
-    Manager.fetch(getWebConfig()).then(manager => this.setState({
-      manager: manager,
-    }, () => this.test(manager)));
+    Manager.fetch(getWebConfig()).then(manager =>
+      this.setState(
+        {
+          manager: manager,
+        },
+        () => this.test(manager),
+      ),
+    );
   }
 
   render() {
@@ -45,8 +58,7 @@ class TestBed extends React.Component<any, State> {
         loaded
         <TrackListView />
       </div>
-    )
-
+    );
   }
 }
 
@@ -54,4 +66,4 @@ export const LoadTestBed = () => {
   const root = document.createElement('jukebox');
   document.body.appendChild(root);
   ReactDOM.render(<TestBed />, root);
-}
+};

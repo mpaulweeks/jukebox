@@ -20,41 +20,58 @@ const CollapseBox = styled(CollapseAble)`
 `;
 
 interface Props {
-  onClick(): void,
-  isCollapsed: boolean,
-};
+  onClick(): void;
+  isCollapsed: boolean;
+}
 
-const genCollapseBox = (openText: string, collapsedText: string, Container: StyledComponent<'div', any, { isCollapsed: boolean }, never>) => {
+const genCollapseBox = (
+  openText: string,
+  collapsedText: string,
+  Container: StyledComponent<'div', any, { isCollapsed: boolean }, never>,
+) => {
   return (props: Props) => {
     const { onClick, isCollapsed } = props;
     return (
-      <Container
-        onClick={onClick}
-        isCollapsed={isCollapsed}
-      >
+      <Container onClick={onClick} isCollapsed={isCollapsed}>
         {isCollapsed ? collapsedText : openText}
       </Container>
     );
-  }
-}
+  };
+};
 
 // alternative arrows ⇦ ⇧ ⇨ ⇩
 
-export const CollapseRoot = genCollapseBox('X', '', styled(CollapseBox)`
-  top: 0px;
-  right: 0px;
-`);
-export const CollapseBottom = genCollapseBox('▲', '▼', styled(CollapseBox)`
-  right: 0px;
-  bottom: 0px;
-  ${props => props.isCollapsed && `
+export const CollapseRoot = genCollapseBox(
+  'X',
+  '',
+  styled(CollapseBox)`
+    top: 0px;
+    right: 0px;
+  `,
+);
+export const CollapseBottom = genCollapseBox(
+  '▲',
+  '▼',
+  styled(CollapseBox)`
+    right: 0px;
+    bottom: 0px;
+    ${props =>
+      props.isCollapsed &&
+      `
     bottom: -50px;
   `}
-`);
-export const CollapseSidebar = genCollapseBox('◄', '►', styled(CollapseBox)`
-  top: 0px;
-  right: 0px;
-  ${props => props.isCollapsed && `
+  `,
+);
+export const CollapseSidebar = genCollapseBox(
+  '◄',
+  '►',
+  styled(CollapseBox)`
+    top: 0px;
+    right: 0px;
+    ${props =>
+      props.isCollapsed &&
+      `
     right: -50px;
   `}
-`);
+  `,
+);

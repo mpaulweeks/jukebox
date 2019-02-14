@@ -27,7 +27,7 @@
     "crontask": "yarn setup && yarn loader:itunes",
     "cronjob": "git pull && yarn crontask",
     "lint": "tslint -c tslint.json 'packages/*/src/**/*.{ts,tsx}'",
-    "pretty": "yarn prettier --write --single-quote --trailing-comma es5 'packages/*/src/**/*.{ts,tsx}'"
+    "pretty": "yarn prettier --write --single-quote --trailing-comma all 'packages/*/src/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "gh-pages": "^2.0.1",

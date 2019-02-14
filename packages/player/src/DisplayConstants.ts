@@ -1,2 +1,1 @@
-export const DisplayConstants = {
-};
+export const DisplayConstants = {};

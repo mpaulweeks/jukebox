@@ -1,19 +1,18 @@
-
 export interface ColorScheme {
-  foreground: string,
-  background: string,
-  hover: string,
-  highlight: string,
-  collapseForeground: string,
-  collapseBackground: string,
+  foreground: string;
+  background: string;
+  hover: string;
+  highlight: string;
+  collapseForeground: string;
+  collapseBackground: string;
 }
 
 interface SchemeLookup {
-  [key: string]: ColorScheme,
+  [key: string]: ColorScheme;
 }
 
 const lookup: SchemeLookup = {
-  'light': {
+  light: {
     foreground: 'black',
     background: 'white',
     hover: 'darkgrey',
@@ -21,7 +20,7 @@ const lookup: SchemeLookup = {
     collapseForeground: 'white',
     collapseBackground: 'grey',
   },
-  'dark': {
+  dark: {
     foreground: 'white',
     background: 'black',
     hover: 'lightgrey',
@@ -34,4 +33,4 @@ lookup.default = lookup.light;
 
 export const getColorScheme = (colorScheme?: string): ColorScheme => {
   return (colorScheme && lookup[colorScheme]) || lookup['default'];
-}
+};

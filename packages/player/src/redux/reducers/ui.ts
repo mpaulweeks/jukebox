@@ -1,13 +1,17 @@
-import { TOGGLE_COLLAPSE_HEADER, TOGGLE_COLLAPSE_ROOT, TOGGLE_COLLAPSE_SIDEBAR } from "../actionTypes";
+import {
+  TOGGLE_COLLAPSE_HEADER,
+  TOGGLE_COLLAPSE_ROOT,
+  TOGGLE_COLLAPSE_SIDEBAR,
+} from '../actionTypes';
 
 export interface UiState {
-  collapseRoot: boolean,
-  collapseHeader: boolean,
-  collapseSidebar: boolean,
+  collapseRoot: boolean;
+  collapseHeader: boolean;
+  collapseSidebar: boolean;
 }
 
 interface UiAction {
-  type: string,
+  type: string;
 }
 
 const initialState: UiState = {
@@ -16,7 +20,7 @@ const initialState: UiState = {
   collapseSidebar: false,
 };
 
-export default function (state = initialState, action: UiAction) {
+export default function(state = initialState, action: UiAction) {
   switch (action.type) {
     case TOGGLE_COLLAPSE_ROOT: {
       return {

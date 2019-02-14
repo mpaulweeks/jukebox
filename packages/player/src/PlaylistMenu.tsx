@@ -13,22 +13,24 @@ const SidebarContainer = styled.div`
   ${FlexStretchMixin}
 `;
 
-const PlaylistName = styled('div') <{ isCurrent: boolean }>`
+const PlaylistName = styled('div')<{ isCurrent: boolean }>`
   cursor: pointer;
   box-sizing: border-box;
   padding: 5px;
 
-  ${props => props.isCurrent && `
+  ${props =>
+    props.isCurrent &&
+    `
     background-color: var(--jukebox-highlight);
   `}
 `;
 
 interface Props {
-  setCurrentTrackList(trackList: PlayableTrackList): void,
-  setCurrentBrowser(browser: PlaylistBrowser): void,
-  data: DataState,
-  player: PlayerState,
-};
+  setCurrentTrackList(trackList: PlayableTrackList): void;
+  setCurrentBrowser(browser: PlaylistBrowser): void;
+  data: DataState;
+  player: PlayerState;
+}
 
 class PlaylistMenu extends React.Component<Props> {
   render() {
@@ -72,14 +74,17 @@ class PlaylistMenu extends React.Component<Props> {
           </PlaylistName>
         ))}
       </SidebarContainer>
-    )
+    );
   }
 }
 
-export default connect((state: MasterState) => ({
-  data: state.data,
-  player: state.player,
-}), {
+export default connect(
+  (state: MasterState) => ({
+    data: state.data,
+    player: state.player,
+  }),
+  {
     setCurrentTrackList,
     setCurrentBrowser,
-  })(PlaylistMenu);
+  },
+)(PlaylistMenu);

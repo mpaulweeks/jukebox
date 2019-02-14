@@ -20,6 +20,6 @@ const init = () => {
     ...defaultConfig,
     ...config.config,
   };
-}
+};
 
 export const LoaderConfig = init();

@@ -16,9 +16,7 @@ const TrackContainer = styled.div`
   flex-wrap: no-wrap;
 `;
 
-const AlbumContainer = styled.div`
-
-`;
+const AlbumContainer = styled.div``;
 const AlbumCover = styled.img`
   width: auto;
   height: 100%;
@@ -46,8 +44,8 @@ const TrackTitle = styled(DetailsRow)`
 `;
 
 interface Props {
-  player: PlayerState,
-};
+  player: PlayerState;
+}
 
 class TrackView extends React.Component<Props> {
   render() {
@@ -58,9 +56,7 @@ class TrackView extends React.Component<Props> {
           <AlbumContainer>
             <AlbumCover src={PlaceholderImage} />
           </AlbumContainer>
-          <DetailsContainer>
-            Click on a track to start playing
-          </DetailsContainer>
+          <DetailsContainer>Click on a track to start playing</DetailsContainer>
         </TrackContainer>
       );
     }
@@ -70,25 +66,17 @@ class TrackView extends React.Component<Props> {
           <AlbumCover src={track.imageSrc || PlaceholderImage} />
         </AlbumContainer>
         <DetailsContainer>
-          <TrackTitle>
-            {track.title}
-          </TrackTitle>
-          <DetailsRow>
-            {track.artist}
-          </DetailsRow>
-          <DetailsRow>
-            {track.album}
-          </DetailsRow>
-          <DetailsRow>
-            {track.trackNumberDisplay}
-          </DetailsRow>
+          <TrackTitle>{track.title}</TrackTitle>
+          <DetailsRow>{track.artist}</DetailsRow>
+          <DetailsRow>{track.album}</DetailsRow>
+          <DetailsRow>{track.trackNumberDisplay}</DetailsRow>
         </DetailsContainer>
       </TrackContainer>
-    )
+    );
   }
 }
 
 const mapStateToProps = (state: MasterState) => ({
   player: state.player,
-})
+});
 export default connect(mapStateToProps)(TrackView);

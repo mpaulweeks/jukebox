@@ -1,4 +1,4 @@
-import { Store } from "..";
+import { Store } from '..';
 
 (async () => {
   const store = new Store();

@@ -1,12 +1,20 @@
 import fs from 'fs';
-import { asyncMap, Collection, Constants, InfoLookup, Logger, MetaLoader, SongLoader } from 'jukebox-utils';
+import {
+  asyncMap,
+  Collection,
+  Constants,
+  InfoLookup,
+  Logger,
+  MetaLoader,
+  SongLoader,
+} from 'jukebox-utils';
 import { iTunesLibrary } from './iTunesLibrary';
 import { Store } from './store';
 
 interface ImageFile {
-  hash: string,
-  buffer: Buffer,
-  summary: string,
+  hash: string;
+  buffer: Buffer;
+  summary: string;
 }
 
 export class Loader {
@@ -16,7 +24,12 @@ export class Loader {
   infoLookup: InfoLookup;
   allTracks: any;
 
-  constructor(store: Store, library: iTunesLibrary, existingCollection: Collection, existingDataBase: InfoLookup) {
+  constructor(
+    store: Store,
+    library: iTunesLibrary,
+    existingCollection: Collection,
+    existingDataBase: InfoLookup,
+  ) {
     this.store = store;
     this.library = library;
     this.collection = existingCollection;
@@ -24,7 +37,10 @@ export class Loader {
     this.allTracks = {};
 
     Logger.log('created new loader!');
-    Logger.log('collection size:', Object.keys(this.collection.data.tracks).length);
+    Logger.log(
+      'collection size:',
+      Object.keys(this.collection.data.tracks).length,
+    );
     Logger.log('infoLookup size:', Object.keys(this.infoLookup.data).length);
   }
 
@@ -43,7 +59,6 @@ export class Loader {
         });
       }
     });
-
   }
 
   async export() {
@@ -65,7 +80,9 @@ export class Loader {
     }, {});
 
     Logger.log('loading missing metaData from files...');
-    const toUpdateMeta = Object.keys(collection.data.tracks).filter(id => !infoLookup.containsTrack(id));
+    const toUpdateMeta = Object.keys(collection.data.tracks).filter(
+      id => !infoLookup.containsTrack(id),
+    );
     await asyncMap(toUpdateMeta, async id => {
       if (!audioBuffers[id]) {
         const { path } = library.getTrack(id);
@@ -100,11 +117,13 @@ export class Loader {
       return song;
     });
 
-    Logger.log('uploading missing images...')
+    Logger.log('uploading missing images...');
     const toUploadImage = Object.keys(imageBuffers)
       .filter(id => !collection.containsImage(id))
       .map(id => imageBuffers[id]);
-    await asyncMap(toUploadImage, (image => store.uploadImage(image.hash, image.buffer)));
+    await asyncMap(toUploadImage, image =>
+      store.uploadImage(image.hash, image.buffer),
+    );
     collection.data.images = Object.keys(imageBuffers).reduce((obj, id) => {
       obj[id] = imageBuffers[id].summary;
       return obj;
@@ -124,6 +143,6 @@ export class Loader {
     Logger.log('updating collection:', toUploadImage.length);
     await store.uploadData(Constants.CollectionFileName, collection.data);
 
-    Logger.log('success!')
+    Logger.log('success!');
   }
 }

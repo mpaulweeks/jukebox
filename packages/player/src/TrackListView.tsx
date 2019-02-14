@@ -8,18 +8,17 @@ import { PlayerState } from './redux/reducers/player';
 import { setCurrentTrack } from './redux/actions';
 import { connect } from 'react-redux';
 
-const TrackListContainer = styled(MainViewContainer)`
-`;
+const TrackListContainer = styled(MainViewContainer)``;
 
-const TracksTableContainer = styled(MainViewScrollable)`
-`;
+const TracksTableContainer = styled(MainViewScrollable)``;
 
 const TracksTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   color: inherit;
 
-  & th, & td {
+  & th,
+  & td {
     border-top: 1px solid var(--jukebox-foreground);
     box-sizing: border-box;
     padding: 0px 5px;
@@ -30,10 +29,12 @@ const TracksTable = styled.table`
     border-top-width: 0px;
   }
 `;
-const TrackRow = styled('tr') <{ isCurrent: boolean }>`
+const TrackRow = styled('tr')<{ isCurrent: boolean }>`
   cursor: pointer;
 
-  ${props => props.isCurrent && `
+  ${props =>
+    props.isCurrent &&
+    `
     background-color: var(--jukebox-highlight);
   `}
 `;
@@ -50,11 +51,10 @@ const TrackInfo = styled.div`
   flex-wrap: no-wrap;
 `;
 
-
 interface Props {
-  player: PlayerState,
-  setCurrentTrack(track: PlayableTrack): void,
-};
+  player: PlayerState;
+  setCurrentTrack(track: PlayableTrack): void;
+}
 
 function trimColumns<T>(trackList: PlayableTrackList, arr: Array<T>): Array<T> {
   if (trackList.custom) {
@@ -93,9 +93,7 @@ class TrackListView extends React.Component<Props> {
               <tr>
                 {columnHeaders.map((text, index) => (
                   <th key={`header-${index}`}>
-                    <TrackInfo>
-                      {text}
-                    </TrackInfo>
+                    <TrackInfo>{text}</TrackInfo>
                   </th>
                 ))}
               </tr>
@@ -118,9 +116,7 @@ class TrackListView extends React.Component<Props> {
                   >
                     {columns.map((comp, column) => (
                       <td key={`body-${row}-${column}`}>
-                        <TrackInfo>
-                          {comp}
-                        </TrackInfo>
+                        <TrackInfo>{comp}</TrackInfo>
                       </td>
                     ))}
                   </TrackRow>
@@ -130,12 +126,15 @@ class TrackListView extends React.Component<Props> {
           </TracksTable>
         </TracksTableContainer>
       </TrackListContainer>
-    )
+    );
   }
 }
 
-export default connect((state: MasterState) => ({
-  player: state.player,
-}), {
+export default connect(
+  (state: MasterState) => ({
+    player: state.player,
+  }),
+  {
     setCurrentTrack,
-  })(TrackListView);
+  },
+)(TrackListView);

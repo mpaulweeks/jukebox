@@ -1,14 +1,10 @@
-const isBrowser = (typeof window !== 'undefined');
+const isBrowser = typeof window !== 'undefined';
 const isTest = isBrowser && window.location.search === '?test';
 
-const isStaging = (
-  (process.env.REACT_APP_JUKEBOX_ENV === 'staging') ||
-  (isBrowser && window.location.pathname.includes('/staging/'))
-);
-const isDev = (
-  !isStaging &&
-  (process.env.REACT_APP_JUKEBOX_ENV === 'development')
-);
+const isStaging =
+  process.env.REACT_APP_JUKEBOX_ENV === 'staging' ||
+  (isBrowser && window.location.pathname.includes('/staging/'));
+const isDev = !isStaging && process.env.REACT_APP_JUKEBOX_ENV === 'development';
 const isProduction = !(isDev || isStaging);
 
 const LogDebug = isTest;

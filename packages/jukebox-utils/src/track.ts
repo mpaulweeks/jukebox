@@ -49,9 +49,16 @@ export class Track implements PlayableTrack {
       this.trackNumberDisplay = `${this.trackNumerator}`;
     }
 
-    this.durationDisplay = (duration ? `${Math.floor((duration / 1000) / 60)}:${String(Math.floor((duration / 1000) % 60)).padStart(2, '0')}` : '')
+    this.durationDisplay = duration
+      ? `${Math.floor(duration / 1000 / 60)}:${String(
+          Math.floor((duration / 1000) % 60),
+        ).padStart(2, '0')}`
+      : '';
 
-    this.sortKey = `${this.album} ${String(this.trackNumerator || 0).padStart(4, '0')}`;
+    this.sortKey = `${this.album} ${String(this.trackNumerator || 0).padStart(
+      4,
+      '0',
+    )}`;
 
     this.audioSrc = `${Constants.AudioPath}/${id}`;
     this.imageSrc = imageHash && `${Constants.ImagePath}/${imageHash}`;
@@ -67,7 +74,7 @@ export class Track implements PlayableTrack {
     return 1;
   }
 
-  static fromLookup(id: string, infoLookup: InfoLookup): (undefined | Track) {
+  static fromLookup(id: string, infoLookup: InfoLookup): undefined | Track {
     const info = infoLookup.get(id);
     if (!info) {
       console.log('failed track lookup! ID:', id);

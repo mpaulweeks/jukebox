@@ -1,6 +1,14 @@
 import { CollectionData } from './types';
 
 export class Collection {
+  static default(): Collection {
+    return new Collection({
+      playlists: {},
+      tracks: {},
+      images: {},
+    });
+  }
+
   data: CollectionData;
 
   constructor(data: CollectionData) {
@@ -12,13 +20,5 @@ export class Collection {
   }
   containsImage(imageHash) {
     return !!this.data.images[imageHash];
-  }
-
-  static default(): Collection {
-    return new Collection({
-      playlists: {},
-      tracks: {},
-      images: {},
-    });
   }
 }

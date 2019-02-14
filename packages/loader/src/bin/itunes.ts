@@ -1,5 +1,5 @@
-import { Loader, Store } from "..";
-import { LoaderConfig } from "../loaderConfig";
+import { Loader, Store } from '..';
+import { LoaderConfig } from '../loaderConfig';
 
 (async () => {
   const { whitelist } = LoaderConfig;

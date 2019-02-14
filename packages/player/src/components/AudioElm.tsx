@@ -1,17 +1,23 @@
 import React from 'react';
-import { PlayerState } from "../redux/reducers/player";
+import { PlayerState } from '../redux/reducers/player';
 import { MasterState } from '../redux/reducers';
-import { setCurrentTrack, toggleIsPlaying, seekNextTrack, seekPrevTrack } from '../redux/actions';
+import {
+  setCurrentTrack,
+  toggleIsPlaying,
+  seekNextTrack,
+  seekPrevTrack,
+} from '../redux/actions';
 import { connect } from 'react-redux';
 import { PlayableTrack } from 'jukebox-utils';
 
 interface Props {
-  player: PlayerState,
-  setCurrentTrack(track: PlayableTrack): void,
-  seekNextTrack(): void,
+  player: PlayerState;
+  setCurrentTrack(track: PlayableTrack): void;
+  seekNextTrack(): void;
 }
 class AudioElm extends React.Component<Props> {
-  audioElm = new Audio();
+  private audioElm = new Audio();
+
   componentDidMount() {
     const { audioElm } = this;
 
@@ -42,23 +48,26 @@ class AudioElm extends React.Component<Props> {
     }
   }
 
-  onTrackEnd = (keyboardEvent?: any) => {
+  private onTrackEnd = (keyboardEvent?: any) => {
     const { player } = this.props;
     if (player.repeat) {
-      this.audioElm.play()
+      this.audioElm.play();
     } else {
       this.props.seekNextTrack();
     }
-  }
+  };
 
   render() {
     return '';
   }
 }
 
-export default connect((state: MasterState) => ({
-  player: state.player,
-}), {
+export default connect(
+  (state: MasterState) => ({
+    player: state.player,
+  }),
+  {
     setCurrentTrack,
     seekNextTrack,
-  })(AudioElm);
+  },
+)(AudioElm);

@@ -3,33 +3,33 @@ import itunes from 'itunes-data';
 import { Logger } from 'jukebox-utils';
 
 interface iTunesTrackData {
-  itunesId: string,
-  name: string,
-  location: string,
-  path: string,
-  summary: string,
-  id: string,
-};
+  itunesId: string;
+  name: string;
+  location: string;
+  path: string;
+  summary: string;
+  id: string;
+}
 
 interface iTunesPlaylistData {
-  id: string,
-  name: string,
-  iTunesIds: Array<string>,
-  tracks: Array<iTunesTrackData>,
-  trackIds: Array<string>,
+  id: string;
+  name: string;
+  iTunesIds: string[];
+  tracks: iTunesTrackData[];
+  trackIds: string[];
 }
 
 interface iTunesLibraryData {
   iTunesPlaylists: {
-    [id: string]: iTunesPlaylistData,
-  },
+    [id: string]: iTunesPlaylistData;
+  };
   iTunesTracks: {
-    [id: string]: iTunesTrackData,
-  },
+    [id: string]: iTunesTrackData;
+  };
   tracks: {
-    [id: string]: iTunesTrackData,
-  },
-};
+    [id: string]: iTunesTrackData;
+  };
+}
 
 export class iTunesLibrary {
   data: iTunesLibraryData;
@@ -57,14 +57,16 @@ export class iTunesLibrary {
 
     // mac special case
     if (/^file:\/\/\//.test(location)) {
-      location = location.substring(7)
+      location = location.substring(7);
     }
 
     return decodeURI(
       location
-        .split('%3B').join(';')
-        .split('%23').join('#')
-    )
+        .split('%3B')
+        .join(';')
+        .split('%23')
+        .join('#'),
+    );
   }
 
   addTrack(track: any) {
@@ -74,7 +76,9 @@ export class iTunesLibrary {
       name: track.Name,
       location: track.Location,
       path: this.decodeLocation(track.Location),
-      summary: (track.Album ? `${track.Album} - ` : '') + `${track.Artist} - ${track.Name}`,
+      summary:
+        (track.Album ? `${track.Album} - ` : '') +
+        `${track.Artist} - ${track.Name}`,
     };
     const { tracks, iTunesTracks } = this.data;
     iTunesTracks[newTrack.itunesId] = newTrack;
@@ -108,13 +112,15 @@ export class iTunesLibrary {
     const { iTunesPlaylists } = this.data;
     iTunesPlaylists[newPlaylist.id] = newPlaylist;
   }
-  getPlaylists(filter?: Array<string>) {
+  getPlaylists(filter?: string[]) {
     const { iTunesPlaylists } = this.data;
     return Object.keys(iTunesPlaylists)
       .map(key => iTunesPlaylists[key])
-      .filter(playlist => filter ? filter.includes(playlist.name) : true)
+      .filter(playlist => (filter ? filter.includes(playlist.name) : true))
       .map(playlist => {
-        const tracks = playlist.iTunesIds.map(itunesId => this.getTrackByTunes(itunesId)).filter(t => t);
+        const tracks = playlist.iTunesIds
+          .map(itunesId => this.getTrackByTunes(itunesId))
+          .filter(t => t);
         return {
           ...playlist,
           tracks,
@@ -122,7 +128,6 @@ export class iTunesLibrary {
         };
       });
   }
-
 }
 
 export class iTunesLibraryLoader {
@@ -143,11 +148,11 @@ export class iTunesLibraryLoader {
   setupListeners(library: iTunesLibrary) {
     const parser = itunes.parser();
 
-    parser.on("track", function (track) {
+    parser.on('track', function(track) {
       library.addTrack(track);
     });
 
-    parser.on("playlist", function (playlist) {
+    parser.on('playlist', function(playlist) {
       library.addPlaylist(playlist);
     });
 

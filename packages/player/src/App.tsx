@@ -1,5 +1,12 @@
 import React from 'react';
-import { Manager, PlaylistBrowser, PlayableTrack, PlayerSettings, PlayableTrackList, Logger, Constants, DefaultWebConfig, getWebConfig } from 'jukebox-utils';
+import {
+  Manager,
+  PlayableTrack,
+  PlayableTrackList,
+  Constants,
+  DefaultWebConfig,
+  getWebConfig,
+} from 'jukebox-utils';
 import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
@@ -16,7 +23,9 @@ import {
   toggleCollapseHeader,
   toggleCollapseRoot,
   toggleCollapseSidebar,
-  toggleIsPlaying, seekNextTrack, seekPrevTrack
+  toggleIsPlaying,
+  seekNextTrack,
+  seekPrevTrack,
 } from './redux/actions';
 import { connect } from 'react-redux';
 import { PlayerState } from './redux/reducers/player';
@@ -34,12 +43,14 @@ const RootContainer = styled(CollapseAble)`
   height: 100%;
   top: 0px;
   left: 0px;
-  ${props => props.isCollapsed && `
+  ${props =>
+    props.isCollapsed &&
+    `
     top: -100%;
   `};
 `;
 
-const RootInner = styled('div') <{ colorScheme: ColorScheme }>`
+const RootInner = styled('div')<{ colorScheme: ColorScheme }>`
   ${FlexStretchMixin}
 
   font-size: 16px;
@@ -48,16 +59,17 @@ const RootInner = styled('div') <{ colorScheme: ColorScheme }>`
   --jukebox-background: ${props => props.colorScheme.background};
   --jukebox-hover: ${props => props.colorScheme.hover};
   --jukebox-highlight: ${props => props.colorScheme.highlight};
-  --jukebox-collapse-foreground: ${props => props.colorScheme.collapseForeground};
-  --jukebox-collapse-background: ${props => props.colorScheme.collapseBackground};
+  --jukebox-collapse-foreground: ${props =>
+    props.colorScheme.collapseForeground};
+  --jukebox-collapse-background: ${props =>
+    props.colorScheme.collapseBackground};
 
   --jukebox-frame-gap: 10px;
   background-color: var(--jukebox-background);
   color: var(--jukebox-foreground);
 `;
 
-const Header = styled.div`
-`;
+const Header = styled.div``;
 const BodyContainer = styled.div`
   ${FlexStretchMixin}
   flex-direction: row;
@@ -70,7 +82,9 @@ const BoxWrapper = styled(CollapseAble)`
 const HeaderBoxWrapper = styled(BoxWrapper)`
   padding-bottom: 0px;
   height: 200px;
-  ${props => props.isCollapsed && `
+  ${props =>
+    props.isCollapsed &&
+    `
     margin-top: calc(-200px - var(--jukebox-frame-gap));
   `}
 `;
@@ -82,7 +96,9 @@ const SidebarBoxWrapper = styled(BoxWrapper)`
   width: 200px;
   min-width: 200px;
   max-width: 200px;
-  ${props => props.isCollapsed && `
+  ${props =>
+    props.isCollapsed &&
+    `
     margin-left: calc(-200px - var(--jukebox-frame-gap));
   `}
 `;
@@ -101,23 +117,23 @@ const Box = styled.div`
 `;
 
 interface Props {
-  codeConfig: DefaultWebConfig,
-  data: DataState,
-  player: PlayerState,
-  ui: UiState,
-  setManager(manager: Manager): void,
-  setCurrentTrack(track: PlayableTrack): void,
-  setCurrentTrackList(trackList: PlayableTrackList): void,
-  toggleCollapseHeader(): void,
-  toggleCollapseRoot(): void,
-  toggleCollapseSidebar(): void,
-  toggleIsPlaying(): void,
-  seekNextTrack(): void,
-  seekPrevTrack(): void,
-};
+  codeConfig: DefaultWebConfig;
+  data: DataState;
+  player: PlayerState;
+  ui: UiState;
+  setManager(manager: Manager): void;
+  setCurrentTrack(track: PlayableTrack): void;
+  setCurrentTrackList(trackList: PlayableTrackList): void;
+  toggleCollapseHeader(): void;
+  toggleCollapseRoot(): void;
+  toggleCollapseSidebar(): void;
+  toggleIsPlaying(): void;
+  seekNextTrack(): void;
+  seekPrevTrack(): void;
+}
 interface State {
-  colorScheme: ColorScheme,
-};
+  colorScheme: ColorScheme;
+}
 
 class App extends React.Component<Props, State> {
   webConfig = getWebConfig(this.props.codeConfig);
@@ -175,16 +191,14 @@ class App extends React.Component<Props, State> {
         if (manager && manager.playlists.length) {
           return this.props.setCurrentTrackList(manager.playlists[0]);
         }
-      })
+      });
   }
 
   render() {
     const { data, player, ui } = this.props;
     const { colorScheme } = this.state;
     if (!data.manager) {
-      return (
-        <h3> loading, please wait... </h3>
-      );
+      return <h3> loading, please wait... </h3>;
     }
 
     const { webConfig } = this;
@@ -202,11 +216,11 @@ class App extends React.Component<Props, State> {
                     isCollapsed={ui.collapseHeader}
                   />
                 ) : (
-                    <CollapseRoot
-                      onClick={this.props.toggleCollapseRoot}
-                      isCollapsed={false}
-                    />
-                  )}
+                  <CollapseRoot
+                    onClick={this.props.toggleCollapseRoot}
+                    isCollapsed={false}
+                  />
+                )}
               </Box>
             </HeaderBoxWrapper>
           </Header>
@@ -225,13 +239,7 @@ class App extends React.Component<Props, State> {
               </SidebarBoxWrapper>
             )}
             <MainViewBoxWrapper>
-              <Box>
-                {player.browser ? (
-                  <BrowserView />
-                ) : (
-                    <TrackListView />
-                  )}
-              </Box>
+              <Box>{player.browser ? <BrowserView /> : <TrackListView />}</Box>
             </MainViewBoxWrapper>
           </BodyContainer>
           <Header>
@@ -243,15 +251,17 @@ class App extends React.Component<Props, State> {
           </Header>
         </RootInner>
       </RootContainer>
-    )
+    );
   }
 }
 
-export default connect((state: MasterState) => ({
-  data: state.data,
-  player: state.player,
-  ui: state.ui,
-}), {
+export default connect(
+  (state: MasterState) => ({
+    data: state.data,
+    player: state.player,
+    ui: state.ui,
+  }),
+  {
     setManager,
     setCurrentTrack,
     setCurrentTrackList,
@@ -261,4 +271,5 @@ export default connect((state: MasterState) => ({
     toggleIsPlaying,
     seekNextTrack,
     seekPrevTrack,
-  })(App);
+  },
+)(App);
