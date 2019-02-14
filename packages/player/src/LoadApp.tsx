@@ -24,8 +24,8 @@ export const LoadApp = () => {
         document.body.appendChild(root);
         const callback = (elm: any) => {
           api = {
+            ...(devWindow['JUKEBOX'] || {}),
             elm: root,
-            toggle: elm.toggleCollapseRoot,
           };
           resolve(api);
         };

@@ -18,3 +18,22 @@ online music player / backup
   "AWS_SECRET_ACCESS_KEY": ...
 }
 ```
+
+## usage
+
+```html
+<script defer src="https://s3.amazonaws.com/mpaulweeks-jukebox/jukebox.min.js"></script>
+```
+
+```js
+createJukebox({
+  // playlist: '2016',
+  // color_scheme: 'dark',
+}).then(jukebox => {
+  const elm = document.getElementById('jukebox-open');
+  elm.addEventListener('click', jukebox.open);
+});
+
+// close it via console. calling createJukebox returns the same promise
+(await createJukebox()).close();
+```
