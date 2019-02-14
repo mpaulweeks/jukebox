@@ -26,7 +26,8 @@
     "prod:deploy": "yarn loader:deploy && gh-pages -d packages/player/build",
     "crontask": "yarn setup && yarn loader:itunes",
     "cronjob": "git pull && yarn crontask",
-    "lint": "tslint -c tslint.json 'packages/*/src/**/*.{ts,tsx}'"
+    "lint": "tslint -c tslint.json 'packages/*/src/**/*.{ts,tsx}'",
+    "pretty": "yarn prettier --write --single-quote --trailing-comma es5 'packages/*/src/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "gh-pages": "^2.0.1",
@@ -34,6 +35,7 @@
     "lerna": "^3.10.7"
   },
   "devDependencies": {
+    "prettier": "^1.16.4",
     "tslint": "^5.12.1",
     "typescript": "^3.3.3"
   }
