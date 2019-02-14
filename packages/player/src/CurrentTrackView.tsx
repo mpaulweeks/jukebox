@@ -4,6 +4,7 @@ import { PlayableTrack } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
 import { connect } from 'react-redux';
 import { PlayerState } from './redux/reducers/player';
+import { MasterState } from './redux/reducers';
 
 const TrackContainer = styled.div`
   width: 100%;
@@ -87,7 +88,7 @@ class TrackView extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: MasterState) => ({
   player: state.player,
 })
 export default connect(mapStateToProps)(TrackView);

@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import { PlayableTrackList, PlayableTrack, notEmpty } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
 import { MainViewContainer, MainViewScrollable } from './Components';
+import { MasterState } from './redux/reducers';
+import { PlayerState } from './redux/reducers/player';
+import { setCurrentTrack } from './redux/actions';
+import { connect } from 'react-redux';
 
 const TrackListContainer = styled(MainViewContainer)`
 `;
@@ -48,29 +52,28 @@ const TrackInfo = styled.div`
 
 
 interface Props {
-  loadTrack: (track: PlayableTrack) => void,
-  currentTrack?: PlayableTrack,
-  playlist?: PlayableTrackList,
+  player: PlayerState,
+  setCurrentTrack(track: PlayableTrack): void,
 };
 
-function trimColumns<T>(playlist: PlayableTrackList, arr: Array<T>): Array<T> {
-  if (playlist.custom) {
+function trimColumns<T>(trackList: PlayableTrackList, arr: Array<T>): Array<T> {
+  if (trackList.custom) {
     arr.splice(5, 1);
   }
   return arr;
 }
 
-export default class TrackListView extends React.Component<Props> {
+class TrackListView extends React.Component<Props> {
   truncate(info: string) {
     return (info || '').substring(0, 20);
   }
   render() {
-    const { loadTrack, playlist, currentTrack } = this.props;
-    if (!playlist) {
+    const { player, setCurrentTrack } = this.props;
+    const { trackList } = player;
+    if (!trackList) {
       return 'loading';
     }
-    console.log(playlist);
-    const columnHeaders = trimColumns(playlist, [
+    const columnHeaders = trimColumns(trackList, [
       '',
       'title',
       'artist',
@@ -81,8 +84,8 @@ export default class TrackListView extends React.Component<Props> {
     return (
       <TrackListContainer>
         <h1>
-          {playlist.name}
-          {!playlist.custom && <em> (sortable) </em>}
+          {trackList.name}
+          {!trackList.custom && <em> (sortable) </em>}
         </h1>
         <TracksTableContainer>
           <TracksTable>
@@ -98,8 +101,8 @@ export default class TrackListView extends React.Component<Props> {
               </tr>
             </thead>
             <tbody>
-              {playlist.tracks.map((track, row) => {
-                const columns = trimColumns(playlist, [
+              {trackList.tracks.map((track, row) => {
+                const columns = trimColumns(trackList, [
                   <TrackImage src={track.imageSrc || PlaceholderImage} />,
                   track.title,
                   this.truncate(track.artist),
@@ -110,8 +113,8 @@ export default class TrackListView extends React.Component<Props> {
                 return (
                   <TrackRow
                     key={`track-${row}`}
-                    onClick={() => loadTrack(track)}
-                    isCurrent={track === currentTrack}
+                    onClick={() => setCurrentTrack(track)}
+                    isCurrent={track === player.track}
                   >
                     {columns.map((comp, column) => (
                       <td key={`body-${row}-${column}`}>
@@ -130,3 +133,9 @@ export default class TrackListView extends React.Component<Props> {
     )
   }
 }
+
+export default connect((state: MasterState) => ({
+  player: state.player,
+}), {
+    setCurrentTrack,
+  })(TrackListView);

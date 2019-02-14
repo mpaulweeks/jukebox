@@ -3,6 +3,11 @@ import styled from 'styled-components';
 import { PlayableTrackList, Manager, PlaylistBrowser } from 'jukebox-utils';
 import { FlexStretchMixin } from './Components';
 
+import { setCurrentTrackList, setCurrentBrowser } from './redux/actions';
+import { PlayerState } from './redux/reducers/player';
+import { connect } from 'react-redux';
+import { MasterState } from './redux/reducers';
+
 const SidebarContainer = styled.div`
   ${FlexStretchMixin}
 `;
@@ -18,35 +23,34 @@ const PlaylistName = styled('div') <{ isCurrent: boolean }>`
 `;
 
 interface Props {
-  loadPlaylist: (playlist: PlayableTrackList) => void,
-  loadBrowser: (browser: PlaylistBrowser) => void,
+  setCurrentTrackList(trackList: PlayableTrackList): void,
+  setCurrentBrowser(browser: PlaylistBrowser): void,
   manager: Manager,
-  currentTrackList?: PlayableTrackList,
-  currentBrowser?: PlaylistBrowser,
+  player: PlayerState,
 };
 
-export default class PlaylistMenu extends React.Component<Props> {
+class PlaylistMenu extends React.Component<Props> {
   render() {
-    const { manager, loadPlaylist, loadBrowser, currentTrackList, currentBrowser } = this.props;
+    const { manager, player, setCurrentTrackList, setCurrentBrowser } = this.props;
     return (
       <SidebarContainer>
         {!manager.webConfig.HideAggregateLists && (
           <div>
             <PlaylistName
-              onClick={() => loadPlaylist(manager.allSongs)}
-              isCurrent={manager.allSongs === currentTrackList}
+              onClick={() => setCurrentTrackList(manager.allSongs)}
+              isCurrent={manager.allSongs === player.trackList}
             >
               {manager.allSongs.name}
             </PlaylistName>
             <PlaylistName
-              onClick={() => loadBrowser(manager.browseAlbums)}
-              isCurrent={manager.browseAlbums === currentBrowser}
+              onClick={() => setCurrentBrowser(manager.browseAlbums)}
+              isCurrent={manager.browseAlbums === player.browser}
             >
               {manager.browseAlbums.name}
             </PlaylistName>
             <PlaylistName
-              onClick={() => loadBrowser(manager.browseArtists)}
-              isCurrent={manager.browseArtists === currentBrowser}
+              onClick={() => setCurrentBrowser(manager.browseArtists)}
+              isCurrent={manager.browseArtists === player.browser}
             >
               {manager.browseArtists.name}
             </PlaylistName>
@@ -56,8 +60,8 @@ export default class PlaylistMenu extends React.Component<Props> {
         {manager.playlists.map((pl, index) => (
           <PlaylistName
             key={`playlist-name-${index}`}
-            onClick={() => loadPlaylist(pl)}
-            isCurrent={pl === currentTrackList}
+            onClick={() => setCurrentTrackList(pl)}
+            isCurrent={pl === player.trackList}
           >
             {pl.name}
           </PlaylistName>
@@ -66,3 +70,10 @@ export default class PlaylistMenu extends React.Component<Props> {
     )
   }
 }
+
+export default connect((state: MasterState) => ({
+  player: state.player,
+}), {
+    setCurrentTrackList,
+    setCurrentBrowser,
+  })(PlaylistMenu);

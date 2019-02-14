@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import { PlayableTrackList, PlaylistBrowser } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
 import { MainViewScrollable, MainViewContainer } from './Components';
+import { connect } from 'react-redux';
+import { setCurrentTrackList } from './redux/actions';
+import { PlayerState } from './redux/reducers/player';
+import { MasterState } from './redux/reducers';
 
 const BrowserContainer = styled(MainViewContainer)`
 `;
@@ -54,16 +58,22 @@ const TrackListInfo = styled.div`
 `;
 
 interface Props {
-  loadPlaylist: (playlist: PlayableTrackList) => void,
-  browser: PlaylistBrowser,
+  player: PlayerState,
+  setCurrentTrackList(trackList: PlayableTrackList): void,
 };
 
-export class BrowserView extends React.Component<Props> {
+class BrowserView extends React.Component<Props> {
   truncate(info: string) {
     return (info || '').substring(0, 20);
   }
   render() {
-    const { loadPlaylist, browser } = this.props;
+    const { player, setCurrentTrackList } = this.props;
+    const { browser } = player;
+
+    if (!browser) {
+      // todo how to ensure?
+      return <div></div>
+    }
     return (
       <BrowserContainer>
         <h1>{browser.name}</h1>
@@ -71,7 +81,7 @@ export class BrowserView extends React.Component<Props> {
           {browser.playlists.map((pl, index) => (
             <TrackList
               key={`playlist-${index}`}
-              onClick={() => loadPlaylist(pl)}
+              onClick={() => setCurrentTrackList(pl)}
             >
               <TrackListInfo>
                 <TrackListImage src={pl.imageSrc || PlaceholderImage} />
@@ -89,3 +99,9 @@ export class BrowserView extends React.Component<Props> {
     )
   }
 }
+
+export default connect((state: MasterState) => ({
+  player: state.player,
+}), {
+    setCurrentTrackList,
+  })(BrowserView);

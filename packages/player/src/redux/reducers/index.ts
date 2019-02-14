@@ -1,10 +1,16 @@
 import { combineReducers } from "redux";
-import manager from "./manager";
-import player from "./player";
-import ui from "./ui";
+import data, { DataState } from "./data";
+import player, { PlayerState } from "./player";
+import ui, { UiState } from "./ui";
+
+export interface MasterState {
+  data: DataState,
+  player: PlayerState,
+  ui: UiState,
+}
 
 export default combineReducers({
-  manager: manager,
+  data: data,
   player: player,
   ui: ui,
 } as any);

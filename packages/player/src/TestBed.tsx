@@ -39,14 +39,11 @@ class TestBed extends React.Component<any, State> {
   render() {
     const { tracks } = this.state;
     const playlist = new Playlist('test playlist', tracks, true);
+    // todo hook into redux
     return (
       <div>
         loaded
-        <TrackListView
-          loadTrack={() => { }}
-          currentTrack={undefined}
-          playlist={playlist}
-        />
+        <TrackListView />
       </div>
     )
 

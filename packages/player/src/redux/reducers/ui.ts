@@ -1,12 +1,12 @@
 import { ColorScheme } from "../../ColorScheme";
 import { TOGGLE_COLLAPSE_HEADER, TOGGLE_COLLAPSE_ROOT, TOGGLE_COLLAPSE_SIDEBAR } from "../actionTypes";
 
-const initialState = {
-  colorScheme: undefined,
-  collapseRoot: true,
-  collapseHeader: false,
-  collapseSidebar: false,
-};
+export interface UiState {
+  colorScheme?: ColorScheme,
+  collapseRoot?: boolean,
+  collapseHeader?: boolean,
+  collapseSidebar?: boolean,
+}
 
 interface UiAction {
   type: string,
@@ -14,6 +14,13 @@ interface UiAction {
     colorScheme?: ColorScheme,
   }
 }
+
+const initialState: UiState = {
+  colorScheme: undefined,
+  collapseRoot: true,
+  collapseHeader: false,
+  collapseSidebar: false,
+};
 
 export default function (state = initialState, action: UiAction) {
   switch (action.type) {

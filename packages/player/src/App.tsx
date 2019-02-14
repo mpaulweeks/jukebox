@@ -4,13 +4,18 @@ import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
 import styled from 'styled-components';
-import { BrowserView } from './BrowserView';
+import BrowserView from './BrowserView';
 import { CollapseRoot, CollapseBottom, CollapseSidebar } from './Collapse';
 import { CollapseAble, FlexStretchMixin, ResetMixin } from './Components';
 import { PlaybackControls } from './PlaybackControls';
 import { ColorScheme, getColorScheme } from './ColorScheme';
-import { setCurrentTrack } from './redux/actions';
+import {
+  setCurrentTrack,
+  setCurrentTrackList,
+} from './redux/actions';
 import { connect } from 'react-redux';
+import { PlayerState } from './redux/reducers/player';
+import { MasterState } from './redux/reducers';
 
 // todo pass colors as props
 const RootContainer = styled(CollapseAble)`
@@ -90,22 +95,20 @@ const Box = styled.div`
 
 interface Props {
   codeConfig: DefaultWebConfig,
+  player: PlayerState,
   setCurrentTrack(track: PlayableTrack): void,
+  setCurrentTrackList(trackList: PlayableTrackList): void,
 };
 interface State {
   manager?: Manager,
   colorScheme: ColorScheme,
   settings: PlayerSettings,
-  currentTrack?: PlayableTrack,
-  currentTrackList?: PlayableTrackList,
-  currentBrowser?: PlaylistBrowser,
   collapseRoot: boolean,
   collapseHeader: boolean,
   collapseSidebar: boolean,
 };
 
 class App extends React.Component<Props, State> {
-  audioElm = new Audio();
   webConfig = getWebConfig(this.props.codeConfig);
   state: State = {
     manager: undefined,
@@ -115,9 +118,6 @@ class App extends React.Component<Props, State> {
       repeat: false,
       shuffle: false,
     },
-    currentTrack: undefined,
-    currentTrackList: undefined,
-    currentBrowser: undefined,
     collapseRoot: !this.webConfig.OnlyJukebox,
     collapseHeader: false,
     collapseSidebar: false,
@@ -136,6 +136,8 @@ class App extends React.Component<Props, State> {
       toggle: this.toggleCollapseRoot,
     };
 
+    const { player } = this.props;
+
     // setup listeners
     document.addEventListener('keydown', evt => {
       switch (evt.code) {
@@ -149,7 +151,7 @@ class App extends React.Component<Props, State> {
         // Logger.log(evt);
       }
     });
-    this.audioElm.addEventListener('ended', () => this.onTrackEnd());
+    player.audioElm.addEventListener('ended', () => this.onTrackEnd());
 
     // load fonts
     [
@@ -167,63 +169,32 @@ class App extends React.Component<Props, State> {
       manager: manager,
     }, () => {
       if (manager.playlists.length) {
-        this.loadPlaylist(manager.playlists[0]);
+        this.props.setCurrentTrackList(manager.playlists[0]);
       }
     }));
   }
 
-  loadTrack = (track: PlayableTrack, force?: boolean) => {
-    // todo make this redux
-    const newSource = track.audioSrc;
-    if (force || newSource !== this.audioElm.src) {
-      this.audioElm.src = newSource;
-
-      this.props.setCurrentTrack(track);
-      this.setState({
-        currentTrack: track,
-        settings: {
-          ...this.state.settings,
-          isPlaying: true,
-        },
-      });
-    }
-  }
-  loadPlaylist = (playlist: PlayableTrackList) => {
-    // todo make this redux
-    const { currentTrackList } = this.state;
-    if (!currentTrackList || currentTrackList.name !== playlist.name) {
-      this.setState({
-        currentTrackList: playlist,
-        currentBrowser: undefined,
-      });
-    }
-  }
-  loadBrowser = (browser: PlaylistBrowser) => {
-    // todo make this redux
-    this.setState({
-      currentTrackList: undefined,
-      currentBrowser: browser,
-    });
-  }
-
   nextTrack = (keyboardEvent?: any) => {
-    const { settings, currentTrack, currentTrackList } = this.state;
-    if (currentTrack && currentTrackList) {
-      const newTrack = currentTrackList.nextTrack(settings, currentTrack);
-      this.loadTrack(newTrack);
+    const { settings } = this.state;
+    const { track, trackList } = this.props.player;
+    if (track && trackList) {
+      const newTrack = trackList.nextTrack(settings, track);
+      this.props.setCurrentTrack(newTrack);
     }
   }
   prevTrack = (keyboardEvent?: any) => {
-    const { settings, currentTrack, currentTrackList } = this.state;
-    if (currentTrack && currentTrackList) {
-      const newTrack = currentTrackList.prevTrack(settings, currentTrack);
-      this.loadTrack(newTrack);
+    const { settings } = this.state;
+    const { track, trackList } = this.props.player;
+    if (track && trackList) {
+      const newTrack = trackList.prevTrack(settings, track);
+      this.props.setCurrentTrack(newTrack);
     }
   }
   onTrackEnd = (keyboardEvent?: any) => {
+    const { player } = this.props;
     const { settings } = this.state;
     if (settings.repeat) {
-      this.audioElm.play();
+      player.audioElm.play();
     } else {
       this.nextTrack();
     }
@@ -236,13 +207,14 @@ class App extends React.Component<Props, State> {
   }
 
   togglePlay = () => {
-    const { currentTrack, currentTrackList, settings } = this.state;
-    if (!currentTrack && !currentTrackList) {
+    const { settings } = this.state;
+    const { track, trackList } = this.props.player;
+    if (!track && !trackList) {
       // on app load. dont do anything
       return;
     }
-    if (!currentTrack && currentTrackList) {
-      this.loadTrack(currentTrackList.tracks[0]);
+    if (!track && trackList) {
+      this.props.setCurrentTrack(trackList.tracks[0]);
     }
     this.setState({
       settings: {
@@ -287,7 +259,8 @@ class App extends React.Component<Props, State> {
   }
 
   render() {
-    const { manager, colorScheme, settings, currentTrack, currentTrackList, currentBrowser, collapseRoot, collapseHeader, collapseSidebar } = this.state;
+    const { manager, colorScheme, settings, collapseRoot, collapseHeader, collapseSidebar } = this.state;
+    const { browser } = this.props.player;
     if (!manager) {
       return (
         <h3> loading, please wait... </h3>
@@ -295,14 +268,16 @@ class App extends React.Component<Props, State> {
     }
 
     // todo move into DidReceiveProps
-    const { audioElm } = this;
-    if (settings.isPlaying) {
-      audioElm.play();
-    } else {
-      audioElm.pause();
+    const { audioElm } = this.props.player;
+    if (audioElm) {
+      if (settings.isPlaying) {
+        audioElm.play();
+      } else {
+        audioElm.pause();
+      }
     }
 
-    const { webConfig, loadTrack, loadPlaylist, loadBrowser } = this;
+    const { webConfig } = this;
     return (
       <RootContainer isCollapsed={collapseRoot}>
         <RootInner colorScheme={colorScheme}>
@@ -329,11 +304,7 @@ class App extends React.Component<Props, State> {
               <SidebarBoxWrapper isCollapsed={collapseSidebar}>
                 <Box>
                   <PlaylistMenu
-                    loadPlaylist={loadPlaylist}
-                    loadBrowser={loadBrowser}
                     manager={manager}
-                    currentTrackList={currentTrackList}
-                    currentBrowser={currentBrowser}
                   />
                   {webConfig.OnlyJukebox && (
                     <CollapseSidebar
@@ -346,17 +317,10 @@ class App extends React.Component<Props, State> {
             )}
             <MainViewBoxWrapper>
               <Box>
-                {currentBrowser ? (
-                  <BrowserView
-                    loadPlaylist={loadPlaylist}
-                    browser={currentBrowser}
-                  />
+                {browser ? (
+                  <BrowserView />
                 ) : (
-                    <TrackListView
-                      loadTrack={loadTrack}
-                      playlist={currentTrackList}
-                      currentTrack={currentTrack}
-                    />
+                    <TrackListView />
                   )}
               </Box>
             </MainViewBoxWrapper>
@@ -381,10 +345,9 @@ class App extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: any) => {
-
-}
-
-export default connect(mapStateToProps, {
-  setCurrentTrack,
-})(App);
+export default connect((state: MasterState) => ({
+  player: state.player,
+}), {
+    setCurrentTrack,
+    setCurrentTrackList,
+  })(App);
