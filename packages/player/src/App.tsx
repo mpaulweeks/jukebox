@@ -50,7 +50,7 @@ const RootContainer = styled(CollapseAble)`
   `};
 `;
 
-const RootInner = styled('div') <{ colorScheme: ColorScheme }>`
+const RootInner = styled('div')<{ colorScheme: ColorScheme }>`
   ${FlexStretchMixin}
 
   font-size: 16px;
@@ -155,7 +155,8 @@ class App extends React.Component<Props, State> {
     appWindow.JUKEBOX = {
       toggle: this.props.toggleCollapseRoot, // deprecated
       open: () => this.props.ui.collapseRoot && this.props.toggleCollapseRoot(),
-      close: () => !this.props.ui.collapseRoot && this.props.toggleCollapseRoot(),
+      close: () =>
+        !this.props.ui.collapseRoot && this.props.toggleCollapseRoot(),
       play: () => !this.props.player.isPlaying && this.props.toggleIsPlaying(),
       pause: () => this.props.player.isPlaying && this.props.toggleIsPlaying(),
     };
@@ -222,11 +223,11 @@ class App extends React.Component<Props, State> {
                     isCollapsed={ui.collapseHeader}
                   />
                 ) : (
-                    <CollapseRoot
-                      onClick={this.props.toggleCollapseRoot}
-                      isCollapsed={false}
-                    />
-                  )}
+                  <CollapseRoot
+                    onClick={this.props.toggleCollapseRoot}
+                    isCollapsed={false}
+                  />
+                )}
               </Box>
             </HeaderBoxWrapper>
           </Header>
@@ -245,7 +246,13 @@ class App extends React.Component<Props, State> {
               </SidebarBoxWrapper>
             )}
             <MainViewBoxWrapper>
-              <Box>{player.browser ? <BrowserView /> : <TrackListView />}</Box>
+              <Box>
+                {player.browser ? (
+                  <BrowserView />
+                ) : (
+                  player.trackList && <TrackListView />
+                )}
+              </Box>
             </MainViewBoxWrapper>
           </BodyContainer>
           <Header>

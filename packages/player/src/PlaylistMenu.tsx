@@ -37,7 +37,7 @@ class PlaylistMenu extends React.Component<Props> {
     const { data, player, setCurrentTrackList, setCurrentBrowser } = this.props;
     const { manager } = data;
     if (!manager) {
-      return '';
+      throw new Error('PlaylistMenu should not be rendered in this state!');
     }
     return (
       <SidebarContainer>

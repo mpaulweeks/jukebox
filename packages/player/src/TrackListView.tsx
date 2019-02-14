@@ -71,8 +71,9 @@ class TrackListView extends React.Component<Props> {
     const { player, setCurrentTrack } = this.props;
     const { trackList } = player;
     if (!trackList) {
-      return 'loading';
+      throw new Error('TrackListView should not be rendered in this state!');
     }
+
     const columnHeaders = trimColumns(trackList, [
       '',
       'title',

@@ -70,8 +70,7 @@ class BrowserView extends React.Component<Props> {
     const { browser } = player;
 
     if (!browser) {
-      // todo how to ensure?
-      return <div />;
+      throw new Error('BrowserView should not be rendered in this state!');
     }
     return (
       <BrowserContainer>
