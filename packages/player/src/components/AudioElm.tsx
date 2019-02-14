@@ -8,9 +8,7 @@ import { PlayableTrack } from 'jukebox-utils';
 interface Props {
   player: PlayerState,
   setCurrentTrack(track: PlayableTrack): void,
-  toggleIsPlaying(): void,
   seekNextTrack(): void,
-  seekPrevTrack(): void,
 }
 class AudioElm extends React.Component<Props> {
   audioElm = new Audio();
@@ -18,20 +16,6 @@ class AudioElm extends React.Component<Props> {
     const { audioElm } = this;
 
     // setup listeners
-    // todo only apply to jukebox div
-    document.addEventListener('keydown', evt => {
-      evt.preventDefault();
-      switch (evt.code) {
-        case 'ArrowLeft':
-          return this.props.seekPrevTrack();
-        case 'ArrowRight':
-          return this.props.seekNextTrack();
-        case 'Space':
-          return this.props.toggleIsPlaying();
-        default:
-        // Logger.log(evt);
-      }
-    });
     audioElm.addEventListener('ended', () => this.onTrackEnd());
 
     // load fonts for audio symbols
@@ -76,7 +60,5 @@ export default connect((state: MasterState) => ({
   player: state.player,
 }), {
     setCurrentTrack,
-    toggleIsPlaying,
     seekNextTrack,
-    seekPrevTrack,
   })(AudioElm);

@@ -16,6 +16,7 @@ import {
   toggleCollapseHeader,
   toggleCollapseRoot,
   toggleCollapseSidebar,
+  toggleIsPlaying, seekNextTrack, seekPrevTrack
 } from './redux/actions';
 import { connect } from 'react-redux';
 import { PlayerState } from './redux/reducers/player';
@@ -24,7 +25,6 @@ import AudioElm from './components/AudioElm';
 import { UiState } from './redux/reducers/ui';
 import { DataState } from './redux/reducers/data';
 
-// todo pass colors as props
 const RootContainer = styled(CollapseAble)`
   ${FlexStretchMixin}
 
@@ -111,6 +111,9 @@ interface Props {
   toggleCollapseHeader(): void,
   toggleCollapseRoot(): void,
   toggleCollapseSidebar(): void,
+  toggleIsPlaying(): void,
+  seekNextTrack(): void,
+  seekPrevTrack(): void,
 };
 interface State {
   colorScheme: ColorScheme,
@@ -139,6 +142,30 @@ class App extends React.Component<Props, State> {
     if (this.webConfig.OnlyJukebox) {
       this.props.toggleCollapseRoot();
     }
+
+    // setup listeners to only work when its fullscreen
+    document.addEventListener('keydown', evt => {
+      if (!this.props.ui.collapseRoot) {
+        let match = true;
+        switch (evt.code) {
+          case 'ArrowLeft':
+            this.props.seekPrevTrack();
+            break;
+          case 'ArrowRight':
+            this.props.seekNextTrack();
+            break;
+          case 'Space':
+            this.props.toggleIsPlaying();
+            break;
+          default:
+            // Logger.log(evt);
+            match = false;
+        }
+        if (match) {
+          evt.preventDefault();
+        }
+      }
+    });
 
     // fetch data, start app
     Manager.fetch(this.webConfig)
@@ -231,4 +258,7 @@ export default connect((state: MasterState) => ({
     toggleCollapseHeader,
     toggleCollapseRoot,
     toggleCollapseSidebar,
+    toggleIsPlaying,
+    seekNextTrack,
+    seekPrevTrack,
   })(App);
