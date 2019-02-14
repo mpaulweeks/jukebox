@@ -25,11 +25,16 @@
     "stage:player": "REACT_APP_JUKEBOX_ENV=staging yarn player:start",
     "prod:deploy": "yarn loader:deploy && gh-pages -d packages/player/build",
     "crontask": "yarn setup && yarn loader:itunes",
-    "cronjob": "git pull && yarn crontask"
+    "cronjob": "git pull && yarn crontask",
+    "lint": "tslint -c tslint.json 'packages/*/src/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "gh-pages": "^2.0.1",
     "http-server": "^0.11.1",
     "lerna": "^3.10.7"
+  },
+  "devDependencies": {
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3"
   }
 }
