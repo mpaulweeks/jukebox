@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PlayerSettings } from 'jukebox-utils';
+import { seekNextTrack, seekPrevTrack, toggleIsPlaying, toggleIsRepeat, toggleIsShuffle } from './redux/actions';
 import { CanHighlight, HoverMixin } from './Components';
+import { connect } from 'react-redux';
+import { MasterState } from './redux/reducers';
+import { PlayerState } from './redux/reducers/player';
 
 const ControlsContainer = styled.div`
   display: flex;
@@ -42,16 +45,16 @@ const Control = styled(CanHighlight)`
 `;
 
 export interface PlaybackControlProps {
-  settings: PlayerSettings,
-  prevTrack(): void,
-  nextTrack(): void,
-  togglePlay(): void,
-  toggleShuffle(): void,
-  toggleRepeat(): void,
+  player: PlayerState,
+  seekNextTrack(): void,
+  seekPrevTrack(): void,
+  toggleIsPlaying(): void,
+  toggleIsShuffle(): void,
+  toggleIsRepeat(): void,
 }
-export class PlaybackControls extends React.Component<PlaybackControlProps>{
+class PlaybackControls extends React.Component<PlaybackControlProps>{
   render() {
-    const { settings } = this.props;
+    const { player } = this.props;
 
     // <i className="material-icons">volume_up</i>
     // <i className="material-icons">volume_down</i>
@@ -66,25 +69,25 @@ export class PlaybackControls extends React.Component<PlaybackControlProps>{
           </Control>
         </ControlsBlock>
         <CenterControlsBlock>
-          <Control onClick={this.props.prevTrack}>
+          <Control onClick={this.props.seekPrevTrack}>
             <i className="material-icons">skip_previous</i>
           </Control>
-          <Control onClick={this.props.togglePlay}>
-            {settings.isPlaying ? (
+          <Control onClick={this.props.toggleIsPlaying}>
+            {player.isPlaying ? (
               <i className="material-icons">pause_circle_outline</i>
             ) : (
                 <i className="material-icons">play_circle_outline</i>
               )}
           </Control>
-          <Control onClick={this.props.nextTrack}>
+          <Control onClick={this.props.seekNextTrack}>
             <i className="material-icons">skip_next</i>
           </Control>
         </CenterControlsBlock>
         <ControlsBlock>
-          <Control onClick={this.props.toggleShuffle} highlight={settings.shuffle}>
+          <Control onClick={this.props.toggleIsShuffle} highlight={player.shuffle}>
             <i className="material-icons">shuffle</i>
           </Control>
-          <Control onClick={this.props.toggleRepeat} highlight={settings.repeat}>
+          <Control onClick={this.props.toggleIsRepeat} highlight={player.repeat}>
             <i className="material-icons">repeat</i>
           </Control>
         </ControlsBlock>
@@ -92,3 +95,13 @@ export class PlaybackControls extends React.Component<PlaybackControlProps>{
     )
   }
 }
+
+export default connect((state: MasterState) => ({
+  player: state.player,
+}), {
+    seekNextTrack,
+    seekPrevTrack,
+    toggleIsPlaying,
+    toggleIsShuffle,
+    toggleIsRepeat,
+  })(PlaybackControls);

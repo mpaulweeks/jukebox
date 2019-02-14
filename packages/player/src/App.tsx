@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import BrowserView from './BrowserView';
 import { CollapseRoot, CollapseBottom, CollapseSidebar } from './Collapse';
 import { CollapseAble, FlexStretchMixin, ResetMixin } from './Components';
-import { PlaybackControls } from './PlaybackControls';
+import PlaybackControls from './PlaybackControls';
 import { ColorScheme, getColorScheme } from './ColorScheme';
 import {
   setCurrentTrack,
@@ -16,6 +16,7 @@ import {
 import { connect } from 'react-redux';
 import { PlayerState } from './redux/reducers/player';
 import { MasterState } from './redux/reducers';
+import AudioElm from './components/AudioElm';
 
 // todo pass colors as props
 const RootContainer = styled(CollapseAble)`
@@ -136,34 +137,6 @@ class App extends React.Component<Props, State> {
       toggle: this.toggleCollapseRoot,
     };
 
-    const { player } = this.props;
-
-    // setup listeners
-    document.addEventListener('keydown', evt => {
-      switch (evt.code) {
-        case 'ArrowLeft':
-          return this.prevTrack(evt);
-        case 'ArrowRight':
-          return this.nextTrack(evt);
-        case 'Space':
-          return this.onSpaceBar(evt);
-        default:
-        // Logger.log(evt);
-      }
-    });
-    player.audioElm.addEventListener('ended', () => this.onTrackEnd());
-
-    // load fonts
-    [
-      // https://stackoverflow.com/a/27053825
-      'https://fonts.googleapis.com/icon?family=Material+Icons',
-    ].forEach(fontSrc => {
-      const linkElm = document.createElement('link');
-      linkElm.setAttribute('rel', 'stylesheet');
-      linkElm.setAttribute('href', fontSrc);
-      document.head.appendChild(linkElm);
-    });
-
     // fetch data, start app
     Manager.fetch(this.webConfig).then(manager => this.setState({
       manager: manager,
@@ -172,74 +145,6 @@ class App extends React.Component<Props, State> {
         this.props.setCurrentTrackList(manager.playlists[0]);
       }
     }));
-  }
-
-  nextTrack = (keyboardEvent?: any) => {
-    const { settings } = this.state;
-    const { track, trackList } = this.props.player;
-    if (track && trackList) {
-      const newTrack = trackList.nextTrack(settings, track);
-      this.props.setCurrentTrack(newTrack);
-    }
-  }
-  prevTrack = (keyboardEvent?: any) => {
-    const { settings } = this.state;
-    const { track, trackList } = this.props.player;
-    if (track && trackList) {
-      const newTrack = trackList.prevTrack(settings, track);
-      this.props.setCurrentTrack(newTrack);
-    }
-  }
-  onTrackEnd = (keyboardEvent?: any) => {
-    const { player } = this.props;
-    const { settings } = this.state;
-    if (settings.repeat) {
-      player.audioElm.play();
-    } else {
-      this.nextTrack();
-    }
-  }
-  onSpaceBar = (keyboardEvent?: any) => {
-    this.togglePlay();
-    if (keyboardEvent) {
-      keyboardEvent.preventDefault();
-    }
-  }
-
-  togglePlay = () => {
-    const { settings } = this.state;
-    const { track, trackList } = this.props.player;
-    if (!track && !trackList) {
-      // on app load. dont do anything
-      return;
-    }
-    if (!track && trackList) {
-      this.props.setCurrentTrack(trackList.tracks[0]);
-    }
-    this.setState({
-      settings: {
-        ...settings,
-        isPlaying: !settings.isPlaying,
-      },
-    });
-  }
-  toggleShuffle = () => {
-    const { settings } = this.state;
-    this.setState({
-      settings: {
-        ...settings,
-        shuffle: !settings.shuffle,
-      },
-    });
-  }
-  toggleRepeat = () => {
-    const { settings } = this.state;
-    this.setState({
-      settings: {
-        ...settings,
-        repeat: !settings.repeat,
-      },
-    });
   }
 
   toggleCollapseRoot = () => {
@@ -267,19 +172,10 @@ class App extends React.Component<Props, State> {
       );
     }
 
-    // todo move into DidReceiveProps
-    const { audioElm } = this.props.player;
-    if (audioElm) {
-      if (settings.isPlaying) {
-        audioElm.play();
-      } else {
-        audioElm.pause();
-      }
-    }
-
     const { webConfig } = this;
     return (
       <RootContainer isCollapsed={collapseRoot}>
+        <AudioElm />
         <RootInner colorScheme={colorScheme}>
           <Header>
             <HeaderBoxWrapper isCollapsed={collapseHeader}>
@@ -328,14 +224,7 @@ class App extends React.Component<Props, State> {
           <Header>
             <FooterBoxWrapper>
               <Box>
-                <PlaybackControls
-                  settings={settings}
-                  nextTrack={this.nextTrack}
-                  prevTrack={this.prevTrack}
-                  togglePlay={this.togglePlay}
-                  toggleShuffle={this.toggleShuffle}
-                  toggleRepeat={this.toggleRepeat}
-                />
+                <PlaybackControls />
               </Box>
             </FooterBoxWrapper>
           </Header>
