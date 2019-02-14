@@ -10,13 +10,19 @@ import { CollapseAble, FlexStretchMixin, ResetMixin } from './Components';
 import PlaybackControls from './PlaybackControls';
 import { ColorScheme, getColorScheme } from './ColorScheme';
 import {
+  setManager,
   setCurrentTrack,
   setCurrentTrackList,
+  toggleCollapseHeader,
+  toggleCollapseRoot,
+  toggleCollapseSidebar,
 } from './redux/actions';
 import { connect } from 'react-redux';
 import { PlayerState } from './redux/reducers/player';
 import { MasterState } from './redux/reducers';
 import AudioElm from './components/AudioElm';
+import { UiState } from './redux/reducers/ui';
+import { DataState } from './redux/reducers/data';
 
 // todo pass colors as props
 const RootContainer = styled(CollapseAble)`
@@ -96,32 +102,24 @@ const Box = styled.div`
 
 interface Props {
   codeConfig: DefaultWebConfig,
+  data: DataState,
   player: PlayerState,
+  ui: UiState,
+  setManager(manager: Manager): void,
   setCurrentTrack(track: PlayableTrack): void,
   setCurrentTrackList(trackList: PlayableTrackList): void,
+  toggleCollapseHeader(): void,
+  toggleCollapseRoot(): void,
+  toggleCollapseSidebar(): void,
 };
 interface State {
-  manager?: Manager,
   colorScheme: ColorScheme,
-  settings: PlayerSettings,
-  collapseRoot: boolean,
-  collapseHeader: boolean,
-  collapseSidebar: boolean,
 };
 
 class App extends React.Component<Props, State> {
   webConfig = getWebConfig(this.props.codeConfig);
   state: State = {
-    manager: undefined,
     colorScheme: getColorScheme(this.webConfig.ColorScheme),
-    settings: {
-      isPlaying: false,
-      repeat: false,
-      shuffle: false,
-    },
-    collapseRoot: !this.webConfig.OnlyJukebox,
-    collapseHeader: false,
-    collapseSidebar: false,
   };
 
   componentDidMount() {
@@ -134,39 +132,29 @@ class App extends React.Component<Props, State> {
     };
     // public API
     appWindow.JUKEBOX = {
-      toggle: this.toggleCollapseRoot,
+      toggle: this.props.toggleCollapseRoot,
     };
 
-    // fetch data, start app
-    Manager.fetch(this.webConfig).then(manager => this.setState({
-      manager: manager,
-    }, () => {
-      if (manager.playlists.length) {
-        this.props.setCurrentTrackList(manager.playlists[0]);
-      }
-    }));
-  }
+    // read config
+    if (this.webConfig.OnlyJukebox) {
+      this.props.toggleCollapseRoot();
+    }
 
-  toggleCollapseRoot = () => {
-    this.setState({
-      collapseRoot: !this.state.collapseRoot,
-    });
-  }
-  toggleCollapseHeader = () => {
-    this.setState({
-      collapseHeader: !this.state.collapseHeader,
-    });
-  }
-  toggleCollapseSidebar = () => {
-    this.setState({
-      collapseSidebar: !this.state.collapseSidebar,
-    });
+    // fetch data, start app
+    Manager.fetch(this.webConfig)
+      .then(manager => this.props.setManager(manager))
+      .then(() => {
+        const { manager } = this.props.data;
+        if (manager && manager.playlists.length) {
+          return this.props.setCurrentTrackList(manager.playlists[0]);
+        }
+      })
   }
 
   render() {
-    const { manager, colorScheme, settings, collapseRoot, collapseHeader, collapseSidebar } = this.state;
-    const { browser } = this.props.player;
-    if (!manager) {
+    const { data, player, ui } = this.props;
+    const { colorScheme } = this.state;
+    if (!data.manager) {
       return (
         <h3> loading, please wait... </h3>
       );
@@ -174,21 +162,21 @@ class App extends React.Component<Props, State> {
 
     const { webConfig } = this;
     return (
-      <RootContainer isCollapsed={collapseRoot}>
+      <RootContainer isCollapsed={ui.collapseRoot}>
         <AudioElm />
         <RootInner colorScheme={colorScheme}>
           <Header>
-            <HeaderBoxWrapper isCollapsed={collapseHeader}>
+            <HeaderBoxWrapper isCollapsed={ui.collapseHeader}>
               <Box>
                 <CurrentTrackView />
                 {webConfig.OnlyJukebox ? (
                   <CollapseBottom
-                    onClick={this.toggleCollapseHeader}
-                    isCollapsed={collapseHeader}
+                    onClick={this.props.toggleCollapseHeader}
+                    isCollapsed={ui.collapseHeader}
                   />
                 ) : (
                     <CollapseRoot
-                      onClick={this.toggleCollapseRoot}
+                      onClick={this.props.toggleCollapseRoot}
                       isCollapsed={false}
                     />
                   )}
@@ -196,16 +184,14 @@ class App extends React.Component<Props, State> {
             </HeaderBoxWrapper>
           </Header>
           <BodyContainer>
-            {manager.playlists.length > 1 && (
-              <SidebarBoxWrapper isCollapsed={collapseSidebar}>
+            {data.manager.playlists.length > 1 && (
+              <SidebarBoxWrapper isCollapsed={ui.collapseSidebar}>
                 <Box>
-                  <PlaylistMenu
-                    manager={manager}
-                  />
+                  <PlaylistMenu />
                   {webConfig.OnlyJukebox && (
                     <CollapseSidebar
-                      onClick={this.toggleCollapseSidebar}
-                      isCollapsed={collapseSidebar}
+                      onClick={this.props.toggleCollapseSidebar}
+                      isCollapsed={ui.collapseSidebar}
                     />
                   )}
                 </Box>
@@ -213,7 +199,7 @@ class App extends React.Component<Props, State> {
             )}
             <MainViewBoxWrapper>
               <Box>
-                {browser ? (
+                {player.browser ? (
                   <BrowserView />
                 ) : (
                     <TrackListView />
@@ -235,8 +221,14 @@ class App extends React.Component<Props, State> {
 }
 
 export default connect((state: MasterState) => ({
+  data: state.data,
   player: state.player,
+  ui: state.ui,
 }), {
+    setManager,
     setCurrentTrack,
     setCurrentTrackList,
+    toggleCollapseHeader,
+    toggleCollapseRoot,
+    toggleCollapseSidebar,
   })(App);

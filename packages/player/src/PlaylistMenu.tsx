@@ -7,6 +7,7 @@ import { setCurrentTrackList, setCurrentBrowser } from './redux/actions';
 import { PlayerState } from './redux/reducers/player';
 import { connect } from 'react-redux';
 import { MasterState } from './redux/reducers';
+import { DataState } from './redux/reducers/data';
 
 const SidebarContainer = styled.div`
   ${FlexStretchMixin}
@@ -25,13 +26,17 @@ const PlaylistName = styled('div') <{ isCurrent: boolean }>`
 interface Props {
   setCurrentTrackList(trackList: PlayableTrackList): void,
   setCurrentBrowser(browser: PlaylistBrowser): void,
-  manager: Manager,
+  data: DataState,
   player: PlayerState,
 };
 
 class PlaylistMenu extends React.Component<Props> {
   render() {
-    const { manager, player, setCurrentTrackList, setCurrentBrowser } = this.props;
+    const { data, player, setCurrentTrackList, setCurrentBrowser } = this.props;
+    const { manager } = data;
+    if (!manager) {
+      return '';
+    }
     return (
       <SidebarContainer>
         {!manager.webConfig.HideAggregateLists && (
@@ -72,6 +77,7 @@ class PlaylistMenu extends React.Component<Props> {
 }
 
 export default connect((state: MasterState) => ({
+  data: state.data,
   player: state.player,
 }), {
     setCurrentTrackList,

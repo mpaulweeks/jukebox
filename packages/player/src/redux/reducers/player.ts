@@ -137,6 +137,13 @@ export default function (state = initialState, action: PlayerAction) {
         };
       }
     }
+    case TOGGLE_IS_SHUFFLE: {
+      const { shuffle } = state;
+      return {
+        ...state,
+        shuffle: !shuffle,
+      };
+    }
     default:
       return state;
   }
