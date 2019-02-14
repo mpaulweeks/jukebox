@@ -1,5 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
 import App from './App';
 import { DefaultWebConfig } from 'jukebox-utils';
 
@@ -17,14 +21,18 @@ export const LoadApp = () => {
     } else {
       const root = document.createElement('jukebox');
       document.body.appendChild(root);
-      const callback = (elm: App) => {
+      const callback = (elm: any) => {
         api = {
           elm: root,
           toggle: elm.toggleCollapseRoot,
         };
         resolve(api);
       };
-      ReactDOM.render(<App codeConfig={codeConfig} ref={callback} />, root);
+      ReactDOM.render(
+        <Provider store={store}>
+          <App codeConfig={codeConfig} ref={callback} />
+        </Provider >,
+        root);
     }
   });
 };

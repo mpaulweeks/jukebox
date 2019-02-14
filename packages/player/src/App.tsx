@@ -9,6 +9,8 @@ import { CollapseRoot, CollapseBottom, CollapseSidebar } from './Collapse';
 import { CollapseAble, FlexStretchMixin, ResetMixin } from './Components';
 import { PlaybackControls } from './PlaybackControls';
 import { ColorScheme, getColorScheme } from './ColorScheme';
+import { setCurrentTrack } from './redux/actions';
+import { connect } from 'react-redux';
 
 // todo pass colors as props
 const RootContainer = styled(CollapseAble)`
@@ -88,6 +90,7 @@ const Box = styled.div`
 
 interface Props {
   codeConfig: DefaultWebConfig,
+  setCurrentTrack(track: PlayableTrack): void,
 };
 interface State {
   manager?: Manager,
@@ -101,7 +104,7 @@ interface State {
   collapseSidebar: boolean,
 };
 
-export default class App extends React.Component<Props, State> {
+class App extends React.Component<Props, State> {
   audioElm = new Audio();
   webConfig = getWebConfig(this.props.codeConfig);
   state: State = {
@@ -175,6 +178,7 @@ export default class App extends React.Component<Props, State> {
     if (force || newSource !== this.audioElm.src) {
       this.audioElm.src = newSource;
 
+      this.props.setCurrentTrack(track);
       this.setState({
         currentTrack: track,
         settings: {
@@ -305,9 +309,7 @@ export default class App extends React.Component<Props, State> {
           <Header>
             <HeaderBoxWrapper isCollapsed={collapseHeader}>
               <Box>
-                <CurrentTrackView
-                  track={currentTrack}
-                />
+                <CurrentTrackView />
                 {webConfig.OnlyJukebox ? (
                   <CollapseBottom
                     onClick={this.toggleCollapseHeader}
@@ -378,3 +380,11 @@ export default class App extends React.Component<Props, State> {
     )
   }
 }
+
+const mapStateToProps = (state: any) => {
+
+}
+
+export default connect(mapStateToProps, {
+  setCurrentTrack,
+})(App);

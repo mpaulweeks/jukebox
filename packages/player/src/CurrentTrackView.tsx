@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { PlayableTrack } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
+import { connect } from 'react-redux';
+import { PlayerState } from './redux/reducers/player';
 
 const TrackContainer = styled.div`
   width: 100%;
@@ -43,12 +45,12 @@ const TrackTitle = styled(DetailsRow)`
 `;
 
 interface Props {
-  track?: PlayableTrack,
+  player: PlayerState,
 };
 
-export default class TrackView extends React.Component<Props> {
+class TrackView extends React.Component<Props> {
   render() {
-    const { track } = this.props;
+    const { track } = this.props.player;
     if (!track) {
       return (
         <TrackContainer>
@@ -84,3 +86,8 @@ export default class TrackView extends React.Component<Props> {
     )
   }
 }
+
+const mapStateToProps = (state: any) => ({
+  player: state.player,
+})
+export default connect(mapStateToProps)(TrackView);
