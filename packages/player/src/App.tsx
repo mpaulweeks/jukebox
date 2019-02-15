@@ -213,7 +213,6 @@ class App extends React.Component<Props, State> {
           return this.props.setCurrentTrackList(manager.playlists[0]);
         }
       })
-      .then(() => this.props.setIsPlaying(true));
   }
 
   render() {

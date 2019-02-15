@@ -22,7 +22,7 @@ class AudioElm extends React.Component<Props> {
     const { audioElm } = this;
 
     // setup listeners
-    audioElm.addEventListener('ended', () => this.onTrackEnd());
+    audioElm.addEventListener('ended', this.onTrackEnd);
 
     // load fonts for audio symbols
     [
@@ -37,17 +37,22 @@ class AudioElm extends React.Component<Props> {
   }
   componentDidUpdate(prevProps: Props) {
     const { audioElm } = this;
-    const { isPlaying, track } = this.props.player;
+    const { track } = this.props.player;
     if (track && track !== prevProps.player.track) {
       audioElm.src = track.audioSrc;
     }
+    this.ensurePlaying();
+  }
+
+  private ensurePlaying = () => {
+    const { audioElm } = this;
+    const { isPlaying } = this.props.player;
     if (isPlaying) {
       audioElm.play();
     } else {
       audioElm.pause();
     }
   }
-
   private onTrackEnd = (keyboardEvent?: any) => {
     const { player } = this.props;
     if (player.repeat) {
