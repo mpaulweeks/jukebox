@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PlayableTrack } from 'jukebox-utils';
+import { truncate } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
 import { connect } from 'react-redux';
 import { PlayerState } from './redux/reducers/player';
@@ -37,10 +37,19 @@ const DetailsRow = styled.div`
   align-items: center;
 
   margin: 0px 20px;
+  text-align: center;
 `;
 const TrackTitle = styled(DetailsRow)`
+  font-size: 2.5em;
   font-weight: bold;
-  text-decoration: underline;
+`;
+const TrackArtist = styled(DetailsRow)`
+  font-size: 1.5em;
+  font-style: italic;
+`;
+const TrackAlbum = styled(DetailsRow)`
+  font-size: 1.5em;
+  font-weight: bold;
 `;
 
 interface Props {
@@ -67,9 +76,8 @@ class TrackView extends React.Component<Props> {
         </AlbumContainer>
         <DetailsContainer>
           <TrackTitle>{track.title}</TrackTitle>
-          <DetailsRow>{track.artist}</DetailsRow>
-          <DetailsRow>{track.album}</DetailsRow>
-          <DetailsRow>{track.trackNumberDisplay}</DetailsRow>
+          <TrackArtist>{truncate(track.artist, 80)}</TrackArtist>
+          <TrackAlbum>{track.album}</TrackAlbum>
         </DetailsContainer>
       </TrackContainer>
     );

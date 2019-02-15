@@ -34,3 +34,11 @@ export function notEmpty<TValue>(
 ): value is TValue {
   return value !== null && value !== undefined;
 }
+
+export function truncate(str: string, limit: number) {
+  str = str || '';
+  if (str.length < limit) {
+    return str;
+  }
+  return str.substring(0, limit - 4) + ' ...';
+}

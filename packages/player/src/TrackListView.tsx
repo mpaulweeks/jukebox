@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PlayableTrackList, PlayableTrack } from 'jukebox-utils';
+import { PlayableTrackList, PlayableTrack, truncate } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
 import { MainViewContainer, MainViewScrollable, MainTitle } from './components/Common';
 import { MasterState } from './redux/reducers';
@@ -64,9 +64,6 @@ function trimColumns<T>(trackList: PlayableTrackList, arr: Array<T>): Array<T> {
 }
 
 class TrackListView extends React.Component<Props> {
-  truncate(info: string) {
-    return (info || '').substring(0, 20);
-  }
   render() {
     const { player, setCurrentTrack } = this.props;
     const { trackList } = player;
@@ -104,7 +101,7 @@ class TrackListView extends React.Component<Props> {
                 const columns = trimColumns(trackList, [
                   <TrackImage src={track.imageSrc || PlaceholderImage} />,
                   track.title,
-                  this.truncate(track.artist),
+                  truncate(track.artist, 20),
                   track.durationDisplay,
                   track.album,
                   track.trackNumberDisplay,
