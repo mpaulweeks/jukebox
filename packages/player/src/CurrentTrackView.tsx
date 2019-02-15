@@ -20,7 +20,9 @@ const TrackContainer = styled.div`
   }
 `;
 
-const AlbumContainer = styled.div``;
+const AlbumContainer = styled.div`
+  flex-grow: 0;
+`;
 const AlbumCover = styled.img`
   width: auto;
   height: 100%;

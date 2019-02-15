@@ -6,11 +6,12 @@ import {
   toggleIsPlaying,
   toggleIsRepeat,
   toggleIsShuffle,
-} from './redux/actions';
-import { CanHighlight, HoverMixin } from './components/Common';
+  togglePopupAbout,
+} from '../redux/actions';
+import { CanHighlight, HoverMixin } from './Common';
 import { connect } from 'react-redux';
-import { MasterState } from './redux/reducers';
-import { PlayerState } from './redux/reducers/player';
+import { MasterState } from '../redux/reducers';
+import { PlayerState } from '../redux/reducers/player';
 
 const ControlsContainer = styled.div`
   display: flex;
@@ -18,6 +19,10 @@ const ControlsContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: no-wrap;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 const ControlsBlock = styled.div`
   display: flex;
@@ -57,6 +62,7 @@ export interface PlaybackControlProps {
   toggleIsPlaying(): void;
   toggleIsShuffle(): void;
   toggleIsRepeat(): void;
+  togglePopupAbout(): void;
 }
 class PlaybackControls extends React.Component<PlaybackControlProps> {
   render() {
@@ -70,7 +76,9 @@ class PlaybackControls extends React.Component<PlaybackControlProps> {
     return (
       <ControlsContainer>
         <ControlsBlock>
-          <Control>?</Control>
+          <Control onClick={this.props.togglePopupAbout}>
+            ?
+          </Control>
         </ControlsBlock>
         <CenterControlsBlock>
           <Control onClick={this.props.seekPrevTrack}>
@@ -80,8 +88,8 @@ class PlaybackControls extends React.Component<PlaybackControlProps> {
             {player.isPlaying ? (
               <i className="material-icons">pause_circle_outline</i>
             ) : (
-              <i className="material-icons">play_circle_outline</i>
-            )}
+                <i className="material-icons">play_circle_outline</i>
+              )}
           </Control>
           <Control onClick={this.props.seekNextTrack}>
             <i className="material-icons">skip_next</i>
@@ -116,5 +124,6 @@ export default connect(
     toggleIsPlaying,
     toggleIsShuffle,
     toggleIsRepeat,
+    togglePopupAbout,
   },
 )(PlaybackControls);

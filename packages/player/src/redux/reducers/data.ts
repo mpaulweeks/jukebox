@@ -16,7 +16,7 @@ const initialState: DataState = {
   manager: undefined,
 };
 
-export default function(state = initialState, action: DataAction) {
+export default function (state = initialState, action: DataAction) {
   switch (action.type) {
     case SET_MANAGER: {
       const { manager } = action.payload;

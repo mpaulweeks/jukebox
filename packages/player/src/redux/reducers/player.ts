@@ -1,22 +1,5 @@
-import {
-  PlayableTrack,
-  PlayableTrackList,
-  PlayerSettings,
-  PlaylistBrowser,
-} from 'jukebox-utils';
-import {
-  SEEK_NEXT_TRACK,
-  SEEK_PREV_TRACK,
-  SET_CURRENT_BROWSER,
-  SET_CURRENT_TRACK,
-  SET_CURRENT_TRACKLIST,
-  SET_IS_PLAYING,
-  SET_IS_REPEAT,
-  SET_IS_SHUFFLE,
-  TOGGLE_IS_PLAYING,
-  TOGGLE_IS_REPEAT,
-  TOGGLE_IS_SHUFFLE,
-} from '../actionTypes';
+import { PlayableTrack, PlayableTrackList, PlayerSettings, PlaylistBrowser } from 'jukebox-utils';
+import { SEEK_NEXT_TRACK, SEEK_PREV_TRACK, SET_CURRENT_BROWSER, SET_CURRENT_TRACK, SET_CURRENT_TRACKLIST, SET_IS_PLAYING, SET_IS_REPEAT, SET_IS_SHUFFLE, TOGGLE_IS_PLAYING, TOGGLE_IS_REPEAT, TOGGLE_IS_SHUFFLE } from '../actionTypes';
 
 export interface PlayerState extends PlayerSettings {
   track: undefined | PlayableTrack;
@@ -45,7 +28,7 @@ const initialState: PlayerState = {
   browser: undefined,
 };
 
-export default function(state = initialState, action: PlayerAction) {
+export default function (state = initialState, action: PlayerAction) {
   switch (action.type) {
     case SET_CURRENT_TRACK: {
       const { track } = action.payload;

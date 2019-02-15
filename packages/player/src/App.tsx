@@ -14,7 +14,7 @@ import styled from 'styled-components';
 import BrowserView from './BrowserView';
 import { CollapseRoot, CollapseBottom, CollapseSidebar } from './components/Collapse';
 import { CollapseAble, FlexStretchMixin, Box } from './components/Common';
-import PlaybackControls from './PlaybackControls';
+import PlaybackControls from './components/PlaybackControls';
 import { ColorScheme, getColorScheme } from './ColorScheme';
 import {
   setManager,
@@ -34,12 +34,23 @@ import { MasterState } from './redux/reducers';
 import AudioElm from './components/AudioElm';
 import { UiState } from './redux/reducers/ui';
 import { DataState } from './redux/reducers/data';
+import PopupAbout from './components/PopupAbout';
 
-const RootContainer = styled(CollapseAble)`
+const RootContainer = styled(CollapseAble) <{ colorScheme: ColorScheme }>`
+  --jukebox-z-index: 2147483646; /* max possible - 1 */
+  --jukebox-popup-z-index: 2147483647; /* max possible */
+  --jukebox-foreground: ${props => props.colorScheme.foreground};
+  --jukebox-background: ${props => props.colorScheme.background};
+  --jukebox-hover: ${props => props.colorScheme.hover};
+  --jukebox-highlight: ${props => props.colorScheme.highlight};
+  --jukebox-border-width: 1px;
+  --jukebox-frame-gap: 10px;
+  --jukebox-tab-size: 50px;
+
   ${FlexStretchMixin}
 
   position: fixed;
-  z-index: 2147483647; /* max possible */
+  z-index: var(--jukebox-z-index);
   width: 100%;
   height: 100%;
   top: 0px;
@@ -56,18 +67,11 @@ const RootContainer = styled(CollapseAble)`
   }
 `;
 
-const RootInner = styled('div') <{ colorScheme: ColorScheme }>`
+const RootInner = styled('div')`
   ${FlexStretchMixin}
 
   font-size: 16px;
 
-  --jukebox-foreground: ${props => props.colorScheme.foreground};
-  --jukebox-background: ${props => props.colorScheme.background};
-  --jukebox-hover: ${props => props.colorScheme.hover};
-  --jukebox-highlight: ${props => props.colorScheme.highlight};
-  --jukebox-border-width: 1px;
-  --jukebox-frame-gap: 10px;
-  --jukebox-tab-size: 50px;
   background-color: var(--jukebox-background);
   color: var(--jukebox-foreground);
 `;
@@ -221,9 +225,9 @@ class App extends React.Component<Props, State> {
 
     const { webConfig } = this;
     return (
-      <RootContainer isCollapsed={ui.collapseRoot}>
+      <RootContainer colorScheme={colorScheme} isCollapsed={ui.collapseRoot}>
         <AudioElm />
-        <RootInner colorScheme={colorScheme}>
+        <RootInner>
           <Header>
             <HeaderBoxWrapper isCollapsed={ui.collapseHeader}>
               <Box>
@@ -274,6 +278,7 @@ class App extends React.Component<Props, State> {
             </FooterBoxWrapper>
           </Header>
         </RootInner>
+        <PopupAbout />
       </RootContainer>
     );
   }
