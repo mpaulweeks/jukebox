@@ -7,7 +7,7 @@ import {
   toggleIsRepeat,
   toggleIsShuffle,
 } from './redux/actions';
-import { CanHighlight, HoverMixin } from './Components';
+import { CanHighlight, HoverMixin } from './components/Common';
 import { connect } from 'react-redux';
 import { MasterState } from './redux/reducers';
 import { PlayerState } from './redux/reducers/player';

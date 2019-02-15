@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PlayableTrackList, PlayableTrack, notEmpty } from 'jukebox-utils';
+import { PlayableTrackList, PlayableTrack } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
-import { MainViewContainer, MainViewScrollable } from './Components';
+import { MainViewContainer, MainViewScrollable } from './components/Common';
 import { MasterState } from './redux/reducers';
 import { PlayerState } from './redux/reducers/player';
 import { setCurrentTrack } from './redux/actions';
@@ -29,7 +29,7 @@ const TracksTable = styled.table`
     border-top-width: 0px;
   }
 `;
-const TrackRow = styled('tr')<{ isCurrent: boolean }>`
+const TrackRow = styled('tr') <{ isCurrent: boolean }>`
   cursor: pointer;
 
   ${props =>

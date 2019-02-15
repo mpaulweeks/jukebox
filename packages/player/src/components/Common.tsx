@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
-export const CollapseAble = styled('div')<{ isCollapsed?: boolean }>`
+export const CollapseAble = styled('div') <{ isCollapsed?: boolean }>`
   transition-duration: 1s;
   transition-delay: 0s;
   transition-timing-function: ease-in-out;
 `;
 
-const Highlightable = styled('div')<{ highlight?: boolean }>``;
+const Highlightable = styled('div') <{ highlight?: boolean }>``;
 export const CanHighlight = styled(Highlightable)`
   ${props =>
     props.highlight &&
@@ -53,6 +53,7 @@ export const MainViewScrollable = styled.div`
   ${ScrollableMixin}
 `;
 
+// todo use this in App
 // https://stackoverflow.com/a/5863871
 export const ResetMixin = styled.div`
   &,
@@ -92,4 +93,14 @@ export const ResetMixin = styled.div`
     width: auto;
     z-index: auto;
   }
+`;
+
+export const Box = styled.div`
+  position: relative;
+
+  ${FlexStretchMixin}
+
+  border: var(--jukebox-border-width) solid var(--jukebox-foreground);
+  box-sizing: border-box;
+  padding: 10px;
 `;

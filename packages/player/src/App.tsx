@@ -12,8 +12,8 @@ import CurrentTrackView from './CurrentTrackView';
 import PlaylistMenu from './PlaylistMenu';
 import styled from 'styled-components';
 import BrowserView from './BrowserView';
-import { CollapseRoot, CollapseBottom, CollapseSidebar } from './Collapse';
-import { CollapseAble, FlexStretchMixin, ResetMixin } from './Components';
+import { CollapseRoot, CollapseBottom, CollapseSidebar } from './components/Collapse';
+import { CollapseAble, FlexStretchMixin, Box } from './components/Common';
 import PlaybackControls from './PlaybackControls';
 import { ColorScheme, getColorScheme } from './ColorScheme';
 import {
@@ -50,7 +50,7 @@ const RootContainer = styled(CollapseAble)`
   `};
 `;
 
-const RootInner = styled('div')<{ colorScheme: ColorScheme }>`
+const RootInner = styled('div') <{ colorScheme: ColorScheme }>`
   ${FlexStretchMixin}
 
   font-size: 16px;
@@ -59,11 +59,7 @@ const RootInner = styled('div')<{ colorScheme: ColorScheme }>`
   --jukebox-background: ${props => props.colorScheme.background};
   --jukebox-hover: ${props => props.colorScheme.hover};
   --jukebox-highlight: ${props => props.colorScheme.highlight};
-  --jukebox-collapse-foreground: ${props =>
-    props.colorScheme.collapseForeground};
-  --jukebox-collapse-background: ${props =>
-    props.colorScheme.collapseBackground};
-
+  --jukebox-border-width: 1px;
   --jukebox-frame-gap: 10px;
   background-color: var(--jukebox-background);
   color: var(--jukebox-foreground);
@@ -104,16 +100,6 @@ const SidebarBoxWrapper = styled(BoxWrapper)`
 `;
 const MainViewBoxWrapper = styled(BoxWrapper)`
   flex-grow: 1;
-`;
-
-const Box = styled.div`
-  position: relative;
-
-  ${FlexStretchMixin}
-
-  border: 1px solid var(--jukebox-foreground);
-  box-sizing: border-box;
-  padding: 10px;
 `;
 
 interface Props {
@@ -223,11 +209,11 @@ class App extends React.Component<Props, State> {
                     isCollapsed={ui.collapseHeader}
                   />
                 ) : (
-                  <CollapseRoot
-                    onClick={this.props.toggleCollapseRoot}
-                    isCollapsed={false}
-                  />
-                )}
+                    <CollapseRoot
+                      onClick={this.props.toggleCollapseRoot}
+                      isCollapsed={false}
+                    />
+                  )}
               </Box>
             </HeaderBoxWrapper>
           </Header>
@@ -250,8 +236,8 @@ class App extends React.Component<Props, State> {
                 {player.browser ? (
                   <BrowserView />
                 ) : (
-                  player.trackList && <TrackListView />
-                )}
+                    player.trackList && <TrackListView />
+                  )}
               </Box>
             </MainViewBoxWrapper>
           </BodyContainer>

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PlayableTrackList, Manager, PlaylistBrowser } from 'jukebox-utils';
-import { FlexStretchMixin } from './Components';
+import { FlexStretchMixin } from './components/Common';
 
 import { setCurrentTrackList, setCurrentBrowser } from './redux/actions';
 import { PlayerState } from './redux/reducers/player';
@@ -13,7 +13,7 @@ const SidebarContainer = styled.div`
   ${FlexStretchMixin}
 `;
 
-const PlaylistName = styled('div')<{ isCurrent: boolean }>`
+const PlaylistName = styled('div') <{ isCurrent: boolean }>`
   cursor: pointer;
   box-sizing: border-box;
   padding: 5px;
