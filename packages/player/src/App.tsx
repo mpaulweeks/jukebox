@@ -26,6 +26,7 @@ import {
   toggleIsPlaying,
   seekNextTrack,
   seekPrevTrack,
+  setIsPlaying,
 } from './redux/actions';
 import { connect } from 'react-redux';
 import { PlayerState } from './redux/reducers/player';
@@ -48,6 +49,11 @@ const RootContainer = styled(CollapseAble)`
     `
     top: -100%;
   `};
+
+  @media (max-width: 600px) {
+    position: absolute;
+    height: auto;
+  }
 `;
 
 const RootInner = styled('div') <{ colorScheme: ColorScheme }>`
@@ -70,6 +76,10 @@ const Header = styled.div``;
 const BodyContainer = styled.div`
   ${FlexStretchMixin}
   flex-direction: row;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const BoxWrapper = styled(CollapseAble)`
@@ -84,6 +94,10 @@ const HeaderBoxWrapper = styled(BoxWrapper)`
     `
     margin-top: calc(-200px - var(--jukebox-frame-gap));
   `}
+
+  @media (max-width: 600px) {
+    height: auto;
+  }
 `;
 const FooterBoxWrapper = styled(BoxWrapper)`
   padding-top: 0px;
@@ -98,6 +112,13 @@ const SidebarBoxWrapper = styled(BoxWrapper)`
     `
     margin-left: calc(-200px - var(--jukebox-frame-gap));
   `}
+  @media (max-width: 600px) {
+    padding-right: var(--jukebox-frame-gap);
+    padding-bottom: 0px;
+    width: auto;
+    min-width: auto;
+    max-width: none;
+  }
 `;
 const MainViewBoxWrapper = styled(BoxWrapper)`
   flex-grow: 1;
@@ -117,6 +138,7 @@ interface Props {
   toggleIsPlaying(): void;
   seekNextTrack(): void;
   seekPrevTrack(): void;
+  setIsPlaying(isPlaying: boolean): void;
 }
 interface State {
   colorScheme: ColorScheme;
@@ -183,9 +205,11 @@ class App extends React.Component<Props, State> {
       .then(() => {
         const { manager } = this.props.data;
         if (manager && manager.playlists.length) {
+          // return this.props.setCurrentTrackList(manager.playlists[1]);
           return this.props.setCurrentTrackList(manager.playlists[0]);
         }
-      });
+      })
+      .then(() => this.props.setIsPlaying(true));
   }
 
   render() {
@@ -271,5 +295,6 @@ export default connect(
     toggleIsPlaying,
     seekNextTrack,
     seekPrevTrack,
+    setIsPlaying,
   },
 )(App);

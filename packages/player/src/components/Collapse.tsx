@@ -46,6 +46,10 @@ const CollapseWrapper = styled(CollapseAble) <{ box: BoxProps }>`
       border-${s}-width: var(--jukebox-border-width);
     `).join('')}
   `}
+
+    @media (max-width: 600px) {
+      display: none;
+    }
 `;
 
 const CollapseBox = styled(Box)`

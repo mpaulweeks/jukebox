@@ -14,12 +14,21 @@ const TrackContainer = styled.div`
   justify-content: flex-start;
   align-items: stretch;
   flex-wrap: no-wrap;
+
+  @media (max-width: 600px){
+    flex-direction: column;
+  }
 `;
 
 const AlbumContainer = styled.div``;
 const AlbumCover = styled.img`
   width: auto;
   height: 100%;
+
+  @media (max-width: 600px){
+    width: 100%;
+    height: auto;
+  }
 `;
 
 const DetailsContainer = styled.div`

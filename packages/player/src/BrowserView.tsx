@@ -35,6 +35,10 @@ const TrackList = styled.div`
     border-radius: 5px;
     padding: 4px;
   }
+
+  @media (max-width: 600px) {
+    width: 50%;
+  }
 `;
 
 const TrackListImage = styled.img`

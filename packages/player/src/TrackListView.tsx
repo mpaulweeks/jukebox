@@ -42,6 +42,10 @@ const TrackRow = styled('tr') <{ isCurrent: boolean }>`
 const TrackImage = styled.img`
   width: auto;
   height: 50px;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;
 const TrackInfo = styled.div`
   display: flex;

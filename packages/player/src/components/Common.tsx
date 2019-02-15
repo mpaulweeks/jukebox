@@ -55,6 +55,12 @@ export const MainViewScrollable = styled.div`
 
 export const MainTitle = styled.h1`
   padding-left: calc(2 * var(--jukebox-tab-size));
+  text-align: left;
+
+  @media (max-width: 600px) {
+    padding-left: 0px;
+    text-align: center;
+  }
 `;
 
 // todo use this in App
