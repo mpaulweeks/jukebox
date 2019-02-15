@@ -64,6 +64,10 @@ const RootContainer = styled(CollapseAble) <{ colorScheme: ColorScheme }>`
   @media (max-width: 600px) {
     position: absolute;
     height: auto;
+    top: 0px;
+    ${props => props.isCollapsed && `
+      left: -100%;
+    `};
   }
 `;
 

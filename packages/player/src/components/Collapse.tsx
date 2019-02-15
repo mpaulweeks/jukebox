@@ -47,9 +47,11 @@ const CollapseWrapper = styled(CollapseAble) <{ box: BoxProps }>`
     `).join('')}
   `}
 
+  ${props => props.box.hideOnMobile && `
     @media (max-width: 600px) {
       display: none;
     }
+  `}
 `;
 
 const CollapseBox = styled(Box)`
@@ -68,6 +70,7 @@ interface Props {
 }
 
 interface BoxProps {
+  hideOnMobile: boolean,
   collapsedText: string,
   openText: string,
   innerSide: string,
@@ -95,6 +98,7 @@ const genCollapseBox = (
 // alternative arrows ⇦ ⇧ ⇨ ⇩
 
 export const CollapseRoot = genCollapseBox({
+  hideOnMobile: false,
   openText: 'X',
   collapsedText: '',
   innerSide: 'bottom',
@@ -104,6 +108,7 @@ export const CollapseRoot = genCollapseBox({
 }, CollapseWrapper,
 );
 export const CollapseBottom = genCollapseBox({
+  hideOnMobile: true,
   openText: '▲',
   collapsedText: '▼',
   innerSide: 'top',
@@ -113,6 +118,7 @@ export const CollapseBottom = genCollapseBox({
 }, CollapseWrapper,
 );
 export const CollapseSidebar = genCollapseBox({
+  hideOnMobile: true,
   openText: '◄',
   collapsedText: '►',
   innerSide: 'left',
