@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { StyledComponent } from 'styled-components';
-import { CollapseAble, Box } from './Common';
+import { CollapseAble, Box, HoverMixin } from './Common';
 
 const CollapseWrapper = styled(CollapseAble) <{ box: BoxProps }>`
   color: var(--jukebox-foreground);
@@ -55,7 +55,7 @@ const CollapseWrapper = styled(CollapseAble) <{ box: BoxProps }>`
 `;
 
 const CollapseBox = styled(Box)`
-  cursor: pointer;
+  ${HoverMixin}
 
   width: var(--jukebox-tab-size);
   height: var(--jukebox-tab-size);

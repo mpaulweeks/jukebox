@@ -1,5 +1,6 @@
 # todo
 
+- brighter hover, style a tags, border the popup, css reset, customize colors via args, fix arg casing
 - Audio.onload fills song info with loading dialogue
 - fix camelcasing on config options
 - check logic for updating existing playlists
