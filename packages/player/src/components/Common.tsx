@@ -53,6 +53,10 @@ export const MainViewScrollable = styled.div`
   ${ScrollableMixin}
 `;
 
+export const MainTitle = styled.h1`
+  padding-left: calc(2 * var(--jukebox-tab-size));
+`;
+
 // todo use this in App
 // https://stackoverflow.com/a/5863871
 export const ResetMixin = styled.div`

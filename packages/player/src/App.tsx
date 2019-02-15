@@ -61,6 +61,7 @@ const RootInner = styled('div') <{ colorScheme: ColorScheme }>`
   --jukebox-highlight: ${props => props.colorScheme.highlight};
   --jukebox-border-width: 1px;
   --jukebox-frame-gap: 10px;
+  --jukebox-tab-size: 50px;
   background-color: var(--jukebox-background);
   color: var(--jukebox-foreground);
 `;

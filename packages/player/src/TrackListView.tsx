@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { PlayableTrackList, PlayableTrack } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
-import { MainViewContainer, MainViewScrollable } from './components/Common';
+import { MainViewContainer, MainViewScrollable, MainTitle } from './components/Common';
 import { MasterState } from './redux/reducers';
 import { PlayerState } from './redux/reducers/player';
 import { setCurrentTrack } from './redux/actions';
@@ -84,10 +84,10 @@ class TrackListView extends React.Component<Props> {
     ]);
     return (
       <TrackListContainer>
-        <h1>
+        <MainTitle>
           {trackList.name}
           {!trackList.custom && <em> (sortable) </em>}
-        </h1>
+        </MainTitle>
         <TracksTableContainer>
           <TracksTable>
             <thead>

@@ -10,22 +10,49 @@ const CollapseWrapper = styled(CollapseAble) <{ box: BoxProps }>`
   position: absolute;
 
   border: var(--jukebox-border-width) solid var(--jukebox-foreground);
+  box-sizing: border-box;
 
-  ${props => props.box.tightSides.map(s => `
-    ${s}: 0px;
-    margin-${s}: calc(0px - var(--jukebox-border-width));
-    border-${s}: 0px;
-  `).join('')}
-  ${props => props.box.gapSides.map(s => `
-    padding-${s}: var(--jukebox-frame-gap);
-  `).join('')}
+  ${props => props.isCollapsed ? `
+    ${[props.box.tightSide, props.box.outerSide].map(s => `
+      ${s}: 0px;
+    `).join('')}
+    ${[props.box.gapSide, props.box.innerSide].map(s => `
+      ${s}: auto;
+    `).join('')}
+
+    ${props.box.outerSide}: calc(0px - ((2 * var(--jukebox-border-width)) + (2 * var(--jukebox-frame-gap)) + var(--jukebox-tab-size)));
+
+    ${[props.box.tightSide, props.box.innerSide].map(s => `
+      margin-${s}: calc(0px - var(--jukebox-border-width));
+      padding-${s}: 0px;
+      border-${s}-width: 0px;
+    `).join('')}
+    ${[props.box.gapSide, props.box.outerSide].map(s => `
+      margin-${s}: 0px;
+      padding-${s}: var(--jukebox-frame-gap);
+      border-${s}-width: var(--jukebox-border-width);
+    `).join('')}
+  ` : `
+    ${[props.box.tightSide, props.box.outerSide].map(s => `
+      ${s}: 0px;
+      margin-${s}: calc(0px - var(--jukebox-border-width));
+      padding-${s}: 0px;
+      border-${s}-width: 0px;
+    `).join('')}
+    ${[props.box.gapSide, props.box.innerSide].map(s => `
+      ${s}: auto;
+      margin-${s}: 0px;
+      padding-${s}: var(--jukebox-frame-gap);
+      border-${s}-width: var(--jukebox-border-width);
+    `).join('')}
+  `}
 `;
 
 const CollapseBox = styled(Box)`
   cursor: pointer;
 
-  width: 50px;
-  height: 50px;
+  width: var(--jukebox-tab-size);
+  height: var(--jukebox-tab-size);
 
   justify-content: center;
   align-items: center;
@@ -39,8 +66,10 @@ interface Props {
 interface BoxProps {
   collapsedText: string,
   openText: string,
-  gapSides: string[],
-  tightSides: string[],
+  innerSide: string,
+  outerSide: string,
+  gapSide: string,
+  tightSide: string,
 }
 
 const genCollapseBox = (
@@ -64,38 +93,27 @@ const genCollapseBox = (
 export const CollapseRoot = genCollapseBox({
   openText: 'X',
   collapsedText: '',
-  gapSides: ['bottom', 'left'],
-  tightSides: ['top', 'right'],
-}, styled(CollapseWrapper)`
-    top: 0px;
-    right: 0px;
-  `,
+  innerSide: 'bottom',
+  outerSide: 'top',
+  gapSide: 'left',
+  tightSide: 'right',
+}, CollapseWrapper,
 );
 export const CollapseBottom = genCollapseBox({
   openText: '▲',
   collapsedText: '▼',
-  gapSides: ['top', 'left'],
-  tightSides: ['bottom', 'right'],
-}, styled(CollapseWrapper)`
-    ${props =>
-    props.isCollapsed &&
-    `
-    bottom: -50px;
-  `}
-  `,
+  innerSide: 'top',
+  outerSide: 'bottom',
+  gapSide: 'left',
+  tightSide: 'right',
+}, CollapseWrapper,
 );
 export const CollapseSidebar = genCollapseBox({
   openText: '◄',
   collapsedText: '►',
-  gapSides: ['bottom', 'left'],
-  tightSides: ['top', 'right'],
-}, styled(CollapseWrapper)`
-    top: 0px;
-    right: 0px;
-    ${props =>
-    props.isCollapsed &&
-    `
-    right: -50px;
-  `}
-  `,
+  innerSide: 'left',
+  outerSide: 'right',
+  gapSide: 'bottom',
+  tightSide: 'top',
+}, CollapseWrapper,
 );

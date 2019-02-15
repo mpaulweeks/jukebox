@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { PlayableTrackList, PlaylistBrowser } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
-import { MainViewScrollable, MainViewContainer } from './components/Common';
+import { MainViewScrollable, MainViewContainer, MainTitle } from './components/Common';
 import { connect } from 'react-redux';
 import { setCurrentTrackList } from './redux/actions';
 import { PlayerState } from './redux/reducers/player';
@@ -74,7 +74,7 @@ class BrowserView extends React.Component<Props> {
     }
     return (
       <BrowserContainer>
-        <h1>{browser.name}</h1>
+        <MainTitle>{browser.name}</MainTitle>
         <TrackListsContainer>
           {browser.playlists.map((pl, index) => (
             <TrackList
