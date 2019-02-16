@@ -24,6 +24,8 @@ import {
   toggleCollapseRoot,
   toggleCollapseSidebar,
   toggleIsPlaying,
+  toggleIsShuffle,
+  toggleIsRepeat,
   seekNextTrack,
   seekPrevTrack,
   setIsPlaying,
@@ -60,6 +62,10 @@ const RootContainer = styled(CollapseAble) <{ colorScheme: ColorScheme }>`
     `
     top: -100%;
   `};
+
+  & a {
+    color: var(--jukebox-foreground);
+  }
 
   @media (max-width: 600px) {
     position: absolute;
@@ -144,6 +150,8 @@ interface Props {
   toggleCollapseRoot(): void;
   toggleCollapseSidebar(): void;
   toggleIsPlaying(): void;
+  toggleIsShuffle(): void;
+  toggleIsRepeat(): void;
   seekNextTrack(): void;
   seekPrevTrack(): void;
   setIsPlaying(isPlaying: boolean): void;
@@ -196,6 +204,12 @@ class App extends React.Component<Props, State> {
             break;
           case 'Space':
             this.props.toggleIsPlaying();
+            break;
+          case 'KeyS':
+            this.props.toggleIsShuffle();
+            break;
+          case 'KeyR':
+            this.props.toggleIsRepeat();
             break;
           default:
             // Logger.log(evt);
@@ -301,6 +315,8 @@ export default connect(
     toggleCollapseRoot,
     toggleCollapseSidebar,
     toggleIsPlaying,
+    toggleIsShuffle,
+    toggleIsRepeat,
     seekNextTrack,
     seekPrevTrack,
     setIsPlaying,

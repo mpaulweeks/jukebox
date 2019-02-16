@@ -25,6 +25,7 @@ const PopupContainer = styled.div`
 const PopupInner = styled.div`
   background-color: var(--jukebox-background);
   color: var(--jukebox-foreground);
+  border: 0.5em solid var(--jukebox-foreground);
   border-radius: 2em;
   padding: 2em;
   text-align: center;
@@ -34,9 +35,27 @@ const AboutTitle = styled.div`
   font-size: 2em;
   font-style: italic;
   font-weight: bold;
-  padding-bottom: 1em;
+  margin-bottom: 0.5em;
 `;
 const AboutAuthor = styled.div``;
+
+const InstructionsTitle = styled.div`
+  font-size: 1em;
+  text-decoration: underline;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+`;
+const InstructionsTable = styled.table`
+  border-collapse: collapse;
+  color: inherit;
+
+  & th,
+  & td {
+    border: 1px solid var(--jukebox-foreground);
+    box-sizing: border-box;
+    padding: 0.5em;
+  }
+`;
 
 interface Props {
   ui: UiState;
@@ -53,6 +72,29 @@ class PopupAbout extends React.Component<Props> {
           <AboutAuthor>
             made by <a href="https://twitter.com/mpaulweeks">@mpaulweeks</a>
           </AboutAuthor>
+          <InstructionsTitle>
+            keyboard shortcuts
+          </InstructionsTitle>
+          <InstructionsTable>
+            <tbody>
+              <tr>
+                <td>spacebar</td>
+                <td>play/pause the music</td>
+              </tr>
+              <tr>
+                <td>left/right arrow</td>
+                <td>skip tracks</td>
+              </tr>
+              <tr>
+                <td>S</td>
+                <td>toggle shuffle</td>
+              </tr>
+              <tr>
+                <td>R</td>
+                <td>toggle repeat</td>
+              </tr>
+            </tbody>
+          </InstructionsTable>
         </PopupInner>
       </PopupContainer>
     ) : '';
