@@ -1,10 +1,10 @@
+import { string } from "prop-types";
+
 export interface ColorScheme {
   foreground: string;
   background: string;
-  hover: string;
-  highlight: string;
-  collapseForeground: string;
-  collapseBackground: string;
+  highlightForeground: string;
+  highlightBackground: string;
 }
 
 interface SchemeLookup {
@@ -15,18 +15,14 @@ const lookup: SchemeLookup = {
   light: {
     foreground: 'black',
     background: 'white',
-    hover: 'darkgrey',
-    highlight: 'lightblue',
-    collapseForeground: 'white',
-    collapseBackground: 'grey',
+    highlightForeground: 'black',
+    highlightBackground: 'lightgrey',
   },
   dark: {
     foreground: 'white',
     background: 'black',
-    hover: 'lightgrey',
-    highlight: 'blue',
-    collapseForeground: 'black',
-    collapseBackground: 'grey',
+    highlightForeground: 'white',
+    highlightBackground: '#404040',
   },
 };
 lookup.default = lookup.light;

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { PlayableTrackList, PlayableTrack, truncate } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
-import { MainViewContainer, MainViewScrollable, MainTitle } from './components/Common';
+import { MainViewContainer, MainViewScrollable, MainTitle, CanHighlightTableRow, HoverMixin } from './components/Common';
 import { MasterState } from './redux/reducers';
 import { PlayerState } from './redux/reducers/player';
 import { setCurrentTrack } from './redux/actions';
@@ -29,14 +29,8 @@ const TracksTable = styled.table`
     border-top-width: 0px;
   }
 `;
-const TrackRow = styled('tr') <{ isCurrent: boolean }>`
-  cursor: pointer;
-
-  ${props =>
-    props.isCurrent &&
-    `
-    background-color: var(--jukebox-highlight);
-  `}
+const TrackRow = styled(CanHighlightTableRow)`
+  ${HoverMixin}
 `;
 
 const TrackImage = styled.img`
@@ -114,7 +108,7 @@ class TrackListView extends React.Component<Props> {
                   <TrackRow
                     key={`track-${row}`}
                     onClick={() => setCurrentTrack(track)}
-                    isCurrent={track === player.track}
+                    highlight={track === player.track}
                   >
                     {columns.map((comp, column) => (
                       <td key={`body-${row}-${column}`}>

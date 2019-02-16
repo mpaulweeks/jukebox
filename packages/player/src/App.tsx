@@ -41,8 +41,8 @@ const RootContainer = styled(CollapseAble) <{ colorScheme: ColorScheme }>`
   --jukebox-popup-z-index: 2147483647; /* max possible */
   --jukebox-foreground: ${props => props.colorScheme.foreground};
   --jukebox-background: ${props => props.colorScheme.background};
-  --jukebox-hover: ${props => props.colorScheme.hover};
-  --jukebox-highlight: ${props => props.colorScheme.highlight};
+  --jukebox-highlight-foreground: ${props => props.colorScheme.highlightForeground};
+  --jukebox-highlight-background: ${props => props.colorScheme.highlightBackground};
   --jukebox-border-width: 1px;
   --jukebox-frame-gap: 10px;
   --jukebox-tab-size: 50px;

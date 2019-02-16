@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PlayableTrackList, Manager, PlaylistBrowser } from 'jukebox-utils';
-import { FlexStretchMixin } from './components/Common';
+import { FlexStretchMixin, CanHighlight, HoverMixin } from './components/Common';
 
 import { setCurrentTrackList, setCurrentBrowser } from './redux/actions';
 import { PlayerState } from './redux/reducers/player';
@@ -13,16 +13,10 @@ const SidebarContainer = styled.div`
   ${FlexStretchMixin}
 `;
 
-const PlaylistName = styled('div') <{ isCurrent: boolean }>`
-  cursor: pointer;
+const PlaylistName = styled(CanHighlight)`
+  ${HoverMixin}
   box-sizing: border-box;
   padding: 5px;
-
-  ${props =>
-    props.isCurrent &&
-    `
-    background-color: var(--jukebox-highlight);
-  `}
 `;
 
 interface Props {
@@ -45,19 +39,19 @@ class PlaylistMenu extends React.Component<Props> {
           <div>
             <PlaylistName
               onClick={() => setCurrentTrackList(manager.allSongs)}
-              isCurrent={manager.allSongs === player.trackList}
+              highlight={manager.allSongs === player.trackList}
             >
               {manager.allSongs.name}
             </PlaylistName>
             <PlaylistName
               onClick={() => setCurrentBrowser(manager.browseAlbums)}
-              isCurrent={manager.browseAlbums === player.browser}
+              highlight={manager.browseAlbums === player.browser}
             >
               {manager.browseAlbums.name}
             </PlaylistName>
             <PlaylistName
               onClick={() => setCurrentBrowser(manager.browseArtists)}
-              isCurrent={manager.browseArtists === player.browser}
+              highlight={manager.browseArtists === player.browser}
             >
               {manager.browseArtists.name}
             </PlaylistName>
@@ -68,7 +62,7 @@ class PlaylistMenu extends React.Component<Props> {
           <PlaylistName
             key={`playlist-name-${index}`}
             onClick={() => setCurrentTrackList(pl)}
-            isCurrent={pl === player.trackList}
+            highlight={pl === player.trackList}
           >
             {pl.name}
           </PlaylistName>

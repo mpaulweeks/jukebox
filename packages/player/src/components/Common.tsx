@@ -6,20 +6,15 @@ export const CollapseAble = styled('div') <{ isCollapsed?: boolean }>`
   transition-timing-function: ease-in-out;
 `;
 
-const Highlightable = styled('div') <{ highlight?: boolean }>``;
-export const CanHighlight = styled(Highlightable)`
-  ${props =>
-    props.highlight &&
-    `
-    background-color: var(--jukebox-highlight);
-  `}
+const HighlightMixin = (highlight?: boolean) => highlight && `
+  background-color: var(--jukebox-highlight-background);
+  color: var(--jukebox-highlight-foreground);
 `;
-export const CanHighlightIcon = styled(Highlightable)`
-  ${props =>
-    props.highlight &&
-    `
-    color: var(--jukebox-highlight);
-  `}
+export const CanHighlight = styled('div') <{ highlight?: boolean }>`
+  ${props => HighlightMixin(props.highlight)}
+`;
+export const CanHighlightTableRow = styled('tr') <{ highlight?: boolean }>`
+  ${props => HighlightMixin(props.highlight)}
 `;
 
 export const ScrollableMixin = `
@@ -30,7 +25,7 @@ export const ScrollableMixin = `
 export const HoverMixin = `
   cursor: pointer;
   &:hover {
-    background-color: var(--jukebox-hover);
+    background-color: var(--jukebox-foreground);
     color: var(--jukebox-background);
   }
 `;
