@@ -39,6 +39,7 @@ export default function (state = initialState, action: PlayerAction) {
           isPlaying: true,
         };
       }
+      return state;
     }
     case SET_CURRENT_TRACKLIST: {
       const { trackList } = action.payload;
@@ -50,6 +51,7 @@ export default function (state = initialState, action: PlayerAction) {
           browser: undefined,
         };
       }
+      return state;
     }
     case SET_CURRENT_BROWSER: {
       const { browser } = action.payload;
@@ -67,12 +69,11 @@ export default function (state = initialState, action: PlayerAction) {
           track: state.trackList.tracks[0],
           isPlaying: isPlaying,
         };
-      } else {
-        return {
-          ...state,
-          isPlaying: isPlaying,
-        };
       }
+      return {
+        ...state,
+        isPlaying: isPlaying,
+      };
     }
     case SET_IS_SHUFFLE: {
       const { shuffle } = action.payload;
@@ -96,12 +97,11 @@ export default function (state = initialState, action: PlayerAction) {
           track: state.trackList.tracks[0],
           isPlaying: !isPlaying,
         };
-      } else {
-        return {
-          ...state,
-          isPlaying: !isPlaying,
-        };
       }
+      return {
+        ...state,
+        isPlaying: !isPlaying,
+      };
     }
     case TOGGLE_IS_SHUFFLE: {
       const { shuffle } = state;
@@ -126,6 +126,7 @@ export default function (state = initialState, action: PlayerAction) {
           track: newTrack,
         };
       }
+      return state;
     }
     case SEEK_PREV_TRACK: {
       const { track, trackList } = state;
@@ -136,6 +137,7 @@ export default function (state = initialState, action: PlayerAction) {
           track: newTrack,
         };
       }
+      return state;
     }
     case TOGGLE_IS_SHUFFLE: {
       const { shuffle } = state;
