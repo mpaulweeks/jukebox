@@ -37,6 +37,7 @@ import AudioElm from './components/AudioElm';
 import { UiState } from './redux/reducers/ui';
 import { DataState } from './redux/reducers/data';
 import PopupAbout from './components/PopupAbout';
+import ProgressBar from './components/ProgressBar';
 
 const RootContainer = styled(CollapseAble) <{ colorScheme: ColorScheme }>`
   --jukebox-z-index: 2147483646; /* max possible - 1 */
@@ -290,6 +291,7 @@ class App extends React.Component<Props, State> {
           <Header>
             <FooterBoxWrapper>
               <Box>
+                <ProgressBar />
                 <PlaybackControls />
               </Box>
             </FooterBoxWrapper>
