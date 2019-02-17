@@ -2,6 +2,8 @@ import { SET_AUDIO_PROGRESS_DISPLAY, TOGGLE_COLLAPSE_HEADER, TOGGLE_COLLAPSE_ROO
 
 export interface UiState {
   progressPercent: number;
+  progressTime: number;
+  durationTime: number;
   collapseRoot: boolean;
   collapseHeader: boolean;
   collapseSidebar: boolean;
@@ -11,12 +13,15 @@ export interface UiState {
 interface UiAction {
   type: string;
   payload?: {
-    percent?: number,
+    currentTime: number,
+    duration: number,
   },
 }
 
 const initialState: UiState = {
   progressPercent: 0,
+  progressTime: 0,
+  durationTime: 0,
   collapseRoot: true,
   collapseHeader: false,
   collapseSidebar: false,
@@ -26,9 +31,12 @@ const initialState: UiState = {
 export default function (state = initialState, action: UiAction) {
   switch (action.type) {
     case SET_AUDIO_PROGRESS_DISPLAY: {
+      const { currentTime, duration } = (action.payload || { currentTime: 0, duration: 0 });
       return {
         ...state,
-        progressPercent: (action.payload && action.payload.percent) || 0,
+        progressPercent: duration ? (currentTime / duration) : 0,
+        progressTime: currentTime || 0,
+        durationTime: duration || 0,
       }
     }
     case TOGGLE_COLLAPSE_ROOT: {

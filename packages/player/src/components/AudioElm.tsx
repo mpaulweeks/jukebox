@@ -15,7 +15,7 @@ interface Props {
   resolveSeek(): void;
   setCurrentTrack(track: PlayableTrack): void;
   seekNextTrack(): void;
-  setAudioProgressDisplay(percent: number): void;
+  setAudioProgressDisplay(currentTime: number, duration: number): void;
 }
 class AudioElm extends React.Component<Props> {
   private audioElm = new Audio();
@@ -75,8 +75,7 @@ class AudioElm extends React.Component<Props> {
   }
   private onProgress = (evt: any) => {
     const { audioElm } = this;
-    const progress = audioElm.currentTime / audioElm.duration;
-    this.props.setAudioProgressDisplay(progress);
+    this.props.setAudioProgressDisplay(audioElm.currentTime, audioElm.duration);
   };
   private onTrackEnd = (keyboardEvent?: any) => {
     const { player } = this.props;

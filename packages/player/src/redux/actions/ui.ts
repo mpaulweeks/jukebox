@@ -1,9 +1,10 @@
 import { SET_AUDIO_PROGRESS_DISPLAY, TOGGLE_COLLAPSE_HEADER, TOGGLE_COLLAPSE_ROOT, TOGGLE_COLLAPSE_SIDEBAR, TOGGLE_POPUP_ABOUT } from '../actionTypes';
 
-export const setAudioProgressDisplay = (percent: number) => ({
+export const setAudioProgressDisplay = (currentTime: number, duration: number) => ({
   type: SET_AUDIO_PROGRESS_DISPLAY,
   payload: {
-    percent,
+    currentTime,
+    duration,
   },
 });
 export const toggleCollapseHeader = () => ({
