@@ -1,7 +1,6 @@
 # todo
 
 - progress bar
-  - fix bug where it tracks the bar itself
   - implement other seek methods
 
 - css reset

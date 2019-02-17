@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import {
   setSeekByPercent,
 } from '../redux/actions';
@@ -9,22 +9,39 @@ import { UiState } from '../redux/reducers/ui';
 
 
 const ProgressContainerRow = styled.div`
-  padding: 20px;
+  padding: 5px;
+`;
+
+const AnimationSlidingStripes = keyframes`
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 0px -27.5px;
+  }
+`;
+
+interface BarProps {
+  percent: number;
+}
+const ProgressBar: any = styled.div.attrs((props: BarProps) => ({
+  style: {
+    backgroundSize: `${100 * props.percent}% 400%`,
+  },
+}))`
+  cursor: pointer;
   height: 30px;
-`;
-const ProgressBarOuter = styled.div`
-  position: relative;
-  height: 100%;
-  border: 1px solid black;
-  background-color: var(--jukebox-background);
-`;
-const ProgressBarInner = styled.div <{ percent: number }>`
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: ${props => 100 * props.percent}%;
-  height: 100%;
-  background-color: var(--jukebox-foreground);
+  border: var(--jukebox-border-width) solid var(--jukebox-foreground);
+  border-radius: 5px;
+  background: repeating-linear-gradient(
+    135deg,
+    var(--jukebox-background),
+    var(--jukebox-background) 10px,
+    var(--jukebox-highlight-background) 10px,
+    var(--jukebox-highlight-background) 20px
+  );
+  background-repeat: no-repeat;
+  animation: ${AnimationSlidingStripes} 1s linear infinite;
 `;
 
 export interface ProgressBarViewProps {
@@ -42,9 +59,7 @@ class ProgressBarView extends React.Component<ProgressBarViewProps> {
   render() {
     return (
       <ProgressContainerRow>
-        <ProgressBarOuter onClick={this.setProgress}>
-          <ProgressBarInner percent={this.props.ui.progressPercent} />
-        </ProgressBarOuter>
+        <ProgressBar onClick={this.setProgress} percent={this.props.ui.progressPercent} />
       </ProgressContainerRow>
     );
   }
