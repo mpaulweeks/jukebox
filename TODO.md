@@ -3,6 +3,7 @@
 - progress bar
   - implement other seek methods
 
+- fade animation on button press OR keyboard press
 - css reset
 - customize colors via args
 - fix arg casing

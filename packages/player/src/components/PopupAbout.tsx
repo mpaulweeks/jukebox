@@ -32,16 +32,15 @@ const PopupInner = styled.div`
 `;
 
 const AboutTitle = styled.div`
-  font-size: 2em;
-  font-style: italic;
+  font-size: 3em;
   font-weight: bold;
   margin-bottom: 0.5em;
 `;
 const AboutAuthor = styled.div``;
 
 const InstructionsTitle = styled.div`
-  font-size: 1em;
-  text-decoration: underline;
+  font-size: 1.5em;
+  font-style: italic;
   margin-top: 1em;
   margin-bottom: 0.5em;
 `;
@@ -65,7 +64,7 @@ class PopupAbout extends React.Component<Props> {
   render() {
     return this.props.ui.showPopupAbout ? (
       <PopupContainer onClick={this.props.togglePopupAbout}>
-        <PopupInner>
+        <PopupInner onClick={e => e.stopPropagation()}>
           <AboutTitle>
             jukebox
           </AboutTitle>
@@ -82,8 +81,20 @@ class PopupAbout extends React.Component<Props> {
                 <td>play/pause the music</td>
               </tr>
               <tr>
-                <td>left/right arrow</td>
-                <td>skip tracks</td>
+                <td>left arrow</td>
+                <td>previous song</td>
+              </tr>
+              <tr>
+                <td>right arrow</td>
+                <td>next song</td>
+              </tr>
+              <tr>
+                <td>comma</td>
+                <td>skip back 10 seconds</td>
+              </tr>
+              <tr>
+                <td>period</td>
+                <td>skip forward 10 seconds</td>
               </tr>
               <tr>
                 <td>S</td>

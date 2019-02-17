@@ -6,6 +6,7 @@ import {
   Constants,
   DefaultWebConfig,
   getWebConfig,
+  Logger,
 } from 'jukebox-utils';
 import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
@@ -28,6 +29,7 @@ import {
   toggleIsRepeat,
   seekNextTrack,
   seekPrevTrack,
+  setSeekByDelta,
   setIsPlaying,
 } from './redux/actions';
 import { connect } from 'react-redux';
@@ -155,6 +157,7 @@ interface Props {
   toggleIsRepeat(): void;
   seekNextTrack(): void;
   seekPrevTrack(): void;
+  setSeekByDelta(delta: number): void;
   setIsPlaying(isPlaying: boolean): void;
 }
 interface State {
@@ -186,6 +189,7 @@ class App extends React.Component<Props, State> {
       play: () => !this.props.player.isPlaying && this.props.toggleIsPlaying(),
       pause: () => this.props.player.isPlaying && this.props.toggleIsPlaying(),
     };
+    Logger.log('JUKEBOX is ready');
 
     // read config
     if (this.webConfig.OnlyJukebox) {
@@ -203,6 +207,12 @@ class App extends React.Component<Props, State> {
           case 'ArrowRight':
             this.props.seekNextTrack();
             break;
+          case 'Comma':
+            this.props.setSeekByDelta(-10);
+            break;
+          case 'Period':
+            this.props.setSeekByDelta(10);
+            break;
           case 'Space':
             this.props.toggleIsPlaying();
             break;
@@ -213,7 +223,7 @@ class App extends React.Component<Props, State> {
             this.props.toggleIsRepeat();
             break;
           default:
-            // Logger.log(evt);
+            Logger.log(evt);
             match = false;
         }
         if (match) {
@@ -321,6 +331,7 @@ export default connect(
     toggleIsRepeat,
     seekNextTrack,
     seekPrevTrack,
+    setSeekByDelta,
     setIsPlaying,
   },
 )(App);

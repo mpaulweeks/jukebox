@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {
   seekNextTrack,
   seekPrevTrack,
+  setSeekByDelta,
   toggleIsPlaying,
   toggleIsRepeat,
   toggleIsShuffle,
@@ -59,6 +60,7 @@ export interface PlaybackControlProps {
   player: PlayerState;
   seekNextTrack(): void;
   seekPrevTrack(): void;
+  setSeekByDelta(delta: number): void;
   toggleIsPlaying(): void;
   toggleIsShuffle(): void;
   toggleIsRepeat(): void;
@@ -81,6 +83,9 @@ class PlaybackControls extends React.Component<PlaybackControlProps> {
           </Control>
         </ControlsBlock>
         <CenterControlsBlock>
+          <Control onClick={() => this.props.setSeekByDelta(-10)}>
+            <i className="material-icons">replay_10</i>
+          </Control>
           <Control onClick={this.props.seekPrevTrack}>
             <i className="material-icons">skip_previous</i>
           </Control>
@@ -93,6 +98,9 @@ class PlaybackControls extends React.Component<PlaybackControlProps> {
           </Control>
           <Control onClick={this.props.seekNextTrack}>
             <i className="material-icons">skip_next</i>
+          </Control>
+          <Control onClick={() => this.props.setSeekByDelta(10)}>
+            <i className="material-icons">forward_10</i>
           </Control>
         </CenterControlsBlock>
         <ControlsBlock>
@@ -121,6 +129,7 @@ export default connect(
   {
     seekNextTrack,
     seekPrevTrack,
+    setSeekByDelta,
     toggleIsPlaying,
     toggleIsShuffle,
     toggleIsRepeat,
