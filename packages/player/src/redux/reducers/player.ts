@@ -1,10 +1,13 @@
 import { PlayableTrack, PlayableTrackList, PlayerSettings, PlaylistBrowser } from 'jukebox-utils';
-import { SEEK_NEXT_TRACK, SEEK_PREV_TRACK, SET_CURRENT_BROWSER, SET_CURRENT_TRACK, SET_CURRENT_TRACKLIST, SET_IS_PLAYING, SET_IS_REPEAT, SET_IS_SHUFFLE, TOGGLE_IS_PLAYING, TOGGLE_IS_REPEAT, TOGGLE_IS_SHUFFLE } from '../actionTypes';
+import { RESOLVE_SEEK, SEEK_NEXT_TRACK, SEEK_PREV_TRACK, SET_CURRENT_BROWSER, SET_CURRENT_TRACK, SET_CURRENT_TRACKLIST, SET_IS_PLAYING, SET_IS_REPEAT, SET_IS_SHUFFLE, SET_SEEK_BY_PERCENT, TOGGLE_IS_PLAYING, TOGGLE_IS_REPEAT, TOGGLE_IS_SHUFFLE } from '../actionTypes';
 
 export interface PlayerState extends PlayerSettings {
   track: undefined | PlayableTrack;
   trackList: undefined | PlayableTrackList;
   browser: undefined | PlaylistBrowser;
+  seekPercent: undefined | number;
+  seekSeconds: undefined | number;
+  seekDelta: undefined | number;
 }
 
 export interface PlayerAction {
@@ -16,6 +19,9 @@ export interface PlayerAction {
     track?: PlayableTrack;
     trackList?: PlayableTrackList;
     browser?: PlaylistBrowser;
+    seekPercent?: number;
+    seekSeconds?: number;
+    seekDelta?: number;
   };
 }
 
@@ -26,6 +32,9 @@ const initialState: PlayerState = {
   track: undefined,
   trackList: undefined,
   browser: undefined,
+  seekPercent: undefined,
+  seekSeconds: undefined,
+  seekDelta: undefined,
 };
 
 export default function (state = initialState, action: PlayerAction) {
@@ -59,6 +68,21 @@ export default function (state = initialState, action: PlayerAction) {
         ...state,
         trackList: undefined,
         browser,
+      };
+    }
+    case SET_SEEK_BY_PERCENT: {
+      const { seekPercent } = action.payload;
+      return {
+        ...state,
+        seekPercent,
+      };
+    }
+    case RESOLVE_SEEK: {
+      return {
+        ...state,
+        seekPercent: undefined,
+        seekSeconds: undefined,
+        seekDelta: undefined,
       };
     }
     case SET_IS_PLAYING: {

@@ -3,17 +3,19 @@ import { PlayerState } from '../redux/reducers/player';
 import { MasterState } from '../redux/reducers';
 import {
   setCurrentTrack,
-  toggleIsPlaying,
   seekNextTrack,
-  seekPrevTrack,
+  setAudioProgressDisplay,
+  resolveSeek,
 } from '../redux/actions';
 import { connect } from 'react-redux';
 import { PlayableTrack } from 'jukebox-utils';
 
 interface Props {
   player: PlayerState;
+  resolveSeek(): void;
   setCurrentTrack(track: PlayableTrack): void;
   seekNextTrack(): void;
+  setAudioProgressDisplay(percent: number): void;
 }
 class AudioElm extends React.Component<Props> {
   private audioElm = new Audio();
@@ -22,6 +24,7 @@ class AudioElm extends React.Component<Props> {
     const { audioElm } = this;
 
     // setup listeners
+    audioElm.addEventListener('timeupdate', this.onProgress);
     audioElm.addEventListener('ended', this.onTrackEnd);
 
     // load fonts for audio symbols
@@ -37,11 +40,26 @@ class AudioElm extends React.Component<Props> {
   }
   componentDidUpdate(prevProps: Props) {
     const { audioElm } = this;
-    const { track } = this.props.player;
+    const { track, seekPercent, seekSeconds, seekDelta } = this.props.player;
     if (track && track !== prevProps.player.track) {
       audioElm.src = track.audioSrc;
     }
     this.ensurePlaying();
+
+    let newTime = undefined;
+    if (seekPercent !== undefined) {
+      newTime = seekPercent * audioElm.duration;
+    } else if (seekSeconds !== undefined) {
+      newTime = seekSeconds;
+    } else if (seekDelta) {
+      newTime = audioElm.currentTime + seekDelta;
+    }
+
+    if (newTime !== undefined) {
+      console.log(audioElm.currentTime, newTime);
+      audioElm.currentTime = newTime;
+      this.props.resolveSeek();
+    }
   }
 
   private ensurePlaying = () => {
@@ -53,6 +71,11 @@ class AudioElm extends React.Component<Props> {
       audioElm.pause();
     }
   }
+  private onProgress = (evt: any) => {
+    const { audioElm } = this;
+    const progress = audioElm.currentTime / audioElm.duration;
+    this.props.setAudioProgressDisplay(progress);
+  };
   private onTrackEnd = (keyboardEvent?: any) => {
     const { player } = this.props;
     if (player.repeat) {
@@ -72,7 +95,9 @@ export default connect(
     player: state.player,
   }),
   {
+    resolveSeek,
     setCurrentTrack,
     seekNextTrack,
+    setAudioProgressDisplay,
   },
 )(AudioElm);
