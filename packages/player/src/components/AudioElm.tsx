@@ -56,7 +56,6 @@ class AudioElm extends React.Component<Props> {
     }
 
     if (newTime !== undefined) {
-      console.log(audioElm.currentTime, newTime);
       if (!isNaN(newTime)) {
         audioElm.currentTime = newTime;
       }

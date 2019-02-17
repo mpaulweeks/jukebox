@@ -1,8 +1,6 @@
 # todo
 
-- progress bar
-  - implement other seek methods
-
+- implement volume control
 - fade animation on button press OR keyboard press
 - css reset
 - customize colors via args

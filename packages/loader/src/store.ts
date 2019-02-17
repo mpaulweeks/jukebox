@@ -1,14 +1,6 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
-import {
-  asyncMap,
-  calcTimestamp,
-  Collection,
-  Constants,
-  DataLoaderWithDefault,
-  InfoLookup,
-  Logger,
-} from 'jukebox-utils';
+import { asyncMap, calcTimestamp, Collection, Constants, DataLoaderWithDefault, InfoLookup, Logger } from 'jukebox-utils';
 import fetch from 'node-fetch';
 import { iTunesLibrary, iTunesLibraryLoader } from './iTunesLibrary';
 import { LoaderConfig } from './loaderConfig';
@@ -60,7 +52,7 @@ export class Store {
           Bucket: this.bucket,
           Key: `${
             Constants.DataDirectory
-          }/backup/${this.getDataKeyWithTimestamp(fileName)}`,
+            }/backup/${this.getDataKeyWithTimestamp(fileName)}`,
           Body: JSON.stringify(data, null, 2),
         }),
       );
@@ -151,7 +143,7 @@ export class Store {
       const { fileName, location } = fileInfo;
       this.uploadWeb(fileName, location);
       if (fileName.endsWith('.js')) {
-        console.log('should re-package:', fileName);
+        Logger.log('should re-package:', fileName);
       }
     });
   }
@@ -172,7 +164,7 @@ export class Store {
       if (Constants.isDev) {
         const path = `${Constants.LocalDataRoot}/${
           Constants.DataDirectory
-        }/${fileName}`;
+          }/${fileName}`;
         Logger.log('fetching:', path);
         const jsonStr = fs.readFileSync(path, 'utf8');
         return new ClassRef(JSON.parse(jsonStr));

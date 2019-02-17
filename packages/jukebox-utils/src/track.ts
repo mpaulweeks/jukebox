@@ -1,5 +1,6 @@
 import { Constants } from './constants';
 import { InfoLookup } from './infoLookup';
+import { Logger } from './logger';
 import { PlayableTrack, TrackData } from './types';
 
 export class Track implements PlayableTrack {
@@ -51,8 +52,8 @@ export class Track implements PlayableTrack {
 
     this.durationDisplay = duration
       ? `${Math.floor(duration / 1000 / 60)}:${String(
-          Math.floor((duration / 1000) % 60),
-        ).padStart(2, '0')}`
+        Math.floor((duration / 1000) % 60),
+      ).padStart(2, '0')}`
       : '';
 
     this.sortKey = `${this.album} ${String(this.trackNumerator || 0).padStart(
@@ -77,7 +78,7 @@ export class Track implements PlayableTrack {
   static fromLookup(id: string, infoLookup: InfoLookup): undefined | Track {
     const info = infoLookup.get(id);
     if (!info) {
-      console.log('failed track lookup! ID:', id);
+      Logger.log('failed track lookup! ID:', id);
     }
     return info && new Track(info);
   }

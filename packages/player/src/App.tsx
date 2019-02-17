@@ -182,7 +182,6 @@ class App extends React.Component<Props, State> {
     // public API
     // this also gets attached to the promise
     appWindow.JUKEBOX = {
-      toggle: this.props.toggleCollapseRoot, // deprecated
       open: () => this.props.ui.collapseRoot && this.props.toggleCollapseRoot(),
       close: () =>
         !this.props.ui.collapseRoot && this.props.toggleCollapseRoot(),
