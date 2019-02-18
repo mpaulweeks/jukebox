@@ -24,6 +24,7 @@ import {
   toggleCollapseHeader,
   toggleCollapseRoot,
   toggleCollapseSidebar,
+  togglePopupAbout,
   toggleIsPlaying,
   toggleIsShuffle,
   toggleIsRepeat,
@@ -152,6 +153,7 @@ interface Props {
   toggleCollapseHeader(): void;
   toggleCollapseRoot(): void;
   toggleCollapseSidebar(): void;
+  togglePopupAbout(): void;
   toggleIsPlaying(): void;
   toggleIsShuffle(): void;
   toggleIsRepeat(): void;
@@ -200,6 +202,13 @@ class App extends React.Component<Props, State> {
       if (!this.props.ui.collapseRoot) {
         let match = true;
         switch (evt.code) {
+          case 'Escape':
+            if (this.props.ui.showPopupAbout){
+              this.props.togglePopupAbout();
+            } else if (!this.webConfig.OnlyJukebox) {
+              this.props.toggleCollapseRoot();
+            }
+            break;
           case 'ArrowLeft':
             this.props.seekPrevTrack();
             break;
@@ -325,6 +334,7 @@ export default connect(
     toggleCollapseHeader,
     toggleCollapseRoot,
     toggleCollapseSidebar,
+    togglePopupAbout,
     toggleIsPlaying,
     toggleIsShuffle,
     toggleIsRepeat,

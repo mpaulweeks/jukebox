@@ -1,5 +1,6 @@
 # todo
 
+- add transitions to background-position on bar
 - implement volume control
 - fade animation on button press OR keyboard press
 - css reset
@@ -7,5 +8,6 @@
 - fix arg casing
 - Audio.onload fills song info with loading dialogue
 - fix camelcasing on config options
+- crossfade next track
 - check logic for updating existing playlists
 - diff tool to compare audio with playlist ids to detect orphans
