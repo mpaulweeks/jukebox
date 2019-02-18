@@ -9,10 +9,11 @@ import {
   toggleIsShuffle,
   togglePopupAbout,
 } from '../redux/actions';
-import { CanHighlight, HoverMixin } from './Common';
+import { CanHighlight, HoverMixin, IconMixin } from './Common';
 import { connect } from 'react-redux';
 import { MasterState } from '../redux/reducers';
 import { PlayerState } from '../redux/reducers/player';
+import VolumeControl from './VolumeControl';
 
 const ControlsContainerRow = styled.div`
   display: flex;
@@ -37,23 +38,11 @@ const CenterControlsBlock = styled(ControlsBlock)`
 `;
 const Control = styled(CanHighlight)`
   ${HoverMixin}
+  ${IconMixin}
 
   border: 1px solid var(--jukebox-foreground);
   border-radius: 5px;
   margin: 5px;
-  font-size: 1.5em;
-  height: 2em;
-  width: 2em;
-
-  & i {
-    font-size: 1.5em;
-  }
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: no-wrap;
 `;
 
 export interface PlaybackControlProps {
@@ -81,6 +70,7 @@ class PlaybackControls extends React.Component<PlaybackControlProps> {
           <Control onClick={this.props.togglePopupAbout}>
             ?
           </Control>
+          <VolumeControl />
         </ControlsBlock>
         <CenterControlsBlock>
           <Control onClick={() => this.props.setSeekByDelta(-10)}>

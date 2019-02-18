@@ -81,6 +81,14 @@ class PopupAbout extends React.Component<Props> {
                 <td>play/pause the music</td>
               </tr>
               <tr>
+                <td>+</td>
+                <td>increase volume</td>
+              </tr>
+              <tr>
+                <td>-</td>
+                <td>decrease volume</td>
+              </tr>
+              <tr>
                 <td>left arrow</td>
                 <td>previous song</td>
               </tr>

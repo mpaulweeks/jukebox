@@ -1,7 +1,8 @@
 import { PlayableTrack, PlayableTrackList, PlayerSettings, PlaylistBrowser } from 'jukebox-utils';
-import { RESOLVE_SEEK, SEEK_NEXT_TRACK, SEEK_PREV_TRACK, SET_CURRENT_BROWSER, SET_CURRENT_TRACK, SET_CURRENT_TRACKLIST, SET_IS_PLAYING, SET_IS_REPEAT, SET_IS_SHUFFLE, SET_SEEK_BY_DELTA, SET_SEEK_BY_PERCENT, SET_SEEK_BY_SECONDS, TOGGLE_IS_PLAYING, TOGGLE_IS_REPEAT, TOGGLE_IS_SHUFFLE } from '../actionTypes';
+import { RESOLVE_SEEK, SEEK_NEXT_TRACK, SEEK_PREV_TRACK, SET_CURRENT_BROWSER, SET_CURRENT_TRACK, SET_CURRENT_TRACKLIST, SET_IS_PLAYING, SET_IS_REPEAT, SET_IS_SHUFFLE, SET_SEEK_BY_DELTA, SET_SEEK_BY_PERCENT, SET_SEEK_BY_SECONDS, SET_VOLUME, TOGGLE_IS_PLAYING, TOGGLE_IS_REPEAT, TOGGLE_IS_SHUFFLE } from '../actionTypes';
 
 export interface PlayerState extends PlayerSettings {
+  volume: number;
   track: undefined | PlayableTrack;
   trackList: undefined | PlayableTrackList;
   browser: undefined | PlaylistBrowser;
@@ -13,6 +14,7 @@ export interface PlayerState extends PlayerSettings {
 export interface PlayerAction {
   type: string;
   payload: {
+    volume?: number;
     isPlaying?: boolean;
     shuffle?: boolean;
     repeat?: boolean;
@@ -26,6 +28,7 @@ export interface PlayerAction {
 }
 
 const initialState: PlayerState = {
+  volume: 0,
   isPlaying: false,
   shuffle: false,
   repeat: false,
@@ -39,6 +42,13 @@ const initialState: PlayerState = {
 
 export default function (state = initialState, action: PlayerAction) {
   switch (action.type) {
+    case SET_VOLUME: {
+      const { volume } = action.payload;
+      return {
+        ...state,
+        volume: Math.min(1, Math.max(0, (volume || 0))),
+      };
+    }
     case SET_CURRENT_TRACK: {
       const { track } = action.payload;
       if (!state.track || (track && track.audioSrc !== state.track.audioSrc)) {

@@ -2,6 +2,7 @@
 export const SET_MANAGER = 'SET_MANAGER';
 
 // player
+export const SET_VOLUME = 'SET_VOLUME';
 export const SET_SEEK_BY_PERCENT = 'SET_SEEK_BY_PERCENT';
 export const SET_SEEK_BY_SECONDS = 'SET_SEEK_BY_SECONDS';
 export const SET_SEEK_BY_DELTA = 'SET_SEEK_BY_DELTA';

@@ -1,6 +1,12 @@
 import { PlayableTrack, PlayableTrackList, PlaylistBrowser } from 'jukebox-utils';
 import * as TYPES from '../actionTypes';
 
+export const setVolume = (volume: number) => ({
+  type: TYPES.SET_VOLUME,
+  payload: {
+    volume,
+  },
+});
 export const setCurrentTrack = (track: PlayableTrack) => ({
   type: TYPES.SET_CURRENT_TRACK,
   payload: {

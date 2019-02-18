@@ -6,7 +6,7 @@ import {
 import { connect } from 'react-redux';
 import { MasterState } from '../redux/reducers';
 import { UiState } from '../redux/reducers/ui';
-import { FlexStretchMixin } from './Common';
+import { FlexStretchMixin, getClickPercent } from './Common';
 import { throws } from 'assert';
 
 
@@ -35,6 +35,7 @@ const ProgressBar: any = styled.div.attrs((props: BarProps) => ({
   height: 30px;
   border: var(--jukebox-border-width) solid var(--jukebox-foreground);
   border-radius: 5px;
+  box-sizing: border-box;
   background: repeating-linear-gradient(
     135deg,
     transparent,
@@ -61,11 +62,7 @@ export interface ProgressBarViewProps {
 }
 class ProgressBarView extends React.Component<ProgressBarViewProps> {
   private setProgress = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const clicked: any = evt.currentTarget;
-    const rect = clicked.getBoundingClientRect();
-    const offset = evt.pageX - rect.left;
-    const percent = offset / (rect.right - rect.left);
-    this.props.setSeekByPercent(percent);
+    this.props.setSeekByPercent(getClickPercent(evt));
   }
   private renderTime(time: number) {
     const minutes = Math.floor(time / 60);

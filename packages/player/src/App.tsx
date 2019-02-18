@@ -19,6 +19,7 @@ import PlaybackControls from './components/PlaybackControls';
 import { ColorScheme, getColorScheme } from './ColorScheme';
 import {
   setManager,
+  setVolume,
   setCurrentTrack,
   setCurrentTrackList,
   toggleCollapseHeader,
@@ -148,6 +149,7 @@ interface Props {
   player: PlayerState;
   ui: UiState;
   setManager(manager: Manager): void;
+  setVolume(volume: number): void;
   setCurrentTrack(track: PlayableTrack): void;
   setCurrentTrackList(trackList: PlayableTrackList): void;
   toggleCollapseHeader(): void;
@@ -203,11 +205,17 @@ class App extends React.Component<Props, State> {
         let match = true;
         switch (evt.code) {
           case 'Escape':
-            if (this.props.ui.showPopupAbout){
+            if (this.props.ui.showPopupAbout) {
               this.props.togglePopupAbout();
             } else if (!this.webConfig.OnlyJukebox) {
               this.props.toggleCollapseRoot();
             }
+            break;
+          case 'Equal':
+            this.props.setVolume(this.props.player.volume + 0.1);
+            break;
+          case 'Minus':
+            this.props.setVolume(this.props.player.volume - 0.1);
             break;
           case 'ArrowLeft':
             this.props.seekPrevTrack();
@@ -329,6 +337,7 @@ export default connect(
   }),
   {
     setManager,
+    setVolume,
     setCurrentTrack,
     setCurrentTrackList,
     toggleCollapseHeader,

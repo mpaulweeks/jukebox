@@ -1,7 +1,6 @@
 # todo
 
 - add transitions to background-position on bar
-- implement volume control
 - fade animation on button press OR keyboard press
 - css reset
 - customize colors via args

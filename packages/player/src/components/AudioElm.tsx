@@ -2,6 +2,7 @@ import React from 'react';
 import { PlayerState } from '../redux/reducers/player';
 import { MasterState } from '../redux/reducers';
 import {
+  setVolume,
   setCurrentTrack,
   seekNextTrack,
   setAudioProgressDisplay,
@@ -13,6 +14,7 @@ import { PlayableTrack } from 'jukebox-utils';
 interface Props {
   player: PlayerState;
   resolveSeek(): void;
+  setVolume(volume: number): void;
   setCurrentTrack(track: PlayableTrack): void;
   seekNextTrack(): void;
   setAudioProgressDisplay(currentTime: number, duration: number): void;
@@ -37,10 +39,17 @@ class AudioElm extends React.Component<Props> {
       linkElm.setAttribute('href', fontSrc);
       document.head.appendChild(linkElm);
     });
+
+    this.props.setVolume(0.8);
   }
   componentDidUpdate(prevProps: Props) {
     const { audioElm } = this;
-    const { track, seekPercent, seekSeconds, seekDelta } = this.props.player;
+    const { volume, track, seekPercent, seekSeconds, seekDelta } = this.props.player;
+
+    if (volume !== undefined && volume !== prevProps.player.volume) {
+      audioElm.volume = volume;
+    }
+
     if (track && track !== prevProps.player.track) {
       audioElm.src = track.audioSrc;
     }
@@ -54,7 +63,6 @@ class AudioElm extends React.Component<Props> {
     } else if (seekDelta) {
       newTime = audioElm.currentTime + seekDelta;
     }
-
     if (newTime !== undefined) {
       if (!isNaN(newTime)) {
         audioElm.currentTime = newTime;
@@ -96,6 +104,7 @@ export default connect(
   }),
   {
     resolveSeek,
+    setVolume,
     setCurrentTrack,
     seekNextTrack,
     setAudioProgressDisplay,

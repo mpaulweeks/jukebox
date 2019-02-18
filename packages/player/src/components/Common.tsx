@@ -39,6 +39,29 @@ export const FlexStretchMixin = `
   flex-grow: 1;
 `;
 
+export const IconMixin = `
+  font-size: 1.5em;
+  height: 2em;
+  width: 2em;
+
+  & i {
+    font-size: 1.5em;
+  }
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: no-wrap;
+`;
+
+export const getClickPercent = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const clicked: any = evt.currentTarget;
+  const rect = clicked.getBoundingClientRect();
+  const offset = evt.pageX - rect.left;
+  return offset / (rect.right - rect.left);
+};
+
 export const MainViewContainer = styled.div`
   ${FlexStretchMixin}
 `;
