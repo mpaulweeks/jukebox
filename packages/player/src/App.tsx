@@ -264,7 +264,7 @@ class App extends React.Component<Props, State> {
     const { data, player, ui } = this.props;
     const { colorScheme } = this.state;
     if (!data.manager) {
-      return <h3> loading, please wait... </h3>;
+      return null;
     }
 
     const { webConfig } = this;
