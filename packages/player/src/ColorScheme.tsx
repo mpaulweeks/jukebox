@@ -1,11 +1,4 @@
-import { string } from "prop-types";
-
-export interface ColorScheme {
-  foreground: string;
-  background: string;
-  highlightForeground: string;
-  highlightBackground: string;
-}
+import { ColorScheme, WebConfig } from 'jukebox-utils'
 
 interface SchemeLookup {
   [key: string]: ColorScheme;
@@ -27,6 +20,11 @@ const lookup: SchemeLookup = {
 };
 lookup.default = lookup.light;
 
-export const getColorScheme = (colorScheme?: string): ColorScheme => {
-  return (colorScheme && lookup[colorScheme]) || lookup['default'];
+export const getColorScheme = (webConfig: WebConfig): ColorScheme => {
+  const { colorScheme, customColors } = webConfig;
+  const scheme = (colorScheme && lookup[colorScheme]) || lookup['default'];
+  return {
+    ...scheme,
+    ...(customColors || {}),
+  };
 };

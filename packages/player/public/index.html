@@ -24,7 +24,13 @@
   <script tyoe="text/javascript">
     document.addEventListener("DOMContentLoaded", function () {
       window.createJukebox({
-        only_jukebox: true,
+        onlyJukebox: true,
+        customColors: {
+          foreground: 'black',
+          background: 'lightblue',
+          highlightForeground: 'black',
+          highlightBackground: 'yellow',
+        },
       });
     });
   </script>

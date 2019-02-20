@@ -29,16 +29,18 @@ function readConfigArray(
 
 export const getWebConfig = (codeConfig?: DefaultWebConfig): WebConfig => {
   const defaults: DefaultWebConfig = {
-    playlist: undefined,
-    playlist_only: false,
-    only_jukebox: false,
-    color_scheme: undefined,
+    playlists: undefined,
+    hideAlbums: false,
+    onlyJukebox: false,
+    colorScheme: undefined,
+    customColors: undefined,
     ...codeConfig,
   };
   return {
-    PlaylistWhitelist: readConfigArray('playlist', defaults),
-    HideAggregateLists: !!readConfig('playlist_only', defaults),
-    OnlyJukebox: !!readConfig('only_jukebox', defaults),
-    ColorScheme: readConfig('color_scheme', defaults),
+    playlists: readConfigArray('playlists', defaults),
+    hideAlbums: !!readConfig('hideAlbums', defaults),
+    onlyJukebox: !!readConfig('onlyJukebox', defaults),
+    colorScheme: readConfig('colorScheme', defaults),
+    customColors: defaults.customColors,
   };
 };

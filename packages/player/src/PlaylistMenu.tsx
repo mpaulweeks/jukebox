@@ -35,7 +35,7 @@ class PlaylistMenu extends React.Component<Props> {
     }
     return (
       <SidebarContainer>
-        {!manager.webConfig.HideAggregateLists && (
+        {!manager.webConfig.hideAlbums && (
           <div>
             <PlaylistName
               onClick={() => setCurrentTrackList(manager.allSongs)}

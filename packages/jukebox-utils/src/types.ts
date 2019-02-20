@@ -83,7 +83,7 @@ export interface CollectionData {
 }
 
 export interface DataLoaderWithDefault<Data, Loader> {
-  new (data: Data): Loader;
+  new(data: Data): Loader;
   default(): Loader;
 }
 
@@ -95,15 +95,23 @@ export interface PlayerSettings {
   repeat: boolean;
   shuffle: boolean;
 }
+export interface ColorScheme {
+  foreground: string;
+  background: string;
+  highlightForeground: string;
+  highlightBackground: string;
+}
 export interface DefaultWebConfig {
-  playlist?: undefined | string[];
-  playlist_only?: boolean;
-  only_jukebox?: boolean;
-  color_scheme?: string;
+  playlists?: undefined | string[];
+  hideAlbums?: boolean;
+  onlyJukebox?: boolean;
+  colorScheme?: string;
+  customColors?: ColorScheme;
 }
 export interface WebConfig {
-  PlaylistWhitelist: undefined | string[];
-  HideAggregateLists: boolean;
-  OnlyJukebox: boolean;
-  ColorScheme: string;
+  playlists: undefined | string[];
+  hideAlbums: boolean;
+  onlyJukebox: boolean;
+  colorScheme: string;
+  customColors?: ColorScheme;
 }

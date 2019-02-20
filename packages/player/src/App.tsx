@@ -7,6 +7,7 @@ import {
   DefaultWebConfig,
   getWebConfig,
   Logger,
+  ColorScheme,
 } from 'jukebox-utils';
 import TrackListView from './TrackListView';
 import CurrentTrackView from './CurrentTrackView';
@@ -16,7 +17,7 @@ import BrowserView from './BrowserView';
 import { CollapseRoot, CollapseBottom, CollapseSidebar } from './components/Collapse';
 import { CollapseAble, FlexStretchMixin, Box } from './components/Common';
 import PlaybackControls from './components/PlaybackControls';
-import { ColorScheme, getColorScheme } from './ColorScheme';
+import { getColorScheme } from './ColorScheme';
 import {
   setManager,
   setVolume,
@@ -171,7 +172,7 @@ interface State {
 class App extends React.Component<Props, State> {
   webConfig = getWebConfig(this.props.codeConfig);
   state: State = {
-    colorScheme: getColorScheme(this.webConfig.ColorScheme),
+    colorScheme: getColorScheme(this.webConfig),
   };
 
   componentDidMount() {
@@ -195,7 +196,7 @@ class App extends React.Component<Props, State> {
     Logger.log('JUKEBOX is ready');
 
     // read config
-    if (this.webConfig.OnlyJukebox) {
+    if (this.webConfig.onlyJukebox) {
       this.props.toggleCollapseRoot();
     }
 
@@ -207,7 +208,7 @@ class App extends React.Component<Props, State> {
           case 'Escape':
             if (this.props.ui.showPopupAbout) {
               this.props.togglePopupAbout();
-            } else if (!this.webConfig.OnlyJukebox) {
+            } else if (!this.webConfig.onlyJukebox) {
               this.props.toggleCollapseRoot();
             }
             break;
@@ -276,7 +277,7 @@ class App extends React.Component<Props, State> {
             <HeaderBoxWrapper isCollapsed={ui.collapseHeader}>
               <Box>
                 <CurrentTrackView />
-                {webConfig.OnlyJukebox ? (
+                {webConfig.onlyJukebox ? (
                   <CollapseBottom
                     onClick={this.props.toggleCollapseHeader}
                     isCollapsed={ui.collapseHeader}
@@ -295,7 +296,7 @@ class App extends React.Component<Props, State> {
               <SidebarBoxWrapper isCollapsed={ui.collapseSidebar}>
                 <Box>
                   <PlaylistMenu />
-                  {webConfig.OnlyJukebox && (
+                  {webConfig.onlyJukebox && (
                     <CollapseSidebar
                       onClick={this.props.toggleCollapseSidebar}
                       isCollapsed={ui.collapseSidebar}

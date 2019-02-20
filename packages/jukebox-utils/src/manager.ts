@@ -29,12 +29,10 @@ export class Manager {
     this.collection = collection;
     this.infoLookup = infoLookup;
 
-    const { PlaylistWhitelist } = webConfig;
-
     let playlistTracks = {};
     const unsortedPlaylists = Object.keys(collection.data.playlists)
       .filter(key =>
-        PlaylistWhitelist ? PlaylistWhitelist.includes(key) : true,
+        webConfig.playlists ? webConfig.playlists.includes(key) : true,
       )
       .map(key => {
         const data = collection.data.playlists[key];
@@ -53,7 +51,7 @@ export class Manager {
     const allSongs = Playlist.fromLookup(infoLookup, {
       name: 'All Songs',
       trackIds: Object.keys(
-        PlaylistWhitelist ? playlistTracks : collection.data.tracks,
+        webConfig.playlists ? playlistTracks : collection.data.tracks,
       ),
     });
 
