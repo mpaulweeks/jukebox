@@ -5,6 +5,7 @@ import PlaceholderImage from './placeholder.png';
 import { connect } from 'react-redux';
 import { PlayerState } from './redux/reducers/player';
 import { MasterState } from './redux/reducers';
+import { FlexStretchMixin } from './components/Common';
 
 const TrackContainer = styled.div`
   width: 100%;
@@ -21,11 +22,14 @@ const TrackContainer = styled.div`
 `;
 
 const AlbumContainer = styled.div`
+  ${FlexStretchMixin}
+  justify-content: flex-start;
+  align-items: flex-start;
   flex-grow: 0;
 `;
 const AlbumCover = styled.img`
   width: auto;
-  height: 100%;
+  height: 190px;
 
   @media (max-width: 600px){
     width: 100%;

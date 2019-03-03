@@ -108,16 +108,11 @@ const BoxWrapper = styled(CollapseAble)`
 `;
 const HeaderBoxWrapper = styled(BoxWrapper)`
   padding-bottom: 0px;
-  height: 200px;
   ${props =>
     props.isCollapsed &&
     `
     margin-top: calc(-200px - var(--jukebox-frame-gap));
   `}
-
-  @media (max-width: 600px) {
-    height: auto;
-  }
 `;
 const FooterBoxWrapper = styled(BoxWrapper)`
   padding-top: 0px;
