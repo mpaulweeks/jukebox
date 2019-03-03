@@ -13,6 +13,12 @@ const SidebarContainer = styled.div`
   ${FlexStretchMixin}
 `;
 
+const AggregateList = styled.div`
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--jukebox-foreground);
+  margin-bottom: 5px;
+`;
+
 const CustomPlaylistList = styled.div`
   ${ScrollableMixin}
 `;
@@ -40,7 +46,7 @@ class PlaylistMenu extends React.Component<Props> {
     return (
       <SidebarContainer>
         {!manager.webConfig.hideAlbums && (
-          <div>
+          <AggregateList>
             <PlaylistName
               onClick={() => setCurrentTrackList(manager.allSongs)}
               highlight={manager.allSongs === player.trackList}
@@ -59,8 +65,7 @@ class PlaylistMenu extends React.Component<Props> {
             >
               {manager.browseArtists.name}
             </PlaylistName>
-            <hr />
-          </div>
+          </AggregateList>
         )}
         <CustomPlaylistList>
           {manager.playlists.map((pl, index) => (
