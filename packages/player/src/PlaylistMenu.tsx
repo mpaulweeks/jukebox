@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PlayableTrackList, Manager, PlaylistBrowser } from 'jukebox-utils';
-import { FlexStretchMixin, CanHighlight, HoverMixin } from './components/Common';
+import { FlexStretchMixin, CanHighlight, HoverMixin, ScrollableMixin } from './components/Common';
 
 import { setCurrentTrackList, setCurrentBrowser } from './redux/actions';
 import { PlayerState } from './redux/reducers/player';
@@ -11,6 +11,10 @@ import { DataState } from './redux/reducers/data';
 
 const SidebarContainer = styled.div`
   ${FlexStretchMixin}
+`;
+
+const CustomPlaylistList = styled.div`
+  ${ScrollableMixin}
 `;
 
 const PlaylistName = styled(CanHighlight)`
@@ -58,15 +62,17 @@ class PlaylistMenu extends React.Component<Props> {
             <hr />
           </div>
         )}
-        {manager.playlists.map((pl, index) => (
-          <PlaylistName
-            key={`playlist-name-${index}`}
-            onClick={() => setCurrentTrackList(pl)}
-            highlight={pl === player.trackList}
-          >
-            {pl.name}
-          </PlaylistName>
-        ))}
+        <CustomPlaylistList>
+          {manager.playlists.map((pl, index) => (
+            <PlaylistName
+              key={`playlist-name-${index}`}
+              onClick={() => setCurrentTrackList(pl)}
+              highlight={pl === player.trackList}
+            >
+              {pl.name}
+            </PlaylistName>
+          ))}
+        </CustomPlaylistList>
       </SidebarContainer>
     );
   }
