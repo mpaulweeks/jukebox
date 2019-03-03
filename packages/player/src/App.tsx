@@ -169,11 +169,16 @@ interface State {
   colorScheme: ColorScheme;
 }
 
+interface KeysHeld {
+  [code: string]: boolean;
+};
+
 class App extends React.Component<Props, State> {
   webConfig = getWebConfig(this.props.codeConfig);
   state: State = {
     colorScheme: getColorScheme(this.webConfig),
   };
+  keysHeld: KeysHeld = {};
 
   componentDidMount() {
     // debuging
@@ -201,51 +206,68 @@ class App extends React.Component<Props, State> {
     }
 
     // setup listeners to only work when its fullscreen
+    document.addEventListener('keyup', evt => {
+      delete this.keysHeld[evt.code];
+    });
     document.addEventListener('keydown', evt => {
-      if (!this.props.ui.collapseRoot) {
-        let match = true;
-        switch (evt.code) {
-          case 'Escape':
-            if (this.props.ui.showPopupAbout) {
-              this.props.togglePopupAbout();
-            } else if (!this.webConfig.onlyJukebox) {
-              this.props.toggleCollapseRoot();
-            }
-            break;
-          case 'Equal':
-            this.props.setVolume(this.props.player.volume + 0.1);
-            break;
-          case 'Minus':
-            this.props.setVolume(this.props.player.volume - 0.1);
-            break;
-          case 'ArrowLeft':
-            this.props.seekPrevTrack();
-            break;
-          case 'ArrowRight':
-            this.props.seekNextTrack();
-            break;
-          case 'Comma':
-            this.props.setSeekByDelta(-10);
-            break;
-          case 'Period':
-            this.props.setSeekByDelta(10);
-            break;
-          case 'Space':
-            this.props.toggleIsPlaying();
-            break;
-          case 'KeyS':
-            this.props.toggleIsShuffle();
-            break;
-          case 'KeyR':
-            this.props.toggleIsRepeat();
-            break;
-          default:
-            Logger.log(evt);
-            match = false;
-        }
-        if (match) {
-          evt.preventDefault();
-        }
+      const { keysHeld } = this;
+      keysHeld[evt.code] = true;
+      if (this.props.ui.collapseRoot) {
+        return;
+      }
+      const ignoreKeys = [
+        'ControlLeft',
+        'ControlRight',
+        'MetaLeft',
+        'MetaRight',
+        'AltLeft',
+        'AltRight',
+      ];
+      if (ignoreKeys.some(code => keysHeld[code])) {
+        return;
+      }
+      let match = true;
+      switch (evt.code) {
+        case 'Escape':
+          if (this.props.ui.showPopupAbout) {
+            this.props.togglePopupAbout();
+          } else if (!this.webConfig.onlyJukebox) {
+            this.props.toggleCollapseRoot();
+          }
+          break;
+        case 'Equal':
+          this.props.setVolume(this.props.player.volume + 0.1);
+          break;
+        case 'Minus':
+          this.props.setVolume(this.props.player.volume - 0.1);
+          break;
+        case 'ArrowLeft':
+          this.props.seekPrevTrack();
+          break;
+        case 'ArrowRight':
+          this.props.seekNextTrack();
+          break;
+        case 'Comma':
+          this.props.setSeekByDelta(-10);
+          break;
+        case 'Period':
+          this.props.setSeekByDelta(10);
+          break;
+        case 'Space':
+          this.props.toggleIsPlaying();
+          break;
+        case 'KeyS':
+          this.props.toggleIsShuffle();
+          break;
+        case 'KeyR':
+          this.props.toggleIsRepeat();
+          break;
+        default:
+          Logger.log(evt);
+          match = false;
+      }
+      if (match) {
+        evt.preventDefault();
       }
     });
 
