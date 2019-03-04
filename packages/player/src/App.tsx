@@ -113,7 +113,7 @@ const HeaderBoxWrapper = styled(BoxWrapper)`
   ${props =>
     props.isCollapsed &&
     `
-    margin-top: calc(-200px - var(--jukebox-frame-gap));
+    margin-top: calc(-212px - var(--jukebox-frame-gap));
   `}
 `;
 const FooterBoxWrapper = styled(BoxWrapper)`

@@ -27,13 +27,13 @@ online music player / backup
 
 ```js
 createJukebox({
-  // playlist: '2016',
-  // color_scheme: 'dark',
+  // optional args
+  playlist: '2016',
+  colorScheme: 'dark',
 }).then(jukebox => {
-  const elm = document.getElementById('jukebox-open');
-  elm.addEventListener('click', jukebox.open);
+  jukebox.open();
 });
 
-// close it via console. calling createJukebox returns the same promise
+// close it via console. calling createJukebox again returns the same promise
 (await createJukebox()).close();
 ```
