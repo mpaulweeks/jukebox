@@ -125,6 +125,7 @@ export const ResetMixin = styled.div`
 
 export const Box = styled.div`
   position: relative;
+  max-height: 100%;
 
   ${FlexStretchMixin}
 

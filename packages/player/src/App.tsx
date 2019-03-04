@@ -87,6 +87,7 @@ const RootInner = styled('div')`
   ${FlexStretchMixin}
 
   font-size: 16px;
+  max-height: 100%;
 
   background-color: var(--jukebox-background);
   color: var(--jukebox-foreground);
@@ -96,6 +97,7 @@ const Header = styled.div``;
 const BodyContainer = styled.div`
   ${FlexStretchMixin}
   flex-direction: row;
+  overflow: hidden;
 
   @media (max-width: 600px) {
     flex-direction: column;

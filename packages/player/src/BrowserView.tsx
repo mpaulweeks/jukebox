@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { PlayableTrackList, PlaylistBrowser } from 'jukebox-utils';
+import { PlayableTrackList } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
 import { MainViewScrollable, MainViewContainer, MainTitle } from './components/Common';
 import { connect } from 'react-redux';
@@ -8,7 +8,9 @@ import { setCurrentTrackList } from './redux/actions';
 import { PlayerState } from './redux/reducers/player';
 import { MasterState } from './redux/reducers';
 
-const BrowserContainer = styled(MainViewContainer)``;
+const BrowserContainer = styled(MainViewContainer)`
+  max-height: 100%;
+`;
 
 const TrackListsContainer = styled(MainViewScrollable)`
   display: flex;

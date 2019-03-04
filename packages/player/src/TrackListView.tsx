@@ -8,7 +8,9 @@ import { PlayerState } from './redux/reducers/player';
 import { setCurrentTrack } from './redux/actions';
 import { connect } from 'react-redux';
 
-const TrackListContainer = styled(MainViewContainer)``;
+const TrackListContainer = styled(MainViewContainer)`
+  max-height: 100%;
+`;
 
 const TracksTableContainer = styled(MainViewScrollable)``;
 
