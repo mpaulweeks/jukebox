@@ -100,7 +100,7 @@ class TrackListView extends React.Component<Props> {
               {trackList.tracks.map((track, row) => {
                 const columns = trimColumns(trackList, [
                   <TrackImage src={track.imageSrc || PlaceholderImage} />,
-                  track.title,
+                  track.title || `(${track.album})`,
                   truncate(track.artist, 20),
                   track.durationDisplay,
                   track.album,
