@@ -54,6 +54,7 @@ const RootContainer = styled(CollapseAble) <{ colorScheme: ColorScheme }>`
   --jukebox-border-width: 1px;
   --jukebox-frame-gap: 10px;
   --jukebox-tab-size: 50px;
+  --jukebox-sidebar-width: 200px;
 
   ${FlexStretchMixin}
 
@@ -113,7 +114,7 @@ const HeaderBoxWrapper = styled(BoxWrapper)`
   ${props =>
     props.isCollapsed &&
     `
-    margin-top: calc(-212px - var(--jukebox-frame-gap));
+    margin-top: calc(0px - (var(--jukebox-sidebar-width) + 2 * (var(--jukebox-frame-gap) + var(--jukebox-border-width))));
   `}
 `;
 const FooterBoxWrapper = styled(BoxWrapper)`
@@ -121,13 +122,13 @@ const FooterBoxWrapper = styled(BoxWrapper)`
 `;
 const SidebarBoxWrapper = styled(BoxWrapper)`
   padding-right: 0px;
-  width: 200px;
-  min-width: 200px;
-  max-width: 200px;
+  width: var(--jukebox-sidebar-width);
+  min-width: var(--jukebox-sidebar-width);
+  max-width: var(--jukebox-sidebar-width);
   ${props =>
     props.isCollapsed &&
     `
-    margin-left: calc(-200px - var(--jukebox-frame-gap));
+    margin-left: calc(0px - (var(--jukebox-sidebar-width) + var(--jukebox-frame-gap)));
   `}
   @media (max-width: 600px) {
     padding-right: var(--jukebox-frame-gap);

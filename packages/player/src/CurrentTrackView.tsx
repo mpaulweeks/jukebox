@@ -29,7 +29,7 @@ const AlbumContainer = styled.div`
 `;
 const AlbumCover = styled.img`
   width: auto;
-  height: 190px;
+  height: calc(var(--jukebox-sidebar-width) - var(--jukebox-frame-gap));
 
   @media (max-width: 600px){
     width: 100%;
