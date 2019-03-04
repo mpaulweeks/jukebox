@@ -19,3 +19,11 @@
 - add transitions to background-position on bar
 - fade animation on button press OR keyboard press
 - Audio.onload fills song info with loading dialogue
+
+## radio mode
+
+- obscure playlist views, only offer playback controls
+- make a few preset channels based on large aggregate playlists:
+  - barbershop
+  - chiptune
+  - classical
