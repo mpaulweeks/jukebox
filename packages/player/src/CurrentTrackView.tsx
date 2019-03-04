@@ -90,7 +90,7 @@ class TrackView extends React.Component<Props> {
           <AlbumCover src={track.imageSrc || PlaceholderImage} />
         </AlbumContainer>
         <DetailsContainer>
-          <TrackTitle>{track.title}</TrackTitle>
+          <TrackTitle>{track.title || `(${track.album})`}</TrackTitle>
           <TrackArtist>{truncate(track.artist, 80)}</TrackArtist>
           <TrackAlbum>{track.album}</TrackAlbum>
         </DetailsContainer>
