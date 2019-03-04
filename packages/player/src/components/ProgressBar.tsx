@@ -38,8 +38,8 @@ const ProgressBar: any = styled.div.attrs((props: BarProps) => ({
   box-sizing: border-box;
   background: repeating-linear-gradient(
     135deg,
-    transparent,
-    transparent 10px,
+    var(--jukebox-highlight-foreground),
+    var(--jukebox-highlight-foreground) 10px,
     var(--jukebox-highlight-background) 10px,
     var(--jukebox-highlight-background) 20px
   );
