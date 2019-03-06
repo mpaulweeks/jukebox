@@ -203,7 +203,10 @@ class App extends React.Component<Props, State> {
       this.props.toggleCollapseRoot();
     }
 
-    // setup listeners to only work when its fullscreen
+    window.addEventListener('focus', evt => {
+      // tabbing back over, forget any held keys
+      this.keysHeld = {};
+    });
     document.addEventListener('keyup', evt => {
       delete this.keysHeld[evt.code];
     });
@@ -211,6 +214,7 @@ class App extends React.Component<Props, State> {
       const { keysHeld } = this;
       keysHeld[evt.code] = true;
       if (this.props.ui.collapseRoot) {
+        // if not fullscreen, ignore any pressed keys
         return;
       }
       const ignoreKeys = [
