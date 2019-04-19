@@ -11,6 +11,7 @@ import { DataState } from './redux/reducers/data';
 
 const SidebarContainer = styled.div`
   ${FlexStretchMixin}
+  ${ScrollableMixin}
 `;
 
 const AggregateList = styled.div`
