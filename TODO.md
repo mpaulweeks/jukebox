@@ -9,6 +9,14 @@
 
 ## p1
 
+- fullscreen view for album art
+  - shrink middle section? keep player on bottom
+- search function for songs within playlist
+  - opens popup where you type search query
+  - on input change, search all tracks
+  - split input by space, make sure all words appear in track title + artist + album
+  - show links to matching tracks and their playlist
+  - clicking link closes popup, loads that track + playlist
 - css reset
 - crossfade next track
 - check logic for updating existing playlists
