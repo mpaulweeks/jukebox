@@ -1,4 +1,4 @@
-import { SET_AUDIO_PROGRESS_DISPLAY, TOGGLE_COLLAPSE_HEADER, TOGGLE_COLLAPSE_ROOT, TOGGLE_COLLAPSE_SIDEBAR, TOGGLE_POPUP_ABOUT, TOGGLE_POPUP_IMAGE } from '../actionTypes';
+import { SET_AUDIO_PROGRESS_DISPLAY, TOGGLE_COLLAPSE_HEADER, TOGGLE_COLLAPSE_ROOT, TOGGLE_COLLAPSE_SIDEBAR, TOGGLE_POPUP_ABOUT, TOGGLE_POPUP_IMAGE, TOGGLE_POPUP_SEARCH } from '../actionTypes';
 
 export const setAudioProgressDisplay = (currentTime: number, duration: number) => ({
   type: SET_AUDIO_PROGRESS_DISPLAY,
@@ -21,4 +21,7 @@ export const togglePopupAbout = () => ({
 });
 export const togglePopupImage = () => ({
   type: TOGGLE_POPUP_IMAGE,
+});
+export const togglePopupSearch = () => ({
+  type: TOGGLE_POPUP_SEARCH,
 });

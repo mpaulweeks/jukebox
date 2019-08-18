@@ -84,4 +84,11 @@ export class Playlist implements PlayableTrackList {
   prevTrack(settings: PlayerSettings, current: PlayableTrack): PlayableTrack {
     return this.jumpToTrack(settings, current, -1);
   }
+
+  search(query: string): SearchResult[] {
+    return this.tracks.map(t => {
+      track: t,
+      score: t.matchesSearch(query),
+    }).filter(sr => sr.score > 0);
+  }
 }

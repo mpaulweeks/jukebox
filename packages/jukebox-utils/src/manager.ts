@@ -78,4 +78,11 @@ export class Manager {
       trackIdsByArtist,
     );
   }
+  search(query: string): SearchResult[] {
+    const found = [];
+    playlists.forEach(pl => {
+      found.concat(...pl.search(query))
+    });
+    return found;
+  }
 }

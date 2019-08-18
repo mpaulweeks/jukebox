@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { PlayableTrackList, Manager, PlaylistBrowser } from 'jukebox-utils';
 import { FlexStretchMixin, CanHighlight, HoverMixin, ScrollableMixin } from './components/Common';
 
-import { setCurrentTrackList, setCurrentBrowser } from './redux/actions';
+import { setCurrentTrackList, setCurrentBrowser, togglePopupSearch } from './redux/actions';
 import { PlayerState } from './redux/reducers/player';
 import { connect } from 'react-redux';
 import { MasterState } from './redux/reducers';
@@ -33,13 +33,14 @@ const PlaylistName = styled(CanHighlight)`
 interface Props {
   setCurrentTrackList(trackList: PlayableTrackList): void;
   setCurrentBrowser(browser: PlaylistBrowser): void;
+  togglePopupSearch(): void;
   data: DataState;
   player: PlayerState;
 }
 
 class PlaylistMenu extends React.Component<Props> {
   render() {
-    const { data, player, setCurrentTrackList, setCurrentBrowser } = this.props;
+    const { data, player, setCurrentTrackList, setCurrentBrowser, togglePopupSearch } = this.props;
     const { manager } = data;
     if (!manager) {
       throw new Error('PlaylistMenu should not be rendered in this state!');
@@ -48,6 +49,9 @@ class PlaylistMenu extends React.Component<Props> {
       <SidebarContainer>
         {!manager.webConfig.hideAlbums && (
           <AggregateList>
+            <PlaylistName onClick={togglePopupSearch}>
+              Search
+            </PlaylistName>
             <PlaylistName
               onClick={() => setCurrentTrackList(manager.allSongs)}
               highlight={manager.allSongs === player.trackList}
@@ -92,5 +96,6 @@ export default connect(
   {
     setCurrentTrackList,
     setCurrentBrowser,
+    togglePopupSearch,
   },
 )(PlaylistMenu);

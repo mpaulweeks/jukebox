@@ -1,4 +1,4 @@
-import { SET_AUDIO_PROGRESS_DISPLAY, TOGGLE_COLLAPSE_HEADER, TOGGLE_COLLAPSE_ROOT, TOGGLE_COLLAPSE_SIDEBAR, TOGGLE_POPUP_ABOUT, TOGGLE_POPUP_IMAGE } from '../actionTypes';
+import { SET_AUDIO_PROGRESS_DISPLAY, TOGGLE_COLLAPSE_HEADER, TOGGLE_COLLAPSE_ROOT, TOGGLE_COLLAPSE_SIDEBAR, TOGGLE_POPUP_ABOUT, TOGGLE_POPUP_IMAGE, TOGGLE_POPUP_SEARCH } from '../actionTypes';
 
 export interface UiState {
   progressPercent: number;
@@ -9,6 +9,7 @@ export interface UiState {
   collapseSidebar: boolean;
   showPopupAbout: boolean;
   showPopupImage: boolean;
+  showPopupSearch: boolean;
 }
 
 interface UiAction {
@@ -28,6 +29,7 @@ const initialState: UiState = {
   collapseSidebar: false,
   showPopupAbout: false,
   showPopupImage: false,
+  showPopupSearch: false,
 };
 
 export default function (state = initialState, action: UiAction) {
@@ -69,6 +71,12 @@ export default function (state = initialState, action: UiAction) {
       return {
         ...state,
         showPopupImage: !state.showPopupImage,
+      };
+    }
+    case TOGGLE_POPUP_SEARCH: {
+      return {
+        ...state,
+        showPopupSearch: !state.showPopupSearch,
       };
     }
     default:

@@ -43,6 +43,7 @@ import { UiState } from './redux/reducers/ui';
 import { DataState } from './redux/reducers/data';
 import PopupAbout from './components/PopupAbout';
 import PopupImage from './components/PopupImage';
+import PopupSearch from './components/PopupSearch';
 import ProgressBar from './components/ProgressBar';
 
 const RootContainer = styled(CollapseAble) <{ colorScheme: ColorScheme }>`
@@ -214,8 +215,8 @@ class App extends React.Component<Props, State> {
     document.addEventListener('keydown', evt => {
       const { keysHeld } = this;
       keysHeld[evt.code] = true;
-      if (this.props.ui.collapseRoot) {
-        // if not fullscreen, ignore any pressed keys
+      if (this.props.ui.collapseRoot || this.props.ui.showPopupSearch) {
+        // if not fullscreen OR search is open, ignore any pressed keys
         return;
       }
       const ignoreKeys = [
@@ -350,6 +351,7 @@ class App extends React.Component<Props, State> {
           </Header>
         </RootInner>
         <PopupImage />
+        <PopupSearch />
         <PopupAbout />
       </RootContainer>
     );
