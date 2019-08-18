@@ -1,2 +1,3 @@
 
-export class SearchResult implements PlayableTrack {
+export class SearchResult {
+}

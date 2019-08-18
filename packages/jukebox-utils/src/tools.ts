@@ -42,3 +42,21 @@ export function truncate(str: string, limit: number) {
   }
   return str.substring(0, limit - 4) + ' ...';
 }
+
+export function sortByFunc<E, T>(
+  array: E[],
+  callback: (elm: E) => T,
+): void {
+  function compare(a: E, b: E) {
+    const ka: T = callback(a);
+    const kb: T = callback(b);
+    if (ka < kb) {
+      return -1;
+    }
+    if (kb < ka) {
+      return 1;
+    }
+    return 0;
+  }
+  array.sort(compare);
+}

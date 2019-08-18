@@ -3,7 +3,8 @@ import { Collection } from './collection';
 import { fetchCollection, fetchInfoLookup } from './fetch';
 import { InfoLookup } from './infoLookup';
 import { Playlist } from './playlist';
-import { PlaylistBrowserData, WebConfig } from './types';
+import { sortByFunc } from './tools';
+import { PlaylistBrowserData, WebConfig, SearchResult } from './types';
 
 export class Manager {
   static async fetch(webConfig: WebConfig): Promise<Manager> {
@@ -78,11 +79,22 @@ export class Manager {
       trackIdsByArtist,
     );
   }
-  search(query: string): SearchResult[] {
-    const found = [];
-    playlists.forEach(pl => {
-      found.concat(...pl.search(query))
+  public search(query: string): SearchResult[] {
+    const found: SearchResult[] = [];
+    const qParts = query.toLowerCase().split(' ');
+    this.playlists.forEach(pl => {
+      const results = pl.tracks.map(t => {
+        const key = `${t.album} ${t.artist} ${t.title}`.toLowerCase();
+        const score = qParts.filter(qp => key.includes(qp)).length;
+        return {
+          playlist: pl,
+          track: t,
+          score: score,
+        };
+      }).filter(sr => sr.score > 0);
+      found.concat(...results);
     });
-    return found;
+    sortByFunc(found, sr => sr.score);
+    return found.reverse();
   }
 }

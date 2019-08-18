@@ -44,6 +44,12 @@ export interface PlayableTrackList {
   prevTrack(PlayerSettings, PlayableTrack): PlayableTrack;
 }
 
+export interface SearchResult {
+  playlist: PlayableTrackList,
+  track: PlayableTrack,
+  score: number,
+}
+
 export interface PlaylistBrowserData {
   // album/artist to trackIds
   [key: string]: string[];
