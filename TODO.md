@@ -9,8 +9,7 @@
 
 ## p1
 
-- fullscreen view for album art
-  - shrink middle section? keep player on bottom
+- fullscreen view for album art doesn't cover playback?
 - search function for songs within playlist
   - opens popup where you type search query
   - on input change, search all tracks

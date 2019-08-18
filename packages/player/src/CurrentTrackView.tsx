@@ -5,6 +5,7 @@ import PlaceholderImage from './placeholder.png';
 import { connect } from 'react-redux';
 import { PlayerState } from './redux/reducers/player';
 import { MasterState } from './redux/reducers';
+import { togglePopupImage } from './redux/actions';
 import { FlexStretchMixin } from './components/Common';
 
 const TrackContainer = styled.div`
@@ -35,6 +36,9 @@ const AlbumCover = styled.img`
     width: 100%;
     height: auto;
   }
+`;
+const AlbumCoverClickable = styled(AlbumCover)`
+  cursor: pointer;
 `;
 
 const DetailsContainer = styled.div`
@@ -69,6 +73,7 @@ const TrackAlbum = styled(DetailsRow)`
 
 interface Props {
   player: PlayerState;
+  togglePopupImage(): void;
 }
 
 class TrackView extends React.Component<Props> {
@@ -87,7 +92,7 @@ class TrackView extends React.Component<Props> {
     return (
       <TrackContainer>
         <AlbumContainer>
-          <AlbumCover src={track.imageSrc || PlaceholderImage} />
+          <AlbumCoverClickable src={track.imageSrc || PlaceholderImage} onClick={this.props.togglePopupImage} />
         </AlbumContainer>
         <DetailsContainer>
           <TrackTitle>{track.title || `(${track.album})`}</TrackTitle>
@@ -102,4 +107,6 @@ class TrackView extends React.Component<Props> {
 const mapStateToProps = (state: MasterState) => ({
   player: state.player,
 });
-export default connect(mapStateToProps)(TrackView);
+export default connect(mapStateToProps, {
+  togglePopupImage,
+})(TrackView);

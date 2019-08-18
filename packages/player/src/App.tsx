@@ -42,6 +42,7 @@ import AudioElm from './components/AudioElm';
 import { UiState } from './redux/reducers/ui';
 import { DataState } from './redux/reducers/data';
 import PopupAbout from './components/PopupAbout';
+import PopupImage from './components/PopupImage';
 import ProgressBar from './components/ProgressBar';
 
 const RootContainer = styled(CollapseAble) <{ colorScheme: ColorScheme }>`
@@ -348,6 +349,7 @@ class App extends React.Component<Props, State> {
             </FooterBoxWrapper>
           </Header>
         </RootInner>
+        <PopupImage />
         <PopupAbout />
       </RootContainer>
     );
