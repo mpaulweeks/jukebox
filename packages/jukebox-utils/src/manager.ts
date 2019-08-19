@@ -92,7 +92,7 @@ export class Manager {
           score: score,
         };
       }).filter(sr => sr.score > 0);
-      found.concat(...results);
+      found.push(...results);
     });
     sortByFunc(found, sr => sr.score);
     return found.reverse();
