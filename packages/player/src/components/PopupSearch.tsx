@@ -47,7 +47,7 @@ class PopupSearch extends React.Component<Props, State> {
   onChange() {
     const { manager } = this.props.data;
     const query = this.input && this.input.value;
-    if (!manager) {
+    if (!manager || !query) {
       return;
     }
     const found = manager.search(query);
