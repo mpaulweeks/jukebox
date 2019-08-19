@@ -1,12 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PlayableTrackList, PlayableTrack, SearchResult } from 'jukebox-utils';
+import { PlayableTrackList, PlayableTrack, SearchResult, truncate } from 'jukebox-utils';
 import { DataState } from '../redux/reducers/data';
 import { UiState } from '../redux/reducers/ui';
 import { MasterState } from '../redux/reducers';
 import { connect } from 'react-redux';
+import { TrackListContainer, TracksTableContainer, TracksTable, TrackRow, TrackImage, TrackInfo, trimColumns } from './TrackTable';
+import PlaceholderImage from '../placeholder.png';
 import { setCurrentTrackList, setCurrentTrack, togglePopupSearch } from '../redux/actions';
 import { PopupContainer, PopupInner, PopupTitle } from './Popup';
+
+const SearchContainerOuter = styled(PopupContainer)`
+  justify-content: flex-start;
+`;
+const SearchContainerInner = styled(PopupInner)`
+  width: 90%;
+  height: 90%;
+  margin-top: 5vh;
+`;
 
 const SearchInput = styled.input`
   font-size: 2rem;
@@ -36,7 +47,7 @@ class PopupSearch extends React.Component<Props, State> {
   onChange() {
     const { manager } = this.props.data;
     const query = this.input && this.input.value;
-    if (!manager || !query || query.length < 3) {
+    if (!manager) {
       return;
     }
     const found = manager.search(query);
@@ -51,20 +62,61 @@ class PopupSearch extends React.Component<Props, State> {
   }
   render() {
     const { results } = this.state;
+    const columnHeaders = [
+      '',
+      'title',
+      'artist',
+      'length',
+      'playlist',
+    ]
     return this.props.ui.showPopupSearch ? (
-      <PopupContainer onClick={this.props.togglePopupSearch}>
-        <PopupInner onClick={e => e.stopPropagation()}>
+      <SearchContainerOuter onClick={this.props.togglePopupSearch}>
+        <SearchContainerInner onClick={e => e.stopPropagation()}>
           <PopupTitle>
             Search
           </PopupTitle>
           <SearchInput type="text" ref={elm => this.setRef(elm)} onChange={() => this.onChange()}/>
-          {results.map(sr => (
-            <div onClick={() => this.onSelect(sr)}>
-              {sr.track.title}
-            </div>
-          ))}
-        </PopupInner>
-      </PopupContainer>
+          <TrackListContainer>
+            <TracksTableContainer>
+              <TracksTable>
+                <thead>
+                  <tr>
+                    {columnHeaders.map((text, index) => (
+                      <th key={`header-${index}`}>
+                        <TrackInfo>{text}</TrackInfo>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.map((sr, row) => {
+                    const { track } = sr;
+                    const columns = trimColumns([
+                      <TrackImage src={track.imageSrc || PlaceholderImage} />,
+                      track.title || `(${track.album})`,
+                      truncate(track.artist, 20),
+                      track.durationDisplay,
+                      sr.playlist.name,
+                    ]);
+                    return (
+                      <TrackRow
+                        key={`track-${row}`}
+                        onClick={() => this.onSelect(sr)}
+                      >
+                        {columns.map((comp, column) => (
+                          <td key={`body-${row}-${column}`}>
+                            <TrackInfo>{comp}</TrackInfo>
+                          </td>
+                        ))}
+                      </TrackRow>
+                    );
+                  })}
+                </tbody>
+              </TracksTable>
+            </TracksTableContainer>
+          </TrackListContainer>
+        </SearchContainerInner>
+      </SearchContainerOuter>
     ) : '';
   }
 }

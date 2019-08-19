@@ -80,6 +80,9 @@ export class Manager {
     );
   }
   public search(query: string): SearchResult[] {
+    if (!query || !query.length) {
+      return [];
+    }
     const found: SearchResult[] = [];
     const qParts = query.toLowerCase().split(' ');
     this.playlists.forEach(pl => {

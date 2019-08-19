@@ -1,66 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
 import { PlayableTrackList, PlayableTrack, truncate } from 'jukebox-utils';
 import PlaceholderImage from './placeholder.png';
 import { MainViewContainer, MainViewScrollable, MainTitle, CanHighlightTableRow, HoverMixin } from './components/Common';
+import { TrackListContainer, TracksTableContainer, TracksTable, TrackRow, TrackImage, TrackInfo, trimColumns } from './components/TrackTable';
 import { MasterState } from './redux/reducers';
 import { PlayerState } from './redux/reducers/player';
 import { setCurrentTrack } from './redux/actions';
 import { connect } from 'react-redux';
 
-const TrackListContainer = styled(MainViewContainer)`
-  max-height: 100%;
-`;
-
-const TracksTableContainer = styled(MainViewScrollable)``;
-
-const TracksTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  color: inherit;
-
-  & th,
-  & td {
-    border-top: 1px solid var(--jukebox-foreground);
-    box-sizing: border-box;
-    padding: 0px 5px;
-    height: 60px;
-  }
-
-  & th {
-    border-top-width: 0px;
-  }
-`;
-const TrackRow = styled(CanHighlightTableRow)`
-  ${HoverMixin}
-`;
-
-const TrackImage = styled.img`
-  width: auto;
-  height: 50px;
-
-  @media (max-width: 600px) {
-    display: none;
-  }
-`;
-const TrackInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: no-wrap;
-`;
-
 interface Props {
   player: PlayerState;
   setCurrentTrack(track: PlayableTrack): void;
-}
-
-function trimColumns<T>(trackList: PlayableTrackList, arr: Array<T>): Array<T> {
-  if (trackList.custom) {
-    arr.splice(5, 1);
-  }
-  return arr;
 }
 
 class TrackListView extends React.Component<Props> {
@@ -71,14 +21,14 @@ class TrackListView extends React.Component<Props> {
       throw new Error('TrackListView should not be rendered in this state!');
     }
 
-    const columnHeaders = trimColumns(trackList, [
+    const columnHeaders = trimColumns([
       '',
       'title',
       'artist',
       'length',
       'album',
       'track #',
-    ]);
+    ], trackList);
     return (
       <TrackListContainer>
         <MainTitle>
@@ -98,14 +48,14 @@ class TrackListView extends React.Component<Props> {
             </thead>
             <tbody>
               {trackList.tracks.map((track, row) => {
-                const columns = trimColumns(trackList, [
+                const columns = trimColumns([
                   <TrackImage src={track.imageSrc || PlaceholderImage} />,
                   track.title || `(${track.album})`,
                   truncate(track.artist, 20),
                   track.durationDisplay,
                   track.album,
                   track.trackNumberDisplay,
-                ]);
+                ], trackList);
                 return (
                   <TrackRow
                     key={`track-${row}`}
