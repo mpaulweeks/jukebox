@@ -18,6 +18,11 @@ export const PopupContainer = styled.div`
 `;
 
 export const PopupInner = styled.div`
+  max-height: 90%;
+  max-width: 90%;
+  box-sizing: border-box;
+  overflow: hidden;
+
   background-color: var(--jukebox-background);
   color: var(--jukebox-foreground);
   border: 0.5em solid var(--jukebox-foreground);

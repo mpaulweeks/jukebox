@@ -9,7 +9,7 @@ import { togglePopupImage } from '../redux/actions';
 import { PopupContainer, PopupInner, PopupTitle } from './Popup';
 
 const LargeAlbumArt = styled.img`
-  height: 80vh;
+  height: 100%;
   width: auto;
  `;
 
