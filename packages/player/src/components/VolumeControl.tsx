@@ -82,7 +82,7 @@ class VolumeControls extends React.Component<VolumeControlProps> {
           />
         </ProgressBar>
         <VolumeIcon >
-          <i className="material-icons">{icon}</i>
+          <i className='material-icons'>{icon}</i>
         </VolumeIcon>
       </ContainerRow>
     );

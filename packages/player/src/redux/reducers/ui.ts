@@ -1,4 +1,12 @@
-import { SET_AUDIO_PROGRESS_DISPLAY, TOGGLE_COLLAPSE_HEADER, TOGGLE_COLLAPSE_ROOT, TOGGLE_COLLAPSE_SIDEBAR, TOGGLE_POPUP_ABOUT, TOGGLE_POPUP_IMAGE, TOGGLE_POPUP_SEARCH } from '../actionTypes';
+import {
+  SET_AUDIO_PROGRESS_DISPLAY,
+  TOGGLE_COLLAPSE_HEADER,
+  TOGGLE_COLLAPSE_ROOT,
+  TOGGLE_COLLAPSE_SIDEBAR,
+  TOGGLE_POPUP_ABOUT,
+  TOGGLE_POPUP_IMAGE,
+  TOGGLE_POPUP_SEARCH,
+} from '../actionTypes';
 
 export interface UiState {
   progressPercent: number;
@@ -15,9 +23,9 @@ export interface UiState {
 interface UiAction {
   type: string;
   payload?: {
-    currentTime: number,
-    duration: number,
-  },
+    currentTime: number;
+    duration: number;
+  };
 }
 
 const initialState: UiState = {
@@ -32,7 +40,7 @@ const initialState: UiState = {
   showPopupSearch: false,
 };
 
-export default function (state = initialState, action: UiAction) {
+export default function(state = initialState, action: UiAction) {
   switch (action.type) {
     case SET_AUDIO_PROGRESS_DISPLAY: {
       const { currentTime, duration } = (action.payload || { currentTime: 0, duration: 0 });
@@ -41,7 +49,7 @@ export default function (state = initialState, action: UiAction) {
         progressPercent: duration ? (currentTime / duration) : 0,
         progressTime: currentTime || 0,
         durationTime: duration || 0,
-      }
+      };
     }
     case TOGGLE_COLLAPSE_ROOT: {
       return {

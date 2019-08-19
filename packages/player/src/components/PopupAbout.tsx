@@ -39,7 +39,7 @@ class PopupAbout extends React.Component<Props> {
             jukebox
           </PopupTitle>
           <AboutAuthor>
-            made by <a href="https://twitter.com/mpaulweeks">@mpaulweeks</a>
+            made by <a href='https://twitter.com/mpaulweeks'>@mpaulweeks</a>
           </AboutAuthor>
           <InstructionsTitle>
             keyboard shortcuts

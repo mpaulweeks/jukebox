@@ -5,7 +5,15 @@ import { DataState } from '../redux/reducers/data';
 import { UiState } from '../redux/reducers/ui';
 import { MasterState } from '../redux/reducers';
 import { connect } from 'react-redux';
-import { TrackListContainer, TracksTableContainer, TracksTable, TrackRow, TrackImage, TrackInfo, trimColumns } from './TrackTable';
+import {
+  TrackListContainer,
+  TracksTableContainer,
+  TracksTable,
+  TrackRow,
+  TrackImage,
+  TrackInfo,
+  trimColumns,
+} from './TrackTable';
 import PlaceholderImage from '../placeholder.png';
 import { setCurrentTrackList, setCurrentTrack, togglePopupSearch } from '../redux/actions';
 import { PopupContainer, PopupInner, PopupTitle } from './Popup';
@@ -35,7 +43,7 @@ interface State {
   results: SearchResult[];
 }
 class PopupSearch extends React.Component<Props, State> {
-  private input?: HTMLInputElement;
+  input?: HTMLInputElement;
   state: State = {
     results: [],
   };
@@ -68,14 +76,18 @@ class PopupSearch extends React.Component<Props, State> {
       'artist',
       'length',
       'playlist',
-    ]
+    ];
     return this.props.ui.showPopupSearch ? (
       <SearchContainerOuter onClick={this.props.togglePopupSearch}>
         <SearchContainerInner onClick={e => e.stopPropagation()}>
           <PopupTitle>
             Search
           </PopupTitle>
-          <SearchInput type="text" ref={elm => this.setRef(elm)} onChange={() => this.onChange()}/>
+          <SearchInput
+            type='text'
+            ref={elm => this.setRef(elm)}
+            onChange={() => this.onChange()}
+          />
           <TrackListContainer>
             <TracksTableContainer>
               <TracksTable>

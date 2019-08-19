@@ -20,7 +20,11 @@ const CollapseWrapper = styled(CollapseAble) <{ box: BoxProps }>`
       ${s}: auto;
     `).join('')}
 
-    ${props.box.outerSide}: calc(0px - ((2 * var(--jukebox-border-width)) + (2 * var(--jukebox-frame-gap)) + var(--jukebox-tab-size)));
+    ${props.box.outerSide}: calc(0px - (
+      (2 * var(--jukebox-border-width)) +
+      (2 * var(--jukebox-frame-gap)) +
+      var(--jukebox-tab-size)
+    ));
 
     ${[props.box.tightSide, props.box.innerSide].map(s => `
       margin-${s}: calc(0px - var(--jukebox-border-width));
@@ -65,18 +69,18 @@ const CollapseBox = styled(Box)`
 `;
 
 interface Props {
-  onClick(): void;
   isCollapsed: boolean;
+  onClick(): void;
 }
 
 interface BoxProps {
-  hideOnMobile: boolean,
-  collapsedText: string,
-  openText: string,
-  innerSide: string,
-  outerSide: string,
-  gapSide: string,
-  tightSide: string,
+  hideOnMobile: boolean;
+  collapsedText: string;
+  openText: string;
+  innerSide: string;
+  outerSide: string;
+  gapSide: string;
+  tightSide: string;
 }
 
 const genCollapseBox = (

@@ -74,23 +74,23 @@ class PlaybackControls extends React.Component<PlaybackControlProps> {
         </ControlsBlock>
         <CenterControlsBlock>
           <Control onClick={() => this.props.setSeekByDelta(-10)}>
-            <i className="material-icons">replay_10</i>
+            <i className='material-icons'>replay_10</i>
           </Control>
           <Control onClick={this.props.seekPrevTrack}>
-            <i className="material-icons">skip_previous</i>
+            <i className='material-icons'>skip_previous</i>
           </Control>
           <Control onClick={this.props.toggleIsPlaying}>
             {player.isPlaying ? (
-              <i className="material-icons">pause_circle_outline</i>
+              <i className='material-icons'>pause_circle_outline</i>
             ) : (
-                <i className="material-icons">play_circle_outline</i>
+                <i className='material-icons'>play_circle_outline</i>
               )}
           </Control>
           <Control onClick={this.props.seekNextTrack}>
-            <i className="material-icons">skip_next</i>
+            <i className='material-icons'>skip_next</i>
           </Control>
           <Control onClick={() => this.props.setSeekByDelta(10)}>
-            <i className="material-icons">forward_10</i>
+            <i className='material-icons'>forward_10</i>
           </Control>
         </CenterControlsBlock>
         <ControlsBlock>
@@ -98,13 +98,13 @@ class PlaybackControls extends React.Component<PlaybackControlProps> {
             onClick={this.props.toggleIsShuffle}
             highlight={player.shuffle}
           >
-            <i className="material-icons">shuffle</i>
+            <i className='material-icons'>shuffle</i>
           </Control>
           <Control
             onClick={this.props.toggleIsRepeat}
             highlight={player.repeat}
           >
-            <i className="material-icons">repeat</i>
+            <i className='material-icons'>repeat</i>
           </Control>
         </ControlsBlock>
       </ControlsContainerRow>

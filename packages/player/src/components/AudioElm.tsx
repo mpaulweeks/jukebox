@@ -55,7 +55,7 @@ class AudioElm extends React.Component<Props> {
     }
     this.ensurePlaying();
 
-    let newTime = undefined;
+    let newTime;
     if (seekPercent !== undefined) {
       newTime = seekPercent * audioElm.duration;
     } else if (seekSeconds !== undefined) {
@@ -70,6 +70,9 @@ class AudioElm extends React.Component<Props> {
       this.props.resolveSeek();
     }
   }
+  render() {
+    return '';
+  }
 
   private ensurePlaying = () => {
     const { audioElm } = this;
@@ -83,7 +86,7 @@ class AudioElm extends React.Component<Props> {
   private onProgress = (evt: any) => {
     const { audioElm } = this;
     this.props.setAudioProgressDisplay(audioElm.currentTime, audioElm.duration);
-  };
+  }
   private onTrackEnd = (keyboardEvent?: any) => {
     const { player } = this.props;
     if (player.repeat) {
@@ -91,10 +94,6 @@ class AudioElm extends React.Component<Props> {
     } else {
       this.props.seekNextTrack();
     }
-  };
-
-  render() {
-    return '';
   }
 }
 

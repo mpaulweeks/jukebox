@@ -45,7 +45,7 @@ export const TrackInfo = styled.div`
   flex-wrap: no-wrap;
 `;
 
-export function trimColumns<T>(arr: Array<T>, trackList?: PlayableTrackList): Array<T> {
+export function trimColumns<T>(arr: T[], trackList?: PlayableTrackList): T[] {
   if (trackList && trackList.custom) {
     arr.splice(5, 1);
   }

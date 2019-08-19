@@ -9,7 +9,6 @@ import { UiState } from '../redux/reducers/ui';
 import { FlexStretchMixin, getClickPercent } from './Common';
 import { throws } from 'assert';
 
-
 const ProgressContainerRow = styled.div`
   padding: 5px;
 `;
@@ -61,14 +60,6 @@ export interface ProgressBarViewProps {
   setSeekByPercent(percent?: number): void;
 }
 class ProgressBarView extends React.Component<ProgressBarViewProps> {
-  private setProgress = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    this.props.setSeekByPercent(getClickPercent(evt));
-  }
-  private renderTime(time: number) {
-    const minutes = Math.floor(time / 60);
-    const seconds = String(Math.floor(time % 60)).padStart(2, '0');
-    return `${minutes}:${seconds}`;
-  }
   render() {
     return (
       <ProgressContainerRow>
@@ -77,6 +68,14 @@ class ProgressBarView extends React.Component<ProgressBarViewProps> {
         </ProgressBar>
       </ProgressContainerRow>
     );
+  }
+  private setProgress = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    this.props.setSeekByPercent(getClickPercent(evt));
+  }
+  private renderTime(time: number) {
+    const minutes = Math.floor(time / 60);
+    const seconds = String(Math.floor(time % 60)).padStart(2, '0');
+    return `${minutes}:${seconds}`;
   }
 }
 
